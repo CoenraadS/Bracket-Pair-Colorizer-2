@@ -15,6 +15,8 @@ Screenshot:
 
 Is a language not supported yet? Read how to [add a new language.](LANGUAGE_SUPPORT.md)
 
+##### HTML Support is not possible yet
+
 ---
 
 ## Settings
