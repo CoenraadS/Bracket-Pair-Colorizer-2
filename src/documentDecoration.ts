@@ -6,7 +6,7 @@ import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
-import TokenMatch from "./TokenMatch";
+import TokenMatch from "./tokenMatch";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;

@@ -1,7 +1,7 @@
-import BasicDefinition from "./BasicDefinition";
-import DefinitionAfterInheritance from "./DefinitionAfterInheritance";
-import ScopeDefinition from "./ScopeDefinition";
-import TokenMatch from "./TokenMatch";
+import BasicDefinition from "./basicDefinition";
+import DefinitionAfterInheritance from "./definitionAfterInheritance";
+import ScopeDefinition from "./scopeDefinition";
+import TokenMatch from "./tokenMatch";
 
 export class RuleBuilder {
     private readonly start = new Map<string, BasicDefinition>();

@@ -1,4 +1,4 @@
-import ScopeDefinition from "./ScopeDefinition";
+import ScopeDefinition from "./scopeDefinition";
 
 export default class DefinitionAfterInheritance {
     public readonly language: string;

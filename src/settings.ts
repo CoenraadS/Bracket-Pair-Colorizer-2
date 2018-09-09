@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import BasicDefinition from "./BasicDefinition";
+import BasicDefinition from "./basicDefinition";
 import ColorMode from "./colorMode";
 import Colors from "./colors";
 import GutterIconManager from "./gutterIconManager";
