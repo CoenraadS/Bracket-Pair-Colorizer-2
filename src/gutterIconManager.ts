@@ -2,7 +2,6 @@ import { workspace } from "vscode";
 import Uri from "vscode-uri/lib/umd";
 
 export default class GutterIconManager {
-    private fs = require("fs");
     private escape = require("escape-html");
 
     private iconDict = new Map<string, Map<string, Uri>>();
