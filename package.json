@@ -45,7 +45,6 @@
                 "bracket-pair-colorizer-2.languages": {
                     "description": "Ensure that an opening brackets color does not match a previous brackets color",
                     "scope": "window",
-                    "$schema": "./json-schema/language-schema.json",
                     "default": [
                         {
                             "language": "javascript",
