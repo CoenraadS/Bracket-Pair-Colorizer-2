@@ -105,7 +105,19 @@
                         },
                         {
                             "language": "python",
-                            "extends": "default"
+                            "extends": "default",
+                            "scopes": [
+                                {
+                                    "startsWith": "punctuation.definition.dict",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
+                                },
+                                {
+                                    "startsWith": "punctuation.definition.arguments",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
+                                }
+                            ]
                         },
                         {
                             "language": "csharp",
@@ -232,8 +244,7 @@
                 },
                 "bracket-pair-colorizer-2.excludedLanguages": {
                     "type": "array",
-                    "default": [
-                    ],
+                    "default": [],
                     "description": "Don't colorize files of these languages",
                     "scope": "window"
                 }
