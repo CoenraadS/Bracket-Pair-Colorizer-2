@@ -54,6 +54,8 @@ Now we can add this information to `bracket-pair-colorizer-2.languages`
 Note: Some tokens do not have open/close suffixes (e.g. `punctuation.bracket.round.java`),  
 in which case only the `startsWith` property needs to be set to `punctuation.bracket.round`
 
+---
+
 ### Step 4
 
 Contribute your findings back to the project by creating [a new issue or pull request](https://github.com/CoenraadS/Bracket-Pair-Colorizer-2).
