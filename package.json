@@ -123,6 +123,34 @@
                                     "closeSuffix": ".close"
                                 }
                             ]
+                        },
+                        {
+                            "language": "java",
+                            "scopes": [
+                                {
+                                    "startsWith": "punctuation.section.class",
+                                    "openSuffix": ".begin.bracket.curly",
+                                    "closeSuffix": ".end.bracket.curly"
+                                },
+                                {
+                                    "startsWith": "punctuation.section.method",
+                                    "openSuffix": ".begin.bracket.curly",
+                                    "closeSuffix": ".end.bracket.curly"
+                                },
+                                {
+                                    "startsWith": "punctuation.definition.parameters",
+                                    "openSuffix": ".begin.bracket.round",
+                                    "closeSuffix": ".end.bracket.round"
+                                },
+                                {
+                                    "startsWith": "punctuation.section.block",
+                                    "openSuffix": ".begin.bracket.curly",
+                                    "closeSuffix": ".end.bracket.curly"
+                                },
+                                {
+                                    "startsWith": "punctuation.bracket.round"
+                                }
+                            ]
                         }
                     ]
                 },
