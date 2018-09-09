@@ -270,11 +270,11 @@
     },
     "devDependencies": {
         "@types/mocha": "^2.2.32",
-        "@types/node": "^6.0.107",
+        "@types/node": "^6.0.117",
         "mocha": "^2.3.3",
         "tslint": "^4.5.1",
-        "typescript": "^2.8.3",
-        "vscode": "^1.1.16"
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.21"
     },
     "repository": {
         "type": "git",
@@ -283,6 +283,6 @@
     "license": "SEE LICENSE IN LICENSE.md",
     "dependencies": {
         "escape-html": "^1.0.3",
-        "vscode-uri": "^1.0.3"
+        "vscode-uri": "^1.0.6"
     }
 }
