@@ -48,20 +48,7 @@
                     "$schema": "./json-schema/language-schema.json",
                     "default": [
                         {
-                            "language": "default",
-                            "scopes": [
-                                {
-                                    "disabled": true,
-                                    "startsWith": "punctuation.definition.string",
-                                    "openAndCloseCharactersAreTheSame": true,
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
-                                }
-                            ]
-                        },
-                        {
                             "language": "javascript",
-                            "extends": "default",
                             "scopes": [
                                 {
                                     "startsWith": "meta.brace.round"
@@ -85,7 +72,6 @@
                         },
                         {
                             "language": "json",
-                            "extends": "default",
                             "scopes": [
                                 {
                                     "startsWith": "punctuation.definition.dictionary",
@@ -105,7 +91,6 @@
                         },
                         {
                             "language": "python",
-                            "extends": "default",
                             "scopes": [
                                 {
                                     "startsWith": "punctuation.definition.dict",
@@ -121,7 +106,6 @@
                         },
                         {
                             "language": "csharp",
-                            "extends": "default",
                             "scopes": [
                                 {
                                     "startsWith": "punctuation.curlybrace",
