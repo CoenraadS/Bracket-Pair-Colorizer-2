@@ -4,9 +4,9 @@ import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
-import { TokenMatch } from "./tokenMatch";
 import Settings from "./settings";
 import TextLine from "./textLine";
+import TokenMatch from "./TokenMatch";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -206,7 +206,7 @@ export default class DocumentDecoration {
     }
 
     public tokenizeDocument() {
-        console.log("Tokenizing " + this.document.fileName);
+        // console.log("Tokenizing " + this.document.fileName);
 
         // One document may be shared by multiple editors (side by side view)
         const editors: vscode.TextEditor[] =
@@ -222,14 +222,14 @@ export default class DocumentDecoration {
         const lineIndex = this.lines.length;
         const lineCount = this.document.lineCount;
         if (lineIndex < lineCount) {
-            console.log("Reparse from line: " + (lineIndex + 1));
+            // console.log("Reparse from line: " + (lineIndex + 1));
             for (let i = lineIndex; i < lineCount; i++) {
                 const newLine = this.tokenizeLine(i);
                 this.lines.push(newLine);
             }
         }
 
-        console.log("Coloring document");
+        // console.log("Coloring document");
         this.colorDecorations(editors);
 
         // console.timeEnd("tokenizeDocument");
@@ -498,7 +498,14 @@ export default class DocumentDecoration {
 
                     const commonToken =
                         typeNoLanguageSuffix.substring(0, typeNoLanguageSuffix.length - tokenMatch.suffix.length);
-                    this.manageTokenStack(character, stack, commonToken, currentLine, token, tokenMatch.openAndCloseCharactersAreTheSame);
+                    this.manageTokenStack(
+                        character,
+                        stack,
+                        commonToken,
+                        currentLine,
+                        token,
+                        tokenMatch.openAndCloseCharactersAreTheSame,
+                    );
                     return;
                 }
             }

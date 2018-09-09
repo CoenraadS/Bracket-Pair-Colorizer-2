@@ -1,4 +1,4 @@
-import { IGrammar, IExtensionPackage } from "./IExtensionGrammar";
+import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
 
 import * as path from "path";
 import * as vscode from "vscode";

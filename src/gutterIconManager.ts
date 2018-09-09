@@ -6,6 +6,7 @@ export default class GutterIconManager {
     private escape = require("escape-html");
 
     private iconDict = new Map<string, Map<string, Uri>>();
+    // tslint:disable-next-line:callable-types
     private disposables = new Array<{ (): void }>();
     private lineHeight: number;
     private fontSize: number;

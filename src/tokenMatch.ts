@@ -9,7 +9,7 @@ export default class TokenMatch {
         disabled: boolean,
         openAndCloseCharactersAreTheSame: boolean,
         startsWith: string,
-        suffix?: string
+        suffix?: string,
     ) {
         this.openAndCloseCharactersAreTheSame = openAndCloseCharactersAreTheSame;
         this.depth = depth;
