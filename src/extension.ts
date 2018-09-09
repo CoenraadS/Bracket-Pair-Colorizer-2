@@ -4,20 +4,20 @@ export function activate(context: ExtensionContext) {
     let documentDecorationManager = new DocumentDecorationManager();
 
     context.subscriptions.push(
-        commands.registerCommand("bracket-pair-colorizer.expandBracketSelection", () => {
+        commands.registerCommand("bracket-pair-colorizer-2.expandBracketSelection", () => {
             const editor = window.activeTextEditor;
             if (!editor) { return; }
             documentDecorationManager.expandBracketSelection(editor);
         }),
 
-        commands.registerCommand("bracket-pair-colorizer.undoBracketSelection", () => {
+        commands.registerCommand("bracket-pair-colorizer-2.undoBracketSelection", () => {
             const editor = window.activeTextEditor;
             if (!editor) { return; }
             documentDecorationManager.undoBracketSelection(editor);
         }),
 
         workspace.onDidChangeConfiguration((event) => {
-            if (event.affectsConfiguration("bracketPairColorizer") ||
+            if (event.affectsConfiguration("bracket-pair-colorizer-2") ||
                 event.affectsConfiguration("editor.lineHeight") ||
                 event.affectsConfiguration("editor.fontSize")
 

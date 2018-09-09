@@ -142,7 +142,23 @@ export default class DocumentDecorationManager {
     }
 
     private isValidDocument(document?: TextDocument): boolean {
-        if (document === undefined || document.lineCount === 0 || document.uri.scheme === "vscode") {
+        if (document === undefined) {
+            console.warn("Ignoring undefined document");
+            return false;
+        }
+
+        if (document.lineCount === 0) {
+            console.warn("Ignoring document with 0 line counter");
+            return false;
+        }
+
+        if (document.uri.scheme === "vscode") {
+            console.log("Ignoring document with 'vscode' uri");
+            return false;
+        }
+
+        if (this.settings.ignoredLanguages.has(document.languageId)) {
+            console.log("Ignoring document because language id was ignored in settings");
             return false;
         }
 

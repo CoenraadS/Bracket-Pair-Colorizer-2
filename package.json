@@ -224,6 +224,13 @@
                     ],
                     "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
                     "scope": "window"
+                },
+                "bracket-pair-colorizer-2.ignoredLanguage": {
+                    "type": "array",
+                    "default": [
+                    ],
+                    "description": "Don't colorize files of these languages",
+                    "scope": "window"
                 }
             }
         }
