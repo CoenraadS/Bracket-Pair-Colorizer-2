@@ -1,0 +1,72 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "language"
+    ],
+    "properties": {
+      "language": {
+        "$id": "#/items/properties/language",
+        "type": "string",
+        "title": "The Language Schema",
+        "default": "",
+        "examples": [
+          "javascript"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "extends": {
+        "$id": "#/items/properties/language",
+        "type": "string",
+        "title": "The Extends Schema",
+        "default": "",
+        "examples": [
+          "javascript"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "scopes": {
+        "$id": "#/items/properties/tokens",
+        "type": "array",
+        "title": "The Tokens Schema",
+        "items": {
+          "$id": "#/items/properties/tokens/items",
+          "type": "object",
+          "title": "The Items Schema",
+          "required": [
+            "open"
+          ],
+          "properties": {
+            "open": {
+              "$id": "#/items/properties/tokens/items/properties/open",
+              "type": "string",
+              "title": "The Open Schema",
+              "default": "",
+              "examples": [
+                "punctuation.definition.parameters.begin"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "close": {
+              "$id": "#/items/properties/tokens/items/properties/close",
+              "type": "string",
+              "title": "The Close Schema",
+              "default": "",
+              "examples": [
+                "punctuation.definition.parameters.end"
+              ],
+              "pattern": "^(.*)$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "outDir": "out",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "forceConsistentCasingInFileNames": true,
+        "sourceMap": true,
+        "rootDir": ".",
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
+    },
+    "exclude": [
+        "node_modules",
+        ".vscode-test",
+        "test/test_files"
+    ]
+}

@@ -1,0 +1,12 @@
+{
+	"extends": "tslint:latest",
+	"rules": {
+		"curly": true,
+		"whitespace": [
+			
+		],
+		"one-line": [
+			
+		]
+	}
+}
