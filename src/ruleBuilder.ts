@@ -1,8 +1,6 @@
-import * as vscode from "vscode";
 import BasicDefinition from "./BasicDefinition";
 import DefinitionAfterInheritance from "./DefinitionAfterInheritance";
 import ScopeDefinition from "./ScopeDefinition";
-import Settings from "./settings";
 import TokenMatch from "./TokenMatch";
 
 export class RuleBuilder {
