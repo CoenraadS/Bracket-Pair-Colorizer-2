@@ -25,7 +25,7 @@ export default class DocumentDecoration {
         this.document = document;
         this.tokenizer = textMate;
 
-        this.suffix = "." + (this.tokenizer as any)._grammar.scopeName.split(".")[1];
+        this.suffix = "." + ((this.tokenizer as any)._grammar.scopeName as string).split(".").slice(1).join(".");
         this.typeMap = this.settings.getRule(document.languageId) || [];
         if (this.document.eol === EndOfLine.LF) {
             this.eol = "\n";
@@ -36,7 +36,6 @@ export default class DocumentDecoration {
     }
 
     public dispose() {
-        this.settings.dispose();
         this.disposeScopeDecorations();
     }
 
@@ -207,9 +206,7 @@ export default class DocumentDecoration {
     }
 
     public tokenizeDocument() {
-        if (this.settings.isDisposed) {
-            return;
-        }
+        console.log("Tokenizing " + this.document.fileName);
 
         // One document may be shared by multiple editors (side by side view)
         const editors: vscode.TextEditor[] =
@@ -239,11 +236,6 @@ export default class DocumentDecoration {
     }
 
     public updateScopeDecorations(event: vscode.TextEditorSelectionChangeEvent) {
-
-        if (this.settings.isDisposed) {
-            return;
-        }
-
         // console.time("updateScopeDecorations");
 
         this.disposeScopeDecorations();

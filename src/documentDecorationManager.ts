@@ -17,6 +17,7 @@ export default class DocumentDecorationManager {
         this.documents.forEach((document, key) => {
             document.dispose();
         });
+        this.settings.dispose();
     }
 
     public expandBracketSelection(editor: TextEditor) {
@@ -34,6 +35,7 @@ export default class DocumentDecorationManager {
     }
 
     public updateDocument(document: TextDocument) {
+        console.log("updateDocument");
         const documentDecoration = this.getDocumentDecorations(document);
         if (documentDecoration) {
             documentDecoration.tokenizeDocument();
@@ -41,6 +43,7 @@ export default class DocumentDecorationManager {
     }
 
     public onDidOpenTextDocument(document: TextDocument) {
+        console.log("onDidOpenTextDocument");
         const documentDecoration = this.getDocumentDecorations(document);
         if (documentDecoration) {
             documentDecoration.tokenizeDocument();
@@ -48,6 +51,7 @@ export default class DocumentDecorationManager {
     }
 
     public onDidChangeTextDocument(event: TextDocumentChangeEvent) {
+        console.log("onDidChangeTextDocument");
         const documentDecoration = this.getDocumentDecorations(event.document);
         if (documentDecoration) {
             documentDecoration.onDidChangeTextDocument(event.contentChanges);
@@ -55,15 +59,18 @@ export default class DocumentDecorationManager {
     }
 
     public onDidCloseTextDocument(closedDocument: TextDocument) {
+        console.log("onDidCloseTextDocument");
         const uri = closedDocument.uri.toString();
         const document = this.documents.get(uri);
         if (document !== undefined) {
+            console.log("Disposing " + uri);
             document.dispose();
-            this.documents.delete(closedDocument.uri.toString());
+            this.documents.delete(uri);
         }
     }
 
     public onDidChangeSelection(event: TextEditorSelectionChangeEvent) {
+        console.log("onDidChangeSelection");
         const documentDecoration = this.getDocumentDecorations(event.textEditor.document);
         if (documentDecoration &&
             (documentDecoration.settings.highlightActiveScope ||
@@ -75,6 +82,7 @@ export default class DocumentDecorationManager {
     }
 
     public updateAllDocuments() {
+        console.log("updateAllDocuments");
         window.visibleTextEditors.forEach((editor) => {
             this.updateDocument(editor.document);
         });
@@ -86,23 +94,29 @@ export default class DocumentDecorationManager {
         }
 
         const uri = document.uri.toString();
+        console.log("Looking for " + uri + " from cache");
         let documentDecorations = this.documents.get(uri);
 
         if (documentDecorations === undefined) {
             try {
                 const tokenizer = this.tryGetTokenizer(document.languageId);
                 if (!tokenizer) {
+                    console.log("Could not find tokenizer for " + uri);
                     return;
                 }
 
                 if (tokenizer instanceof Promise) {
+                    console.log("Found Tokenizer promise for " + uri);
                     tokenizer.then(() => {
-                        this.updateAllDocuments();
+                        this.updateDocument(document);
                     }).catch((e) => console.error(e));
                     return;
                 }
 
+                console.log("Found Tokenizer for " + uri);
+
                 documentDecorations = new DocumentDecoration(document, tokenizer as IGrammar, this.settings);
+                console.log("Adding " + uri + " to cache");
                 this.documents.set(uri, documentDecorations);
             } catch (error) {
                 if (error instanceof Error) {
@@ -119,6 +133,7 @@ export default class DocumentDecorationManager {
             }
         }
 
+        console.log("Retrieved " + uri + " from cache");
         return documentDecorations;
     }
 

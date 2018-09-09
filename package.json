@@ -1,5 +1,5 @@
 {
-    "name": "bracket-pair-colorizer",
+    "name": "bracket-pair-colorizer-2",
     "displayName": "Bracket Pair Colorizer 2",
     "description": "A customizable extension for colorizing matching brackets",
     "version": "0.0.1",
@@ -30,11 +30,11 @@
     "contributes": {
         "commands": [
             {
-                "command": "bracket-pair-colorizer.expandBracketSelection",
+                "command": "bracket-pair-colorizer-2.expandBracketSelection",
                 "title": "Expand Bracket Selection"
             },
             {
-                "command": "bracket-pair-colorizer.undoBracketSelection",
+                "command": "bracket-pair-colorizer-2.undoBracketSelection",
                 "title": "Undo Bracket Selection"
             }
         ],
@@ -56,11 +56,6 @@
                                     "openAndCloseCharactersAreTheSame": true,
                                     "openSuffix": ".begin",
                                     "closeSuffix": ".end"
-                                },
-                                {
-                                    "startsWith": "punctuation.definition.",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
                                 }
                             ]
                         },
@@ -76,6 +71,11 @@
                                 },
                                 {
                                     "startsWith": "punctuation.definition.block"
+                                },
+                                {
+                                    "startsWith": "punctuation.definition.parameters",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
                                 }
                             ]
                         },
@@ -85,23 +85,43 @@
                         },
                         {
                             "language": "json",
-                            "extends": "default"
-                        },
-                        {
-                            "language": "html",
+                            "extends": "default",
                             "scopes": [
                                 {
-                                    "depth": 1,
-                                    "startsWith": "meta.tag.structure.",
-                                    "openAndCloseCharactersAreTheSame": true,
-                                    "openSuffix": ".start",
+                                    "startsWith": "punctuation.definition.dictionary",
+                                    "openSuffix": ".begin",
                                     "closeSuffix": ".end"
                                 }
                             ]
                         },
                         {
+                            "language": "jsonc",
+                            "extends": "json"
+                        },
+                        {
                             "language": "python",
                             "extends": "default"
+                        },
+                        {
+                            "language": "csharp",
+                            "extends": "default",
+                            "scopes": [
+                                {
+                                    "startsWith": "punctuation.curlybrace",
+                                    "openSuffix": ".open",
+                                    "closeSuffix": ".close"
+                                },
+                                {
+                                    "startsWith": "punctuation.squarebracket",
+                                    "openSuffix": ".open",
+                                    "closeSuffix": ".close"
+                                },
+                                {
+                                    "startsWith": "punctuation.parenthesis",
+                                    "openSuffix": ".open",
+                                    "closeSuffix": ".close"
+                                }
+                            ]
                         }
                     ]
                 },
