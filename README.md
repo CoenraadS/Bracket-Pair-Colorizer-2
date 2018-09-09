@@ -1,12 +1,21 @@
-# Bracket Pair Colorizer
+# Bracket Pair Colorizer 2 (Beta)
 
 This extension allows matching brackets to be identified with colours. The user can define which tokens to match, and which colours to use.
 
 Screenshot:  
 ![Screenshot](images/example.png "Bracket Pair Colorizer")
 
------------------------------------------------------------------------------------------------------------
-## [Release Notes](CHANGELOG.md)
+---
+
+### [Release Notes](CHANGELOG.md)
+
+---
+
+### Language Support
+
+Is a language not supported yet? Read how to [add a new language.](LANGUAGE_SUPPORT.md)
+
+---
 
 ## Settings
 
