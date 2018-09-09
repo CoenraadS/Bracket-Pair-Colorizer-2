@@ -101,18 +101,3 @@ Quick-start:
 		"when": "editorTextFocus"
 	}
 ```
-
-### HTML Configuration
->An example configuration for HTML is:  
-```
-    "bracketPairColorizer.consecutivePairColors": [
-        ["<", "</"],
-        ["<", "/>"],
-        [
-            "Gold",
-            "Orchid",
-            "LightSkyBlue"
-        ],
-        "Red"
-    ]
-```
