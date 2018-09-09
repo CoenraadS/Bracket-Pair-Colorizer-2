@@ -40,9 +40,9 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "BracketPair",
+            "title": "Bracket Pair Colorizer 2",
             "properties": {
-                "bracketPairColorizer2.languages": {
+                "bracket-pair-colorizer-2.languages": {
                     "description": "Ensure that an opening brackets color does not match a previous brackets color",
                     "scope": "window",
                     "$schema": "./json-schema/language-schema.json",
@@ -125,25 +125,29 @@
                         }
                     ]
                 },
-                "bracketPairColorizer.timeOut": {
-                    "type": "number",
-                    "default": 200,
-                    "description": "How long the user should idle for, before the document is colorized. Set to 0 to disable",
-                    "scope": "resource"
+                "bracket-pair-colorizer-2.colors": {
+                    "type": "array",
+                    "default": [
+                        "Gold",
+                        "Orchid",
+                        "LightSkyBlue"
+                    ],
+                    "description": "Bracket colors for light themes",
+                    "scope": "window"
                 },
-                "bracketPairColorizer.forceUniqueOpeningColor": {
+                "bracket-pair-colorizer-2.forceUniqueOpeningColor": {
                     "type": "boolean",
                     "default": false,
                     "description": "Ensure that an opening brackets color does not match a previous brackets color",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.forceIterationColorCycle": {
+                "bracket-pair-colorizer-2.forceIterationColorCycle": {
                     "type": "boolean",
                     "default": false,
                     "description": "Should opening brackets iterate the color cycle even if they are not nested",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.colorMode": {
+                "bracket-pair-colorizer-2.colorMode": {
                     "type": "string",
                     "enum": [
                         "Consecutive",
@@ -151,15 +155,15 @@
                     ],
                     "default": "Consecutive",
                     "description": "Should different brackets share a color group (Consecutive), or use their own color group (Independent)",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.highlightActiveScope": {
+                "bracket-pair-colorizer-2.highlightActiveScope": {
                     "type": "boolean",
                     "default": false,
                     "description": "Should the active scope brackets always be highlighted? Recommended to disable editor.matchBrackets if using this feature.",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.activeScopeCSS": {
+                "bracket-pair-colorizer-2.activeScopeCSS": {
                     "type": "array",
                     "default": [
                         "borderStyle : solid",
@@ -167,21 +171,21 @@
                         "borderColor : {color}; opacity: 0.5"
                     ],
                     "description": "CSS for the active scope. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.showBracketsInGutter": {
+                "bracket-pair-colorizer-2.showBracketsInGutter": {
                     "type": "boolean",
                     "default": false,
                     "description": "Show active bracket scope in gutter?",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.showBracketsInRuler": {
+                "bracket-pair-colorizer-2.showBracketsInRuler": {
                     "type": "boolean",
                     "default": false,
                     "description": "Show active bracket scope in ruler?",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.rulerPosition": {
+                "bracket-pair-colorizer-2.rulerPosition": {
                     "type": "string",
                     "enum": [
                         "Center",
@@ -191,27 +195,27 @@
                     ],
                     "default": "Center",
                     "description": "Show active bracket scope in ruler?",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.showVerticalScopeLine": {
+                "bracket-pair-colorizer-2.showVerticalScopeLine": {
                     "type": "boolean",
                     "default": true,
                     "description": "Show a vertical line on the left side of the editor representing the active bracket scope?",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.showHorizontalScopeLine": {
+                "bracket-pair-colorizer-2.showHorizontalScopeLine": {
                     "type": "boolean",
                     "default": true,
                     "description": "Show a horizontal line to create a block around the active bracket scope?",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.scopeLineRelativePosition": {
+                "bracket-pair-colorizer-2.scopeLineRelativePosition": {
                     "type": "boolean",
                     "default": true,
                     "description": "True: Scope Line will start from the ending bracket position. False: Scope Line will always be at column 0",
-                    "scope": "resource"
+                    "scope": "window"
                 },
-                "bracketPairColorizer.scopeLineCSS": {
+                "bracket-pair-colorizer-2.scopeLineCSS": {
                     "type": "array",
                     "default": [
                         "borderStyle : solid",
@@ -219,64 +223,7 @@
                         "borderColor : {color}; opacity: 0.5"
                     ],
                     "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
-                    "scope": "resource"
-                },
-                "bracketPairColorizer.consecutivePairColors": {
-                    "type": "array",
-                    "default": [
-                        "()",
-                        "[]",
-                        "{}",
-                        [
-                            "Gold",
-                            "Orchid",
-                            "LightSkyBlue"
-                        ],
-                        "Red"
-                    ],
-                    "description": "Define paired characters and their shared color group",
-                    "scope": "resource"
-                },
-                "bracketPairColorizer.independentPairColors": {
-                    "type": [
-                        "array"
-                    ],
-                    "items": {
-                        "type": [
-                            "array"
-                        ]
-                    },
-                    "default": [
-                        [
-                            "()",
-                            [
-                                "Gold",
-                                "Orchid",
-                                "LightSkyBlue"
-                            ],
-                            "Red"
-                        ],
-                        [
-                            "[]",
-                            [
-                                "Gold",
-                                "Orchid",
-                                "LightSkyBlue"
-                            ],
-                            "Red"
-                        ],
-                        [
-                            "{}",
-                            [
-                                "Gold",
-                                "Orchid",
-                                "LightSkyBlue"
-                            ],
-                            "Red"
-                        ]
-                    ],
-                    "description": "Define paired characters and their color groups",
-                    "scope": "resource"
+                    "scope": "window"
                 }
             }
         }

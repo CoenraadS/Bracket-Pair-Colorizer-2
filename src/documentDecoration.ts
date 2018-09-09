@@ -4,7 +4,7 @@ import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
-import { TokenMatch } from "./ruleBuilder";
+import { TokenMatch } from "./tokenMatch";
 import Settings from "./settings";
 import TextLine from "./textLine";
 

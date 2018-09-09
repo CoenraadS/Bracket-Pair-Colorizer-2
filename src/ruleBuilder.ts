@@ -1,76 +1,17 @@
 import * as vscode from "vscode";
-
-// tslint:disable:max-classes-per-file
-
-class ScopeDefinition {
-    public readonly depth?: number;
-    public readonly disabled?: boolean;
-    public readonly openAndCloseCharactersAreTheSame?: boolean;
-    public readonly startsWith?: string;
-    public readonly openSuffix?: string;
-    public readonly closeSuffix?: string;
-}
-
-class BasicDefinition {
-    public readonly language: string;
-    public readonly extends?: string;
-    public readonly scopes?: ScopeDefinition[];
-}
-
-export class TokenMatch {
-    public readonly regex: RegExp;
-    public readonly suffix: string;
-    public readonly depth: number;
-    public readonly disabled: boolean;
-    public readonly openAndCloseCharactersAreTheSame: boolean;
-    constructor(
-        depth: number,
-        disabled: boolean,
-        openAndCloseCharactersAreTheSame: boolean,
-        startsWith: string,
-        suffix?: string,
-    ) {
-        this.openAndCloseCharactersAreTheSame = openAndCloseCharactersAreTheSame;
-        this.depth = depth;
-        this.disabled = disabled;
-        const regexStart = this.escapeRegExp(startsWith);
-        if (suffix) {
-            const regexEnd = this.escapeRegExp(suffix);
-            this.regex = new RegExp("^" + regexStart + ".*" + regexEnd + "$");
-            this.suffix = suffix;
-        }
-        else {
-            this.regex = new RegExp("^" + regexStart);
-            this.suffix = "";
-        }
-    }
-
-    private escapeRegExp(input: string) {
-        return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-    }
-}
-
-class DefinitionAfterInheritance {
-    public readonly language: string;
-    public readonly scopes: Map<string, ScopeDefinition>;
-
-    constructor(language: string, scopes: Map<string, ScopeDefinition>) {
-        this.language = language;
-        this.scopes = scopes;
-    }
-}
+import BasicDefinition from "./BasicDefinition";
+import DefinitionAfterInheritance from "./DefinitionAfterInheritance";
+import ScopeDefinition from "./ScopeDefinition";
+import Settings from "./settings";
+import TokenMatch from "./TokenMatch";
 
 export class RuleBuilder {
     private readonly start = new Map<string, BasicDefinition>();
     private readonly intermediate = new Map<string, DefinitionAfterInheritance>();
     private readonly final = new Map<string, TokenMatch[]>();
 
-    constructor() {
-        const userLanguages =
-            vscode.workspace.getConfiguration("bracketPairColorizer2", undefined)
-                .get("languages") as BasicDefinition[];
-
-        for (const userLanguage of userLanguages) {
+    constructor(languageDefinitions: BasicDefinition[]) {
+        for (const userLanguage of languageDefinitions) {
             this.start.set(userLanguage.language, userLanguage);
         }
     }

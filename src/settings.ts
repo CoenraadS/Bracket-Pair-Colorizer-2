@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import BasicDefinition from "./BasicDefinition";
 import ColorMode from "./colorMode";
 import Colors from "./colors";
 import GutterIconManager from "./gutterIconManager";
@@ -10,7 +11,6 @@ export default class Settings {
     public readonly contextualParsing: boolean;
     public readonly forceIterationColorCycle: boolean;
     public readonly forceUniqueOpeningColor: boolean;
-    // public readonly languageID: string;
     public readonly regexNonExact: RegExp;
     public readonly timeOutLength: number;
     public readonly highlightActiveScope: boolean;
@@ -19,20 +19,19 @@ export default class Settings {
     public readonly showBracketsInGutter: boolean;
     public readonly showBracketsInRuler: boolean;
     public readonly scopeLineRelativePosition: boolean;
-    public colors: string[];
+    public readonly colors: string[];
     public isDisposed = false;
     private readonly gutterIcons: GutterIconManager;
     private readonly activeBracketCSSElements: string[][];
     private readonly activeScopeLineCSSElements: string[][];
     private readonly activeScopeLineCSSBorder: string;
     private readonly rulerPosition: string;
-    private readonly ruleBuilder = new RuleBuilder();
+    private readonly ruleBuilder: RuleBuilder;
     constructor(
     ) {
         this.gutterIcons = new GutterIconManager();
-        this.ruleBuilder = new RuleBuilder();
 
-        const configuration = vscode.workspace.getConfiguration("bracketPairColorizer", undefined);
+        const configuration = vscode.workspace.getConfiguration("bracket-pair-colorizer-2", undefined);
         const activeScopeCSS = configuration.get("activeScopeCSS") as string[];
 
         if (!Array.isArray(activeScopeCSS)) {
@@ -121,62 +120,20 @@ export default class Settings {
             throw new Error("colorMode enum could not be parsed");
         }
 
-        this.timeOutLength = configuration.get<number>("timeOut") as number;
-
-        if (typeof this.timeOutLength !== "number") {
-            throw new Error("timeOutLength is not a number");
-        }
-
-        if (this.timeOutLength <= 0) {
-            this.timeOutLength = 1;
-        }
-
-        if (this.colorMode === ColorMode.Consecutive) {
-            const consecutiveSettings = configuration.get<[{}]>("consecutivePairColors");
-
-            if (!Array.isArray(consecutiveSettings)) {
-                throw new Error("consecutivePairColors is not an array");
-            }
-
-            if (consecutiveSettings.length < 3) {
-                throw new Error("consecutivePairColors expected at least 3 parameters, actual: "
-                    + consecutiveSettings.length);
-            }
-
-            this.colors = consecutiveSettings[consecutiveSettings.length - 2] as string[];
-            if (!Array.isArray(this.colors)) {
-                throw new Error("consecutivePairColors[" + (consecutiveSettings.length - 2) + "] is not a string[]");
-            }
-        }
-        else {
-            const independentSettings = configuration.get<[[{}]]>("independentPairColors");
-
-            if (!Array.isArray(independentSettings)) {
-                throw new Error("independentPairColors is not an array");
-            }
-
-            independentSettings.forEach((innerArray, index) => {
-                if (!Array.isArray(innerArray)) {
-                    throw new Error("independentPairColors[" + index + "] is not an array");
-                }
-
-                const brackets = innerArray[0] as string;
-                if (typeof brackets !== "string" && !Array.isArray(brackets)) {
-                    throw new Error("independentSettings[" + index + "][0] is not a string or an array of strings");
-                }
-
-                if (brackets.length < 2) {
-                    throw new Error("independentSettings[" + index + "][0] needs at least 2 elements");
-                }
-
-                this.colors = innerArray[1] as string[];
-                if (!Array.isArray(this.colors)) {
-                    throw new Error("independentSettings[" + index + "][1] is not string[]");
-                }
-            });
+        this.colors = configuration.get("colors") as string[];
+        if (!Array.isArray(this.colors)) {
+            throw new Error("colors is not an array");
         }
 
         this.bracketDecorations = this.createBracketDecorations();
+
+        const languageDefinitions = configuration.get("languages") as BasicDefinition[];
+
+        if (!Array.isArray(languageDefinitions)) {
+            throw new Error("languageDefinitions is not an array");
+        }
+
+        this.ruleBuilder = new RuleBuilder(languageDefinitions);
     }
 
     public getRule(languageID: string) {
