@@ -20,7 +20,7 @@ export default class Settings {
     public readonly showBracketsInRuler: boolean;
     public readonly scopeLineRelativePosition: boolean;
     public readonly colors: string[];
-    public readonly ignoredLanguages: Set<string>;
+    public readonly excludedLanguages: Set<string>;
     public isDisposed = false;
     private readonly gutterIcons: GutterIconManager;
     private readonly activeBracketCSSElements: string[][];
@@ -136,13 +136,13 @@ export default class Settings {
 
         this.ruleBuilder = new RuleBuilder(languageDefinitions);
 
-        const ignoredLanguages = configuration.get("ignoredLanguage") as string[];
+        const excludedLanguages = configuration.get("excludedLanguages") as string[];
 
-        if (!Array.isArray(ignoredLanguages)) {
-            throw new Error("ignoredLanguages is not an array");
+        if (!Array.isArray(excludedLanguages)) {
+            throw new Error("excludedLanguages is not an array");
         }
 
-        this.ignoredLanguages = new Set(ignoredLanguages);
+        this.excludedLanguages = new Set(excludedLanguages);
     }
 
     public getRule(languageID: string) {

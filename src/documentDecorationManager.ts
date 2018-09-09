@@ -157,7 +157,7 @@ export default class DocumentDecorationManager {
             return false;
         }
 
-        if (this.settings.ignoredLanguages.has(document.languageId)) {
+        if (this.settings.excludedLanguages.has(document.languageId)) {
             console.log("Ignoring document because language id was ignored in settings");
             return false;
         }

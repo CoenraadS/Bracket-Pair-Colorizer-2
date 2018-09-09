@@ -91,6 +91,11 @@
                                     "startsWith": "punctuation.definition.dictionary",
                                     "openSuffix": ".begin",
                                     "closeSuffix": ".end"
+                                },
+                                {
+                                    "startsWith": "punctuation.definition.array",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
                                 }
                             ]
                         },
@@ -225,7 +230,7 @@
                     "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
                     "scope": "window"
                 },
-                "bracket-pair-colorizer-2.ignoredLanguage": {
+                "bracket-pair-colorizer-2.excludedLanguages": {
                     "type": "array",
                     "default": [
                     ],

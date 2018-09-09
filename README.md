@@ -58,7 +58,7 @@ Disable this to show the vertical line in column 0
 >`"bracket-pair-colorizer-2.scopeLineCSS"`  
 Choose a border style to highlight the active scope. Use `{color}` to match the existing bracket color 
 
->`"bracket-pair-colorizer-2.ignoreLanguages"`  
+>`"bracket-pair-colorizer-2.excludedLanguages"`  
 Exclude a language from being colorized
 
 ### Commands
