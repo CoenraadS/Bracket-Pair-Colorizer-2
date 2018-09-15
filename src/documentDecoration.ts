@@ -6,7 +6,6 @@ import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
-import TokenMatch from "./tokenMatch";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -18,15 +17,13 @@ export default class DocumentDecoration {
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
     private readonly eol: string;
-    private readonly typeMap: TokenMatch[];
-    private readonly suffix: string;
     constructor(document: vscode.TextDocument, textMate: IGrammar, settings: Settings) {
         this.settings = settings;
         this.document = document;
         this.tokenizer = textMate;
 
-        this.suffix = "." + ((this.tokenizer as any)._grammar.scopeName as string).split(".").slice(1).join(".");
-        this.typeMap = this.settings.getRule(document.languageId) || [];
+        // this.suffix = "." + ((this.tokenizer as any)._grammar.scopeName as string).split(".").slice(1).join(".");
+
         if (this.document.eol === EndOfLine.LF) {
             this.eol = "\n";
         }
@@ -487,28 +484,29 @@ export default class DocumentDecoration {
     }
 
     private validateToken(token: IToken, character: string, stack: Map<string, string[]>, currentLine: TextLine) {
-        for (const tokenMatch of this.typeMap) {
-            if (token.scopes.length - (tokenMatch.depth + 1) >= 0) {
-                const type = token.scopes[token.scopes.length - (tokenMatch.depth + 1)];
-                const typeNoLanguageSuffix = type.substring(0, type.length - this.suffix.length);
-                if (tokenMatch.regex.test(typeNoLanguageSuffix)) {
-                    if (tokenMatch.disabled) {
-                        return;
-                    }
-
-                    const commonToken =
-                        typeNoLanguageSuffix.substring(0, typeNoLanguageSuffix.length - tokenMatch.suffix.length);
-                    this.manageTokenStack(
-                        character,
-                        stack,
-                        commonToken,
-                        currentLine,
-                        token,
-                        tokenMatch.openAndCloseCharactersAreTheSame,
-                    );
-                    return;
-                }
+        if (token.scopes.length > 1) {
+            const type = token.scopes[token.scopes.length - 1];
+            const typeLanguage = type.substring(type.lastIndexOf(".") + 1, type.length);
+            console.log(type +": " +  character);
+            const typeMap = this.settings.getRule(typeLanguage);
+            if (!typeMap) {
+                return;
             }
+
+            const typeNoLanguageSuffix = type.substring(0, type.length - typeLanguage.length - 1);
+            const tokenMatch = typeMap.get(typeNoLanguageSuffix);
+            if (!tokenMatch) {
+                return;
+            }
+
+            const commonToken = tokenMatch.startsWith;
+            this.manageTokenStack(
+                character,
+                stack,
+                commonToken,
+                currentLine,
+                token,
+            );
         }
     }
 
@@ -540,9 +538,9 @@ export default class DocumentDecoration {
         type: string,
         currentLine: TextLine,
         token: IToken,
-        openAndCloseCharactersAreTheSame: boolean,
     ) {
-        const stackKey = openAndCloseCharactersAreTheSame ? currentChar : type + token.scopes.length;
+        const stackKey = type + token.scopes.length;
+        console.log(stackKey);
         const stack = stackMap.get(stackKey);
         if (stack && stack.length > 0) {
             const topStack = stack[stack.length - 1];

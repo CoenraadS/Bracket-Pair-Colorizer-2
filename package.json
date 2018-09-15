@@ -104,6 +104,42 @@
                             ]
                         },
                         {
+                            "language": "c",
+                            "scopes": [
+                                {
+                                    "startsWith": "punctuation.section.parameters",
+                                    "openSuffix": ".begin.bracket.round",
+                                    "closeSuffix": ".end.bracket.round"
+                                },
+                                {
+                                    "startsWith": "punctuation.section.block",
+                                    "openSuffix": ".begin.bracket.curly",
+                                    "closeSuffix": ".end.bracket.curly"
+                                },
+                                {
+                                    "startsWith": "punctuation.definition",
+                                    "openSuffix": ".begin.bracket.square",
+                                    "closeSuffix": ".end.bracket.square"
+                                },
+                                {
+                                    "startsWith": "punctuation.section.parens",
+                                    "openSuffix": ".begin.bracket.round",
+                                    "closeSuffix": ".end.bracket.round"
+                                }
+                            ]
+                        },
+                        {
+                            "language": "cpp",
+                            "extends": "c",
+                            "scopes": [
+                                {
+                                    "startsWith": "punctuation.section.arguments",
+                                    "openSuffix": ".begin.bracket.round",
+                                    "closeSuffix": ".end.bracket.round"
+                                }
+                            ]
+                        },
+                        {
                             "language": "csharp",
                             "scopes": [
                                 {

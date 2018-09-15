@@ -6,7 +6,7 @@ import TokenMatch from "./tokenMatch";
 export class RuleBuilder {
     private readonly start = new Map<string, BasicDefinition>();
     private readonly intermediate = new Map<string, DefinitionAfterInheritance>();
-    private readonly final = new Map<string, TokenMatch[]>();
+    private readonly final = new Map<string, Map<string, TokenMatch>>();
 
     constructor(languageDefinitions: BasicDefinition[]) {
         for (const userLanguage of languageDefinitions) {
@@ -14,7 +14,7 @@ export class RuleBuilder {
         }
     }
 
-    public get(languageId: string) {
+    public get(languageId: string): Map<string, TokenMatch> | undefined {
         const stackResult = this.final.get(languageId);
         if (stackResult) {
             return stackResult;
@@ -45,7 +45,7 @@ export class RuleBuilder {
 
             this.intermediate.set(extendedLanguage.language, extendedLanguage);
 
-            const tokens: TokenMatch[] = [];
+            const tokens = new Map<string, TokenMatch>();
             for (const scope of scopeMap.values()) {
                 if (!scope.startsWith) {
                     console.error("Missing 'startsWith' property");
@@ -53,42 +53,32 @@ export class RuleBuilder {
                     continue;
                 }
 
-                const depth = scope.depth || 0;
                 if (scope.openSuffix && scope.closeSuffix) {
-                    tokens.push(
-                        new TokenMatch(
-                            depth,
-                            !!scope.disabled,
-                            !!scope.openAndCloseCharactersAreTheSame,
-                            scope.startsWith,
-                            scope.openSuffix,
-                        ),
-                        new TokenMatch(
-                            depth,
-                            !!scope.disabled,
-                            !!scope.openAndCloseCharactersAreTheSame,
-                            scope.startsWith,
-                            scope.closeSuffix,
-                        ),
+                    const openToken = new TokenMatch(
+                        scope.startsWith,
+                        scope.openSuffix,
                     );
+
+                    tokens.set(openToken.type, openToken);
+                    const closeToken = new TokenMatch(
+                        scope.startsWith,
+                        scope.closeSuffix,
+                    );
+
+                    tokens.set(closeToken.type, closeToken);
                 }
                 else {
-                    tokens.push(
-                        new TokenMatch(
-                            depth,
-                            !!scope.disabled,
-                            !!scope.openAndCloseCharactersAreTheSame,
-                            scope.startsWith,
-                        ),
+                    const token = new TokenMatch(
+                        scope.startsWith,
                     );
+
+                    tokens.set(token.type, token);
                 }
             }
 
             this.final.set(languageId, tokens);
             return tokens;
         }
-
-        return this.final.get("default");
     }
 
     private getAllScopes(
