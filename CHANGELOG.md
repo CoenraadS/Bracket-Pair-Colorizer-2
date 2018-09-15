@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.4
+PowerShell support
+
 ### 0.0.3
 
 Fix loading languages where file extension differs from language id
