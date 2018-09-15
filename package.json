@@ -186,6 +186,26 @@
                                     "startsWith": "punctuation.bracket.round"
                                 }
                             ]
+                        },
+                        {
+                            "language": "powershell",
+                            "scopes": [
+                                {
+                                    "startsWith": "punctuation.section.group",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
+                                },
+                                {
+                                    "startsWith": "punctuation.section.braces",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
+                                },
+                                {
+                                    "startsWith": "punctuation.section.bracket",
+                                    "openSuffix": ".begin",
+                                    "closeSuffix": ".end"
+                                }
+                            ]
                         }
                     ]
                 },

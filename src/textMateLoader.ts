@@ -7,7 +7,7 @@ import fs = require("fs");
 export class TextMateLoader {
     public readonly scopeNameToLanguage = new Map<string, string>();
     private readonly scopeNameToPath = new Map<string, string>();
-    private readonly languageToScopeNames = new Map<string, string>();
+    private readonly languageToScopeName = new Map<string, string>();
     private languageId = 0;
     private readonly vsctm: any;
     private readonly textMateRegistry = new Map<string, IGrammar>();
@@ -22,7 +22,7 @@ export class TextMateLoader {
             return existingTokenizer;
         }
 
-        const scopeName = this.languageToScopeNames.get(languageID);
+        const scopeName = this.languageToScopeName.get(languageID);
 
         if (!scopeName) {
             return;
@@ -76,7 +76,7 @@ export class TextMateLoader {
                 packageJSON.contributes.grammars.forEach((grammar) => {
                     if (grammar.language && grammar.scopeName && grammar.path) {
                         const fullPath = path.join(extension.extensionPath, grammar.path);
-                        this.languageToScopeNames.set(grammar.language, grammar.scopeName);
+                        this.languageToScopeName.set(grammar.language, grammar.scopeName);
                         this.scopeNameToPath.set(grammar.scopeName, fullPath);
                         this.scopeNameToLanguage.set(grammar.scopeName, grammar.language);
                     }
