@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import fs = require("fs");
 
 export class TextMateLoader {
+    public readonly scopeNameToLanguage = new Map<string, string>();
     private readonly scopeNameToPath = new Map<string, string>();
     private readonly languageToScopeNames = new Map<string, string>();
     private languageId = 0;
@@ -77,6 +78,7 @@ export class TextMateLoader {
                         const fullPath = path.join(extension.extensionPath, grammar.path);
                         this.languageToScopeNames.set(grammar.language, grammar.scopeName);
                         this.scopeNameToPath.set(grammar.scopeName, fullPath);
+                        this.scopeNameToLanguage.set(grammar.scopeName, grammar.language);
                     }
                 });
             }

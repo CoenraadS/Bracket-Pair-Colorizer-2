@@ -5,12 +5,10 @@ import {
 import DocumentDecoration from "./documentDecoration";
 import { IGrammar } from "./IExtensionGrammar";
 import Settings from "./settings";
-import { TextMateLoader } from "./textMateLoader";
 
 export default class DocumentDecorationManager {
     private showError = true;
     private readonly documents = new Map<string, DocumentDecoration>();
-    private readonly textMateLoader = new TextMateLoader();
     private readonly settings = new Settings();
 
     public Dispose() {
@@ -101,19 +99,19 @@ export default class DocumentDecorationManager {
             try {
                 const tokenizer = this.tryGetTokenizer(document.languageId);
                 if (!tokenizer) {
-                    // console.log("Could not find tokenizer for " + uri);
+                    // console.log("Could not find tokenizer for " + document.languageId);
                     return;
                 }
 
                 if (tokenizer instanceof Promise) {
-                    // console.log("Found Tokenizer promise for " + uri);
+                    // console.log("Found Tokenizer promise for " + document.languageId);
                     tokenizer.then(() => {
                         this.updateDocument(document);
                     }).catch((e) => console.error(e));
                     return;
                 }
 
-                // console.log("Found Tokenizer for " + uri);
+                // console.log("Found Tokenizer for " + document.languageId);
 
                 documentDecorations = new DocumentDecoration(document, tokenizer as IGrammar, this.settings);
                 // console.log("Adding " + uri + " to cache");
@@ -138,7 +136,7 @@ export default class DocumentDecorationManager {
     }
 
     private tryGetTokenizer(languageID: string) {
-        return this.textMateLoader.tryGetTokenizer(languageID);
+        return this.settings.TextMateLoader.tryGetTokenizer(languageID);
     }
 
     private isValidDocument(document?: TextDocument): boolean {
@@ -154,6 +152,11 @@ export default class DocumentDecorationManager {
 
         if (document.uri.scheme === "vscode") {
             // console.log("Ignoring document with 'vscode' uri");
+            return false;
+        }
+
+        if (document.uri.scheme === "output") {
+            // console.log("Ignoring document with 'output' uri");
             return false;
         }
 

@@ -487,8 +487,7 @@ export default class DocumentDecoration {
         if (token.scopes.length > 1) {
             const type = token.scopes[token.scopes.length - 1];
             const typeLanguage = type.substring(type.lastIndexOf(".") + 1, type.length);
-            console.log(type +": " +  character);
-            const typeMap = this.settings.getRule(typeLanguage);
+            const typeMap = this.settings.getRule(token.scopes[0]);
             if (!typeMap) {
                 return;
             }
@@ -540,7 +539,6 @@ export default class DocumentDecoration {
         token: IToken,
     ) {
         const stackKey = type + token.scopes.length;
-        console.log(stackKey);
         const stack = stackMap.get(stackKey);
         if (stack && stack.length > 0) {
             const topStack = stack[stack.length - 1];

@@ -4,8 +4,10 @@ import ColorMode from "./colorMode";
 import Colors from "./colors";
 import GutterIconManager from "./gutterIconManager";
 import { RuleBuilder } from "./ruleBuilder";
+import TextMateLoader from "./textMateLoader";
 
 export default class Settings {
+    public readonly TextMateLoader = new TextMateLoader();
     public readonly bracketDecorations: Map<string, vscode.TextEditorDecorationType>;
     public readonly colorMode: ColorMode;
     public readonly contextualParsing: boolean;
@@ -145,8 +147,11 @@ export default class Settings {
         this.excludedLanguages = new Set(excludedLanguages);
     }
 
-    public getRule(languageID: string) {
-        return this.ruleBuilder.get(languageID);
+    public getRule(scopeName: string) {
+        const languageId = this.TextMateLoader.scopeNameToLanguage.get(scopeName);
+        if (languageId) {
+            return this.ruleBuilder.get(languageId);
+        }
     }
 
     public dispose() {
