@@ -475,16 +475,15 @@ export default class DocumentDecoration {
     }
 
     private parseTokens(tokens: IToken[], currentLine: TextLine, text: string) {
-        const stack = currentLine.getCharStack();
         for (const token of tokens) {
             const character = text.substring(token.startIndex, token.endIndex);
             if (token.scopes.length > 1) {
-                this.validateToken(token, character, stack, currentLine);
+                this.validateToken(token, character, currentLine);
             }
         }
     }
 
-    private validateToken(token: IToken, character: string, stack: Map<string, string[]>, currentLine: TextLine) {
+    private validateToken(token: IToken, character: string, currentLine: TextLine) {
         if (token.scopes.length > 1) {
             const type = token.scopes[token.scopes.length - 1];
             const typeLanguage = type.substring(type.lastIndexOf(".") + 1, type.length);
@@ -501,7 +500,6 @@ export default class DocumentDecoration {
 
             this.manageTokenStack(
                 character,
-                stack,
                 tokenMatch,
                 currentLine,
                 token,
@@ -533,12 +531,12 @@ export default class DocumentDecoration {
 
     private manageTokenStack(
         currentChar: string,
-        stackMap: Map<string, string[]>,
         type: ScopeDefinition,
         currentLine: TextLine,
         token: IToken,
     ) {
         const stackKey = type.open;
+        const stackMap = currentLine.getCharStack();
         const stack = stackMap.get(stackKey);
         if (stack && stack.length > 0) {
             const topStack = stack[stack.length - 1];
