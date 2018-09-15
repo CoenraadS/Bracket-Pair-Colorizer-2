@@ -1,20 +1,19 @@
-import BasicDefinition from "./basicDefinition";
+import LanguageDefinition from "./languageDefinition";
 import DefinitionAfterInheritance from "./definitionAfterInheritance";
 import ScopeDefinition from "./scopeDefinition";
-import TokenMatch from "./tokenMatch";
 
 export class RuleBuilder {
-    private readonly start = new Map<string, BasicDefinition>();
+    private readonly start = new Map<string, LanguageDefinition>();
     private readonly intermediate = new Map<string, DefinitionAfterInheritance>();
-    private readonly final = new Map<string, Map<string, TokenMatch>>();
+    private readonly final = new Map<string, Map<string, ScopeDefinition>>();
 
-    constructor(languageDefinitions: BasicDefinition[]) {
+    constructor(languageDefinitions: LanguageDefinition[]) {
         for (const userLanguage of languageDefinitions) {
             this.start.set(userLanguage.language, userLanguage);
         }
     }
 
-    public get(languageId: string): Map<string, TokenMatch> | undefined {
+    public get(languageId: string): Map<string, ScopeDefinition> | undefined {
         const stackResult = this.final.get(languageId);
         if (stackResult) {
             return stackResult;
@@ -22,69 +21,57 @@ export class RuleBuilder {
 
         const baseLanguage = this.start.get(languageId);
 
-        if (baseLanguage) {
-            const history = new Set<BasicDefinition>();
-            const scopesThisToBase = this.getAllScopes(baseLanguage, [], history);
+        if (!baseLanguage) {
+            return;
+        }
 
-            const scopeMap = new Map<string, ScopeDefinition>();
+        const history = new Set<LanguageDefinition>();
+        const scopesThisToBase = this.getAllScopes(baseLanguage, [], history);
 
-            // Set base map first then let extended languages overwrite
-            for (let i = scopesThisToBase.length; i-- > 0;) {
-                for (const scope of scopesThisToBase[i]) {
-                    if (!scope.startsWith) {
-                        console.error("Missing 'startsWith' property");
-                        console.error(scope);
-                        continue;
-                    }
+        const scopeMap = new Map<string, ScopeDefinition>();
 
-                    scopeMap.set(scope.startsWith, scope);
-                }
-            }
-
-            const extendedLanguage = new DefinitionAfterInheritance(baseLanguage.language, scopeMap);
-
-            this.intermediate.set(extendedLanguage.language, extendedLanguage);
-
-            const tokens = new Map<string, TokenMatch>();
-            for (const scope of scopeMap.values()) {
-                if (!scope.startsWith) {
-                    console.error("Missing 'startsWith' property");
+        // Set base map first then let extended languages overwrite
+        for (let i = scopesThisToBase.length; i-- > 0;) {
+            for (const scope of scopesThisToBase[i]) {
+                if (!scope.open) {
+                    console.error("Missing 'open' property");
                     console.error(scope);
                     continue;
                 }
 
-                if (scope.openSuffix && scope.closeSuffix) {
-                    const openToken = new TokenMatch(
-                        scope.startsWith,
-                        scope.openSuffix,
-                    );
+                scopeMap.set(scope.open, scope);
+            }
+        }
 
-                    tokens.set(openToken.type, openToken);
-                    const closeToken = new TokenMatch(
-                        scope.startsWith,
-                        scope.closeSuffix,
-                    );
+        const extendedLanguage = new DefinitionAfterInheritance(baseLanguage.language, scopeMap);
 
-                    tokens.set(closeToken.type, closeToken);
-                }
-                else {
-                    const token = new TokenMatch(
-                        scope.startsWith,
-                    );
+        this.intermediate.set(extendedLanguage.language, extendedLanguage);
 
-                    tokens.set(token.type, token);
-                }
+        const tokens = new Map<string, ScopeDefinition>();
+        for (const scope of scopeMap.values()) {
+            if (!scope.open) {
+                console.error("Missing 'open' property");
+                console.error(scope);
+                continue;
             }
 
-            this.final.set(languageId, tokens);
-            return tokens;
+            tokens.set(scope.open, scope);
+
+            if (scope.close) {
+                if (scope.close === scope.open) {
+                    console.warn("Open and close scopes are the same: " + scope.open);
+                }
+                tokens.set(scope.close, scope);
+            }
         }
+        this.final.set(languageId, tokens);
+        return tokens;
     }
 
     private getAllScopes(
-        userLanguageDefinition: BasicDefinition,
+        userLanguageDefinition: LanguageDefinition,
         allScopeDefinitions: ScopeDefinition[][],
-        history: Set<BasicDefinition>): ScopeDefinition[][] {
+        history: Set<LanguageDefinition>): ScopeDefinition[][] {
         if (history.has(userLanguageDefinition)) {
             console.error("Cycle detected while parsing user languages: " +
                 userLanguageDefinition.language + " => " +

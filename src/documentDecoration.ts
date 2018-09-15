@@ -6,6 +6,7 @@ import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
+import ScopeDefinition from "./scopeDefinition";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -498,11 +499,10 @@ export default class DocumentDecoration {
                 return;
             }
 
-            const commonToken = tokenMatch.startsWith;
             this.manageTokenStack(
                 character,
                 stack,
-                commonToken,
+                tokenMatch,
                 currentLine,
                 token,
             );
@@ -534,18 +534,18 @@ export default class DocumentDecoration {
     private manageTokenStack(
         currentChar: string,
         stackMap: Map<string, string[]>,
-        type: string,
+        type: ScopeDefinition,
         currentLine: TextLine,
         token: IToken,
     ) {
-        const stackKey = type + token.scopes.length;
+        const stackKey = type.open + token.scopes.length;
         const stack = stackMap.get(stackKey);
         if (stack && stack.length > 0) {
             const topStack = stack[stack.length - 1];
             if ((topStack) === currentChar) {
                 stack.push(currentChar);
                 currentLine.addBracket(
-                    type,
+                    stackKey,
                     currentChar,
                     stack.length + token.scopes.length,
                     token.startIndex,
@@ -554,7 +554,7 @@ export default class DocumentDecoration {
             }
             else {
                 currentLine.addBracket(
-                    type,
+                    stackKey,
                     currentChar,
                     stack.length + token.scopes.length,
                     token.startIndex,
@@ -567,7 +567,7 @@ export default class DocumentDecoration {
             const newStack = [currentChar];
             stackMap.set(stackKey, newStack);
             currentLine.addBracket(
-                type,
+                stackKey,
                 currentChar,
                 newStack.length + token.scopes.length,
                 token.startIndex,

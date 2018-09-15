@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import BasicDefinition from "./basicDefinition";
+import LanguageDefinition from "./languageDefinition";
 import ColorMode from "./colorMode";
 import Colors from "./colors";
 import GutterIconManager from "./gutterIconManager";
@@ -130,7 +130,7 @@ export default class Settings {
 
         this.bracketDecorations = this.createBracketDecorations();
 
-        const languageDefinitions = configuration.get("languages") as BasicDefinition[];
+        const languageDefinitions = configuration.get("languages") as LanguageDefinition[];
 
         if (!Array.isArray(languageDefinitions)) {
             throw new Error("languageDefinitions is not an array");
