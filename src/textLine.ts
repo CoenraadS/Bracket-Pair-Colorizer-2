@@ -39,11 +39,11 @@ export default class TextLine {
     public addBracket(
         type: string,
         character: string,
-        depth: number,
         beginIndex: number,
         endIndex: number,
+        open: boolean,
     ): void {
-        const color = this.lineState.getBracketColor(type, character, depth, beginIndex, this);
+        const color = this.lineState.getBracketColor(type, character, beginIndex, this, open);
 
         const colorRanges = this.colorRanges.get(color);
         if (colorRanges !== undefined) {

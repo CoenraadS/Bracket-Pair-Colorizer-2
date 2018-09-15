@@ -10,7 +10,6 @@ interface IBracketManager {
     getCurrentColorIndex(token: Token): number | undefined;
     getClosingBracket(position: Position): BracketClose | undefined;
     getAmountOfClosedBrackets(): number;
-    isClosingPairForCurrentStack(type: string, depth: number): boolean;
     copyCumulativeState(): IBracketManager;
     getOpeningBracketsWhereClosingBracketsAreNotOnSameLine(): Set<BracketPointer>;
 }

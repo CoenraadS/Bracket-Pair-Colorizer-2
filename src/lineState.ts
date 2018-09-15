@@ -47,7 +47,7 @@ export default class LineState {
         return this.charStack;
     }
 
-    public getAmountOfClosedBrackets(){
+    public getAmountOfClosedBrackets() {
         return this.bracketManager.getAmountOfClosedBrackets();
     }
 
@@ -69,15 +69,15 @@ export default class LineState {
     public getBracketColor(
         type: string,
         character: string,
-        depth: number,
         beginIndex: number,
         line: TextLine,
+        open: boolean,
     ): string {
-        const token = new Token(type, character, depth, beginIndex, line);
-        if (this.bracketManager.isClosingPairForCurrentStack(type, depth)) {
-            return this.getCloseBracketColor(token);
+        const token = new Token(type, character, beginIndex, line);
+        if (open) {
+            return this.getOpenBracketColor(token);
         }
-        return this.getOpenBracketColor(token);
+        return this.getCloseBracketColor(token);
     }
 
     private cloneCharStack() {

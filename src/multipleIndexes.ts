@@ -39,18 +39,6 @@ export default class MultipleBracketGroups implements IBracketManager {
         return this.closedBrackets.length;
     }
 
-    public isClosingPairForCurrentStack(type: string, depth: number): boolean {
-        const bracketStack = this.allLinesOpenBracketStack.get(type);
-
-        if (bracketStack && bracketStack.length > 0) {
-            const topStack = bracketStack[bracketStack.length - 1].bracket;
-            return topStack.token.depth === depth;
-        }
-        else {
-            return false;
-        }
-    }
-
     public setCurrent(token: Token, colorIndex: number) {
         const openBracket = new Bracket(token, colorIndex, this.settings.colors[colorIndex]);
         const pointer = new BracketPointer(openBracket);

@@ -4,9 +4,9 @@ import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
+import ScopeDefinition from "./scopeDefinition";
 import Settings from "./settings";
 import TextLine from "./textLine";
-import ScopeDefinition from "./scopeDefinition";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -538,7 +538,7 @@ export default class DocumentDecoration {
         currentLine: TextLine,
         token: IToken,
     ) {
-        const stackKey = type.open + token.scopes.length;
+        const stackKey = type.open;
         const stack = stackMap.get(stackKey);
         if (stack && stack.length > 0) {
             const topStack = stack[stack.length - 1];
@@ -547,18 +547,18 @@ export default class DocumentDecoration {
                 currentLine.addBracket(
                     stackKey,
                     currentChar,
-                    stack.length + token.scopes.length,
                     token.startIndex,
                     token.endIndex,
+                    true,
                 );
             }
             else {
                 currentLine.addBracket(
                     stackKey,
                     currentChar,
-                    stack.length + token.scopes.length,
                     token.startIndex,
                     token.endIndex,
+                    false,
                 );
                 stack.pop();
             }
@@ -569,9 +569,9 @@ export default class DocumentDecoration {
             currentLine.addBracket(
                 stackKey,
                 currentChar,
-                newStack.length + token.scopes.length,
                 token.startIndex,
                 token.endIndex,
+                true,
             );
         }
     }

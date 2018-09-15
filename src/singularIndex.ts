@@ -36,16 +36,6 @@ export default class SingularBracketGroup implements IBracketManager {
         return this.previousOpenBracketColorIndex;
     }
 
-    public isClosingPairForCurrentStack(type: string, depth: number): boolean {
-        if (this.allLinesOpenBracketStack.length === 0) {
-            return false;
-        }
-
-        const topStack = this.allLinesOpenBracketStack[this.allLinesOpenBracketStack.length - 1].bracket;
-
-        return topStack.token.type === type && topStack.token.depth === depth;
-    }
-
     public setCurrent(token: Token, colorIndex: number) {
         const openBracket = new Bracket(token, colorIndex, this.settings.colors[colorIndex]);
         const pointer = new BracketPointer(openBracket);

@@ -1,5 +1,5 @@
-import LanguageDefinition from "./languageDefinition";
 import DefinitionAfterInheritance from "./definitionAfterInheritance";
+import LanguageDefinition from "./languageDefinition";
 import ScopeDefinition from "./scopeDefinition";
 
 export class RuleBuilder {
