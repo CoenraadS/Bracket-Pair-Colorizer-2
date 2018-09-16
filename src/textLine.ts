@@ -2,7 +2,6 @@ import { Position } from "vscode";
 import BracketClose from "./bracketClose";
 import { IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
-import ScopePair from "./scopePair";
 import ScopeSingle, { ScopeType } from "./scopeSingle";
 
 export default class TextLine {
