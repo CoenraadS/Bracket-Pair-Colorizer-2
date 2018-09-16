@@ -64,8 +64,16 @@ export class RuleBuilder {
                 const open = new ScopeSingle(scope.open, ScopeType.Open, scope.open);
                 tokens.set(open.tokenName, open);
 
-                const close = new ScopeSingle(scope.close, ScopeType.Close, scope.open);
-                tokens.set(close.tokenName, close);
+                if (Array.isArray(scope.close)) {
+                    for (const closeType of scope.close) {
+                        const close = new ScopeSingle(closeType, ScopeType.Close, scope.open);
+                        tokens.set(close.tokenName, close);
+                    }
+                }
+                else {
+                    const close = new ScopeSingle(scope.close, ScopeType.Close, scope.open);
+                    tokens.set(close.tokenName, close);
+                }
             }
             else {
                 const ambiguous = new ScopeSingle(scope.open, ScopeType.Ambiguous, scope.open);

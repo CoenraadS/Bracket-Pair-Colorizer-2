@@ -47,6 +47,26 @@
                     "scope": "window",
                     "default": [
                         {
+                            "language": "clojure",
+                            "scopes": [
+                                {
+                                    "open": "punctuation.section.expression.begin",
+                                    "close": "punctuation.section.expression.end.trailing"
+                                },
+                                {
+                                    "open": "punctuation.section.vector.begin",
+                                    "close": [
+                                        "punctuation.section.vector.end.trailing",
+                                        "punctuation.section.vector.end"
+                                    ]
+                                },
+                                {
+                                    "open": "punctuation.section.map.begin",
+                                    "close": "punctuation.section.map.end.trailing"
+                                }
+                            ]
+                        },
+                        {
                             "language": "php",
                             "scopes": [
                                 {

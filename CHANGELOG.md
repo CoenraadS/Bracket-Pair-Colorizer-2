@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.6
+Clojure support
+
 ### 0.0.5
 PHP support  
 Fix switch statements breaking Typescript brackets
