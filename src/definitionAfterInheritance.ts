@@ -1,9 +1,9 @@
-import ScopeDefinition from "./scopeDefinition";
+import ScopePair from "./scopePair";
 
 export default class DefinitionAfterInheritance {
     public readonly language: string;
-    public readonly scopes: Map<string, ScopeDefinition>;
-    constructor(language: string, scopes: Map<string, ScopeDefinition>) {
+    public readonly scopes: Map<string, ScopePair>;
+    constructor(language: string, scopes: Map<string, ScopePair>) {
         this.language = language;
         this.scopes = scopes;
     }

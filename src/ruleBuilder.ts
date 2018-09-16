@@ -1,11 +1,12 @@
 import DefinitionAfterInheritance from "./definitionAfterInheritance";
 import LanguageDefinition from "./languageDefinition";
-import ScopeDefinition from "./scopeDefinition";
+import ScopePair from "./scopePair";
+import ScopeSingle, { ScopeType } from "./scopeSingle";
 
 export class RuleBuilder {
     private readonly start = new Map<string, LanguageDefinition>();
     private readonly intermediate = new Map<string, DefinitionAfterInheritance>();
-    private readonly final = new Map<string, Map<string, ScopeDefinition>>();
+    private readonly final = new Map<string, Map<string, ScopeSingle>>();
 
     constructor(languageDefinitions: LanguageDefinition[]) {
         for (const userLanguage of languageDefinitions) {
@@ -13,7 +14,7 @@ export class RuleBuilder {
         }
     }
 
-    public get(languageId: string): Map<string, ScopeDefinition> | undefined {
+    public get(languageId: string): Map<string, ScopeSingle> | undefined {
         const stackResult = this.final.get(languageId);
         if (stackResult) {
             return stackResult;
@@ -28,7 +29,7 @@ export class RuleBuilder {
         const history = new Set<LanguageDefinition>();
         const scopesThisToBase = this.getAllScopes(baseLanguage, [], history);
 
-        const scopeMap = new Map<string, ScopeDefinition>();
+        const scopeMap = new Map<string, ScopePair>();
 
         // Set base map first then let extended languages overwrite
         for (let i = scopesThisToBase.length; i-- > 0;) {
@@ -47,7 +48,7 @@ export class RuleBuilder {
 
         this.intermediate.set(extendedLanguage.language, extendedLanguage);
 
-        const tokens = new Map<string, ScopeDefinition>();
+        const tokens = new Map<string, ScopeSingle>();
         for (const scope of scopeMap.values()) {
             if (!scope.open) {
                 console.error("Missing 'open' property");
@@ -55,23 +56,31 @@ export class RuleBuilder {
                 continue;
             }
 
-            tokens.set(scope.open, scope);
-
-            if (scope.close) {
+            if (scope.open && scope.close) {
                 if (scope.close === scope.open) {
-                    console.warn("Open and close scopes are the same: " + scope.open);
+                    throw new Error("Open and close scopes are the same: " + scope.open);
                 }
-                tokens.set(scope.close, scope);
+
+                const open = new ScopeSingle(scope.open, ScopeType.Open, scope.open);
+                tokens.set(open.tokenName, open);
+
+                const close = new ScopeSingle(scope.close, ScopeType.Close, scope.open);
+                tokens.set(close.tokenName, close);
+            }
+            else {
+                const ambiguous = new ScopeSingle(scope.open, ScopeType.Ambiguous, scope.open);
+                tokens.set(ambiguous.tokenName, ambiguous);
             }
         }
+
         this.final.set(languageId, tokens);
         return tokens;
     }
 
     private getAllScopes(
         userLanguageDefinition: LanguageDefinition,
-        allScopeDefinitions: ScopeDefinition[][],
-        history: Set<LanguageDefinition>): ScopeDefinition[][] {
+        allScopeDefinitions: ScopePair[][],
+        history: Set<LanguageDefinition>): ScopePair[][] {
         if (history.has(userLanguageDefinition)) {
             console.error("Cycle detected while parsing user languages: " +
                 userLanguageDefinition.language + " => " +

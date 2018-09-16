@@ -47,21 +47,41 @@
                     "scope": "window",
                     "default": [
                         {
+                            "language": "php",
+                            "scopes": [
+                                {
+                                    "open": "punctuation.definition.begin.bracket.round",
+                                    "close": "punctuation.definition.end.bracket.round"
+                                },
+                                {
+                                    "open": "punctuation.definition.arguments.begin.bracket.round",
+                                    "close": "punctuation.definition.arguments.end.bracket.round"
+                                },
+                                {
+                                    "open": "punctuation.definition.begin.bracket.curly",
+                                    "close": "punctuation.definition.end.bracket.curly"
+                                },
+                                {
+                                    "open": "punctuation.section.array.begin",
+                                    "close": "punctuation.section.array.end"
+                                }
+                            ]
+                        },
+                        {
                             "language": "javascript",
                             "scopes": [
                                 {
-                                    "startsWith": "meta.brace.round"
+                                    "open": "meta.brace.round"
                                 },
                                 {
-                                    "startsWith": "meta.brace.square"
+                                    "open": "meta.brace.square"
                                 },
                                 {
-                                    "startsWith": "punctuation.definition.block"
+                                    "open": "punctuation.definition.block"
                                 },
                                 {
-                                    "startsWith": "punctuation.definition.parameters",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.definition.parameters.begin",
+                                    "close": "punctuation.definition.parameters.end"
                                 }
                             ]
                         },
@@ -73,14 +93,12 @@
                             "language": "json",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.definition.dictionary",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.definition.dictionary.begin",
+                                    "close": "punctuation.definition.dictionary.end"
                                 },
                                 {
-                                    "startsWith": "punctuation.definition.array",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.definition.array.begin",
+                                    "close": "punctuation.definition.array.end"
                                 }
                             ]
                         },
@@ -92,14 +110,20 @@
                             "language": "python",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.definition.dict",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.definition.dict.begin",
+                                    "close": "punctuation.definition.dict.end"
                                 },
                                 {
-                                    "startsWith": "punctuation.definition.arguments",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.definition.arguments.begin",
+                                    "close": "punctuation.definition.arguments.end"
+                                },
+                                {
+                                    "open": "punctuation.definition.list.begin",
+                                    "close": "punctuation.definition.list.end"
+                                },
+                                {
+                                    "open": "punctuation.parenthesis.begin",
+                                    "close": "punctuation.parenthesis.end"
                                 }
                             ]
                         },
@@ -107,24 +131,20 @@
                             "language": "c",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.section.parameters",
-                                    "openSuffix": ".begin.bracket.round",
-                                    "closeSuffix": ".end.bracket.round"
+                                    "open": "punctuation.section.parameters.begin.bracket.round",
+                                    "close": "punctuation.section.parameters.end.bracket.round"
                                 },
                                 {
-                                    "startsWith": "punctuation.section.block",
-                                    "openSuffix": ".begin.bracket.curly",
-                                    "closeSuffix": ".end.bracket.curly"
+                                    "open": "punctuation.section.block.begin.bracket.curly",
+                                    "close": "punctuation.section.block.end.bracket.curly"
                                 },
                                 {
-                                    "startsWith": "punctuation.definition",
-                                    "openSuffix": ".begin.bracket.square",
-                                    "closeSuffix": ".end.bracket.square"
+                                    "open": "punctuation.definition.begin.bracket.square",
+                                    "close": "punctuation.definition.end.bracket.square"
                                 },
                                 {
-                                    "startsWith": "punctuation.section.parens",
-                                    "openSuffix": ".begin.bracket.round",
-                                    "closeSuffix": ".end.bracket.round"
+                                    "open": "punctuation.section.parens.begin.bracket.round",
+                                    "close": "punctuation.section.parens.end.bracket.round"
                                 }
                             ]
                         },
@@ -133,9 +153,8 @@
                             "extends": "c",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.section.arguments",
-                                    "openSuffix": ".begin.bracket.round",
-                                    "closeSuffix": ".end.bracket.round"
+                                    "open": "punctuation.section.arguments.begin.bracket.round",
+                                    "close": "punctuation.section.arguments.end.bracket.round"
                                 }
                             ]
                         },
@@ -143,19 +162,16 @@
                             "language": "csharp",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.curlybrace",
-                                    "openSuffix": ".open",
-                                    "closeSuffix": ".close"
+                                    "open": "punctuation.curlybrace.open",
+                                    "close": "punctuation.curlybrace.close"
                                 },
                                 {
-                                    "startsWith": "punctuation.squarebracket",
-                                    "openSuffix": ".open",
-                                    "closeSuffix": ".close"
+                                    "open": "punctuation.squarebracket.open",
+                                    "close": "punctuation.squarebracket.open"
                                 },
                                 {
-                                    "startsWith": "punctuation.parenthesis",
-                                    "openSuffix": ".open",
-                                    "closeSuffix": ".close"
+                                    "open": "punctuation.parenthesis.open",
+                                    "close": "punctuation.parenthesis.close"
                                 }
                             ]
                         },
@@ -163,27 +179,23 @@
                             "language": "java",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.section.class",
-                                    "openSuffix": ".begin.bracket.curly",
-                                    "closeSuffix": ".end.bracket.curly"
+                                    "open": "punctuation.section.class.begin.bracket.curly",
+                                    "close": "punctuation.section.class.end.bracket.curly"
                                 },
                                 {
-                                    "startsWith": "punctuation.section.method",
-                                    "openSuffix": ".begin.bracket.curly",
-                                    "closeSuffix": ".end.bracket.curly"
+                                    "open": "punctuation.section.method.begin.bracket.curly",
+                                    "close": "punctuation.section.method.end.bracket.curly"
                                 },
                                 {
-                                    "startsWith": "punctuation.definition.parameters",
-                                    "openSuffix": ".begin.bracket.round",
-                                    "closeSuffix": ".end.bracket.round"
+                                    "open": "punctuation.definition.parameters.begin.bracket.round",
+                                    "close": "punctuation.definition.parameters.end.bracket.round"
                                 },
                                 {
-                                    "startsWith": "punctuation.section.block",
-                                    "openSuffix": ".begin.bracket.curly",
-                                    "closeSuffix": ".end.bracket.curly"
+                                    "open": "punctuation.section.block.begin.bracket.curly",
+                                    "close": "punctuation.section.block.end.bracket.curly"
                                 },
                                 {
-                                    "startsWith": "punctuation.bracket.round"
+                                    "open": "punctuation.bracket.round"
                                 }
                             ]
                         },
@@ -191,19 +203,16 @@
                             "language": "powershell",
                             "scopes": [
                                 {
-                                    "startsWith": "punctuation.section.group",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.section.group.begin",
+                                    "close": "punctuation.section.group.end"
                                 },
                                 {
-                                    "startsWith": "punctuation.section.braces",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.section.braces.begin",
+                                    "close": "punctuation.section.braces.end"
                                 },
                                 {
-                                    "startsWith": "punctuation.section.bracket",
-                                    "openSuffix": ".begin",
-                                    "closeSuffix": ".end"
+                                    "open": "punctuation.section.bracket.begin",
+                                    "close": "punctuation.section.bracket.end"
                                 }
                             ]
                         }

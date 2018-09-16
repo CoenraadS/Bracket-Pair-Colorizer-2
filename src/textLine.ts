@@ -1,8 +1,9 @@
 import { Position } from "vscode";
-import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import { IStackElement } from "./IExtensionGrammar";
+import { IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
+import ScopePair from "./scopePair";
+import ScopeSingle, { ScopeType } from "./scopeSingle";
 
 export default class TextLine {
     public colorRanges = new Map<string, Array<{ beginIndex: number, endIndex: number }>>();
@@ -36,7 +37,71 @@ export default class TextLine {
         return this.lineState.getAmountOfClosedBrackets();
     }
 
-    public addBracket(
+    public AddToken(
+        currentChar: string,
+        match: ScopeSingle,
+        token: IToken,
+    ) {
+        if (match.type === ScopeType.Open) {
+            this.addBracket(
+                match.key,
+                currentChar,
+                token.startIndex,
+                token.endIndex,
+                true,
+            );
+        }
+        else if (match.type === ScopeType.Close) {
+            this.addBracket(
+                match.key,
+                currentChar,
+                token.startIndex,
+                token.endIndex,
+                false,
+            );
+        }
+        else {
+            const stackKey = match.key;
+            const stackMap = this.getCharStack();
+            const stack = stackMap.get(stackKey);
+            if (stack && stack.length > 0) {
+                const topStack = stack[stack.length - 1];
+                if ((topStack) === currentChar) {
+                    stack.push(currentChar);
+                    this.addBracket(
+                        stackKey,
+                        currentChar,
+                        token.startIndex,
+                        token.endIndex,
+                        true,
+                    );
+                }
+                else {
+                    this.addBracket(
+                        stackKey,
+                        currentChar,
+                        token.startIndex,
+                        token.endIndex,
+                        false,
+                    );
+                    stack.pop();
+                }
+            }
+            else {
+                const newStack = [currentChar];
+                stackMap.set(stackKey, newStack);
+                this.addBracket(
+                    stackKey,
+                    currentChar,
+                    token.startIndex,
+                    token.endIndex,
+                    true,
+                );
+            }
+        }
+    }
+
+    private addBracket(
         type: string,
         character: string,
         beginIndex: number,

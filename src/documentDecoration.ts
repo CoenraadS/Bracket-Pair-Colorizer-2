@@ -4,7 +4,7 @@ import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
-import ScopeDefinition from "./scopeDefinition";
+import ScopePair from "./scopePair";
 import Settings from "./settings";
 import TextLine from "./textLine";
 
@@ -498,10 +498,9 @@ export default class DocumentDecoration {
                 return;
             }
 
-            this.manageTokenStack(
+            currentLine.AddToken(
                 character,
                 tokenMatch,
-                currentLine,
                 token,
             );
         }
@@ -526,51 +525,6 @@ export default class DocumentDecoration {
                 current.value.bracket.token.line = currentLine;
                 current.value.bracket.token.beginIndex = currentBeginIndex;
             }
-        }
-    }
-
-    private manageTokenStack(
-        currentChar: string,
-        type: ScopeDefinition,
-        currentLine: TextLine,
-        token: IToken,
-    ) {
-        const stackKey = type.open;
-        const stackMap = currentLine.getCharStack();
-        const stack = stackMap.get(stackKey);
-        if (stack && stack.length > 0) {
-            const topStack = stack[stack.length - 1];
-            if ((topStack) === currentChar) {
-                stack.push(currentChar);
-                currentLine.addBracket(
-                    stackKey,
-                    currentChar,
-                    token.startIndex,
-                    token.endIndex,
-                    true,
-                );
-            }
-            else {
-                currentLine.addBracket(
-                    stackKey,
-                    currentChar,
-                    token.startIndex,
-                    token.endIndex,
-                    false,
-                );
-                stack.pop();
-            }
-        }
-        else {
-            const newStack = [currentChar];
-            stackMap.set(stackKey, newStack);
-            currentLine.addBracket(
-                stackKey,
-                currentChar,
-                token.startIndex,
-                token.endIndex,
-                true,
-            );
         }
     }
 
