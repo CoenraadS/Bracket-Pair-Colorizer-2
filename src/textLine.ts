@@ -101,6 +101,14 @@ export default class TextLine {
         }
     }
 
+    public getClosingBracket(position: Position): BracketClose | undefined {
+        return this.lineState.getClosingBracket(position);
+    }
+
+    public getOpeningBracketsWhereClosingBracketsAreNotOnSameLine() {
+        return this.lineState.getOpeningBracketsWhereClosingBracketsAreNotOnSameLine();
+    }
+
     private addBracket(
         type: string,
         character: string,
@@ -118,13 +126,5 @@ export default class TextLine {
             this.colorRanges.set(color, [{ beginIndex, endIndex }]);
         }
         return;
-    }
-
-    public getClosingBracket(position: Position): BracketClose | undefined {
-        return this.lineState.getClosingBracket(position);
-    }
-
-    public getOpeningBracketsWhereClosingBracketsAreNotOnSameLine() {
-        return this.lineState.getOpeningBracketsWhereClosingBracketsAreNotOnSameLine();
     }
 }
