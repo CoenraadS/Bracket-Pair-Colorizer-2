@@ -1,5 +1,9 @@
 ## Release Notes
 
+### 0.0.5
+PHP support  
+Fix switch statements breaking Typescript brackets
+
 ### 0.0.4
 PowerShell support
 
