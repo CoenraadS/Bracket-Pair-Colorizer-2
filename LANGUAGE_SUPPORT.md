@@ -44,15 +44,14 @@ Now we can add this information to `bracket-pair-colorizer-2.languages`
  "language": "java",
     "scopes": [
         {
-            "startsWith": "punctuation.section.class",
-            "openSuffix": ".begin.bracket.curly",
-            "closeSuffix": ".end.bracket.curly"
+            "open": "punctuation.section.class.begin.bracket.curly",
+            "close": "punctuation.section.class.end.bracket.curly",
         },
 ```
 ---
 
-Note: Some tokens do not have open/close suffixes (e.g. `punctuation.bracket.round.java`),  
-in which case only the `startsWith` property needs to be set to `punctuation.bracket.round`
+Note: Some tokens do not have open/close suffixes (e.g. `punctuation.bracket.round.java`), 
+in which case only the `open` property needs to be set.
 
 ---
 
