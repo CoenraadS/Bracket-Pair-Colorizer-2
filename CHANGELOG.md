@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.7
+Clojure support hotfix
+
 ### 0.0.6
 Clojure support
 
