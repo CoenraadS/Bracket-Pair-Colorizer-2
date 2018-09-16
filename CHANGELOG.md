@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.8
+Fix gutter icons showing only closing brackets
+
 ### 0.0.7
 Clojure support hotfix
 

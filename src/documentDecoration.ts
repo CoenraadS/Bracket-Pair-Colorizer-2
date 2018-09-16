@@ -267,13 +267,13 @@ export default class DocumentDecoration {
         if (this.settings.showBracketsInGutter) {
             if (startLineIndex === endLineIndex) {
                 const decoration = this.settings.createGutterBracketDecorations
-                    (endBracket.color, endBracket.token.character + endBracket.token.character);
+                    (endBracket.color, startBracket.token.character + endBracket.token.character);
                 event.textEditor.setDecorations(decoration, [beginRange, endRange]);
                 this.scopeDecorations.push(decoration);
             }
             else {
                 const decorationOpen =
-                    this.settings.createGutterBracketDecorations(endBracket.color, endBracket.token.character);
+                    this.settings.createGutterBracketDecorations(startBracket.color, startBracket.token.character);
                 event.textEditor.setDecorations(decorationOpen, [beginRange]);
                 this.scopeDecorations.push(decorationOpen);
                 const decorationClose =
