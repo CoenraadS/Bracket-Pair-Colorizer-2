@@ -51,7 +51,10 @@
                             "scopes": [
                                 {
                                     "open": "punctuation.section.expression.begin",
-                                    "close": "punctuation.section.expression.end.trailing"
+                                    "close": [
+                                        "punctuation.section.expression.end.trailing",
+                                        "punctuation.section.expression.end"
+                                    ]
                                 },
                                 {
                                     "open": "punctuation.section.vector.begin",
@@ -62,7 +65,10 @@
                                 },
                                 {
                                     "open": "punctuation.section.map.begin",
-                                    "close": "punctuation.section.map.end.trailing"
+                                    "close": [
+                                        "punctuation.section.map.end.trailing",
+                                        "punctuation.section.map.end"
+                                    ]
                                 }
                             ]
                         },
