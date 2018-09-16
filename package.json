@@ -42,6 +42,112 @@
             "type": "object",
             "title": "Bracket Pair Colorizer 2",
             "properties": {
+                "bracket-pair-colorizer-2.colors": {
+                    "type": "array",
+                    "default": [
+                        "Gold",
+                        "Orchid",
+                        "LightSkyBlue"
+                    ],
+                    "description": "Scope colors",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.forceUniqueOpeningColor": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Ensure that an opening brackets color does not match a previous brackets color",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.forceIterationColorCycle": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Should opening brackets iterate the color cycle even if they are not nested",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.colorMode": {
+                    "type": "string",
+                    "enum": [
+                        "Consecutive",
+                        "Independent"
+                    ],
+                    "default": "Consecutive",
+                    "description": "Should different brackets share a color group (Consecutive), or use their own color group (Independent)",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.highlightActiveScope": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Should the active scope brackets always be highlighted? Recommended to disable editor.matchBrackets if using this feature.",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.activeScopeCSS": {
+                    "type": "array",
+                    "default": [
+                        "borderStyle : solid",
+                        "borderWidth : 1px",
+                        "borderColor : {color}; opacity: 0.5"
+                    ],
+                    "description": "CSS for the active scope. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.showBracketsInGutter": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Show active bracket scope in gutter?",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.showBracketsInRuler": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Show active bracket scope in ruler?",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.rulerPosition": {
+                    "type": "string",
+                    "enum": [
+                        "Center",
+                        "Full",
+                        "Left",
+                        "Right"
+                    ],
+                    "default": "Center",
+                    "description": "Show active bracket scope in ruler?",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.showVerticalScopeLine": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show a vertical line on the left side of the editor representing the active bracket scope?",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.showHorizontalScopeLine": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show a horizontal line to create a block around the active bracket scope?",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.scopeLineRelativePosition": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "True: Scope Line will start from the ending bracket position. False: Scope Line will always be at column 0",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.scopeLineCSS": {
+                    "type": "array",
+                    "default": [
+                        "borderStyle : solid",
+                        "borderWidth : 1px",
+                        "borderColor : {color}; opacity: 0.5"
+                    ],
+                    "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.excludedLanguages": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Don't colorize files of these languages",
+                    "scope": "window"
+                },
                 "bracket-pair-colorizer-2.languages": {
                     "description": "Ensure that an opening brackets color does not match a previous brackets color",
                     "scope": "window",
@@ -243,112 +349,6 @@
                             ]
                         }
                     ]
-                },
-                "bracket-pair-colorizer-2.colors": {
-                    "type": "array",
-                    "default": [
-                        "Gold",
-                        "Orchid",
-                        "LightSkyBlue"
-                    ],
-                    "description": "Bracket colors for light themes",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.forceUniqueOpeningColor": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Ensure that an opening brackets color does not match a previous brackets color",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.forceIterationColorCycle": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Should opening brackets iterate the color cycle even if they are not nested",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.colorMode": {
-                    "type": "string",
-                    "enum": [
-                        "Consecutive",
-                        "Independent"
-                    ],
-                    "default": "Consecutive",
-                    "description": "Should different brackets share a color group (Consecutive), or use their own color group (Independent)",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.highlightActiveScope": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Should the active scope brackets always be highlighted? Recommended to disable editor.matchBrackets if using this feature.",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.activeScopeCSS": {
-                    "type": "array",
-                    "default": [
-                        "borderStyle : solid",
-                        "borderWidth : 1px",
-                        "borderColor : {color}; opacity: 0.5"
-                    ],
-                    "description": "CSS for the active scope. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.showBracketsInGutter": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Show active bracket scope in gutter?",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.showBracketsInRuler": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Show active bracket scope in ruler?",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.rulerPosition": {
-                    "type": "string",
-                    "enum": [
-                        "Center",
-                        "Full",
-                        "Left",
-                        "Right"
-                    ],
-                    "default": "Center",
-                    "description": "Show active bracket scope in ruler?",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.showVerticalScopeLine": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show a vertical line on the left side of the editor representing the active bracket scope?",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.showHorizontalScopeLine": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show a horizontal line to create a block around the active bracket scope?",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.scopeLineRelativePosition": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "True: Scope Line will start from the ending bracket position. False: Scope Line will always be at column 0",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.scopeLineCSS": {
-                    "type": "array",
-                    "default": [
-                        "borderStyle : solid",
-                        "borderWidth : 1px",
-                        "borderColor : {color}; opacity: 0.5"
-                    ],
-                    "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
-                    "scope": "window"
-                },
-                "bracket-pair-colorizer-2.excludedLanguages": {
-                    "type": "array",
-                    "default": [],
-                    "description": "Don't colorize files of these languages",
-                    "scope": "window"
                 }
             }
         }
