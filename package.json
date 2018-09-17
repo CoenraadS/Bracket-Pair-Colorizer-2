@@ -299,7 +299,7 @@
                                 },
                                 {
                                     "open": "punctuation.squarebracket.open",
-                                    "close": "punctuation.squarebracket.open"
+                                    "close": "punctuation.squarebracket.close"
                                 },
                                 {
                                     "open": "punctuation.parenthesis.open",

@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.9
+C# support hotfix
+
 ### 0.0.8
 Fix gutter icons showing only closing brackets
 
