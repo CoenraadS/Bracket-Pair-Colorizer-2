@@ -38,7 +38,7 @@ export default class DocumentDecoration {
     }
 
     public onDidChangeTextDocument(contentChanges: vscode.TextDocumentContentChangeEvent[]) {
-        if (contentChanges.length > 1) {
+        if (contentChanges.length > 1 || !contentChanges[0].range.isSingleLine) {
             let minLineIndexToUpdate = 0;
             for (const contentChange of contentChanges) {
                 minLineIndexToUpdate = Math.min(minLineIndexToUpdate, contentChange.range.start.line);
@@ -55,71 +55,25 @@ export default class DocumentDecoration {
         }
 
         const change = contentChanges[0];
-
-        const amountOfExistingLinesChanged = (change.range.end.line - change.range.start.line) + 1;
-        const amountOfNewLinesChanged = change.text.split(this.eol).length;
-        const amountOfRemovedLines = Math.max(0, amountOfExistingLinesChanged - amountOfNewLinesChanged);
-        const amountOfLinesToReparse = amountOfExistingLinesChanged - amountOfRemovedLines;
-        const amountOfInsertedLines = amountOfNewLinesChanged - amountOfLinesToReparse;
-        const overLapEndIndex = amountOfLinesToReparse + change.range.start.line;
-
-        if (amountOfInsertedLines > 0 && amountOfRemovedLines > 0) {
-            throw new Error("Inserted/Removed line calculation is wrong");
-        }
-
-        if (amountOfInsertedLines < 0) {
-            throw new Error("amountOfInsertedLines < 0");
-        }
-
-        if (amountOfRemovedLines < 0) {
-            throw new Error("amountOfRemovedLines < 0");
-        }
-
+        const lineNumber = change.range.start.line;
         // Parse overlapped lines with goal to see if we can avoid document reparse
         // By just moving existing brackets if the amount of brackets on a line didn't change
-        for (let i = change.range.start.line; i < overLapEndIndex; i++) {
-            const newLine = this.tokenizeLine(i);
-            const currentLine = this.lines[i];
+        const newLine = this.tokenizeLine(lineNumber);
+        const currentLine = this.lines[lineNumber];
 
-            // Current line has new brackets which need to be colored
-            if (
-                !currentLine.getRuleStack().equals(newLine.getRuleStack()) ||
-                currentLine.getBracketHash() !== newLine.getBracketHash()
-            ) {
-                this.lines[i] = newLine;
-                this.lines.splice(i + 1);
-                this.tokenizeDocument();
-                return;
-            }
-
-            const charOffset = change.text.length - change.rangeLength;
-
-            currentLine.offset(change.rangeOffset, charOffset);
+        // Current line has new brackets which need to be colored
+        if (
+            !currentLine.getRuleStack().equals(newLine.getRuleStack()) ||
+            currentLine.getBracketHash() !== newLine.getBracketHash()
+        ) {
+            this.lines[lineNumber] = newLine;
+            this.lines.splice(lineNumber + 1);
+            this.tokenizeDocument();
+            return;
         }
 
-        if (amountOfInsertedLines > 0 || amountOfRemovedLines > 0) {
-            const existingTextLines = this.lines.splice(overLapEndIndex);
-            existingTextLines.splice(0, amountOfRemovedLines);
-            for (let i = 0; i < amountOfInsertedLines; i++) {
-                const index = i + overLapEndIndex;
-                const newLine = this.tokenizeLine(index);
-                this.lines.push(newLine);
-            }
-
-            if (existingTextLines.length > 0) {
-                const fakeNextLine = this.tokenizeLine(amountOfInsertedLines + overLapEndIndex).getRuleStack();
-                if (existingTextLines[0].getRuleStack().equals(fakeNextLine)) {
-                    this.lines.push(...existingTextLines);
-                    for (let i = amountOfInsertedLines + overLapEndIndex; i < this.lines.length; i++) {
-                        this.lines[i].index = i;
-                    }
-                }
-                else {
-                    this.tokenizeDocument();
-                    return;
-                }
-            }
-        }
+        const charOffset = change.text.length - change.rangeLength;
+        currentLine.offset(change.rangeOffset, charOffset);
     }
 
     public expandBracketSelection(editor: vscode.TextEditor) {
