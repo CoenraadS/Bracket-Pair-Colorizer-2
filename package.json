@@ -149,7 +149,7 @@
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.languages": {
-                    "description": "Ensure that an opening brackets color does not match a previous brackets color",
+                    "description": "Language support. If you want to modify a language, please add it to the bracket-pair-colorizer-2.language-overrides setting to avoid poluting your settings file with this very large array",
                     "scope": "window",
                     "default": [
                         {
@@ -360,6 +360,11 @@
                             ]
                         }
                     ]
+                },
+                "bracket-pair-colorizer-2.language-overrides": {
+                    "description": "Languages defined here will override the base settings",
+                    "scope": "window",
+                    "default": []
                 }
             }
         }

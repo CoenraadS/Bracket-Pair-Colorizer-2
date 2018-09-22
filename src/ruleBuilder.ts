@@ -14,6 +14,12 @@ export class RuleBuilder {
         }
     }
 
+    public override(languageDefinitions: LanguageDefinition[]) {
+        for (const userLanguage of languageDefinitions) {
+            this.start.set(userLanguage.language, userLanguage);
+        }
+    }
+
     public get(languageId: string): Map<string, ScopeSingle> | undefined {
         const stackResult = this.final.get(languageId);
         if (stackResult) {

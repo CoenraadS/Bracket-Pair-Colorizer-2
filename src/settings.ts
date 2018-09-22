@@ -138,6 +138,14 @@ export default class Settings {
 
         this.ruleBuilder = new RuleBuilder(languageDefinitions);
 
+        const languageOverrideDefinitions = configuration.get("language-overrides") as LanguageDefinition[];
+
+        if (!Array.isArray(languageOverrideDefinitions)) {
+            throw new Error("languageOverrideDefinitions is not an array");
+        }
+
+        this.ruleBuilder.override(languageOverrideDefinitions);
+
         const excludedLanguages = configuration.get("excludedLanguages") as string[];
 
         if (!Array.isArray(excludedLanguages)) {
