@@ -1,5 +1,10 @@
 ## Release Notes
 
+### 0.0.10
+JSON with comments support  
+Go support  
+Fix colors sometimes being incorrect after text replacement
+
 ### 0.0.9
 C# support hotfix
 
