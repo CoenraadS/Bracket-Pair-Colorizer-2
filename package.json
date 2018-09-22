@@ -153,6 +153,26 @@
                     "scope": "window",
                     "default": [
                         {
+                            "language": "go",
+                            "scopes": [
+                                {
+                                    "open": "punctuation.definition.begin.bracket.round",
+                                    "close": "punctuation.definition.end.bracket.round"
+                                },
+                                {
+                                    "open": "punctuation.definition.begin.bracket.curly",
+                                    "close": "punctuation.definition.end.bracket.curly"
+                                },
+                                {
+                                    "open": "punctuation.definition.bracket.square",
+                                },
+                                {
+                                    "open": "punctuation.definition.imports.begin.bracket.round",
+                                    "close": "punctuation.definition.imports.end.bracket.round",
+                                }
+                            ]
+                        },
+                        {
                             "language": "clojure",
                             "scopes": [
                                 {
