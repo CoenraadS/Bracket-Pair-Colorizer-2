@@ -56,7 +56,6 @@ export default class DocumentDecoration {
 
         const change = contentChanges[0];
 
-        let recolour = false;
         const amountOfExistingLinesChanged = (change.range.end.line - change.range.start.line) + 1;
         const amountOfNewLinesChanged = change.text.split(this.eol).length;
         const amountOfRemovedLines = Math.max(0, amountOfExistingLinesChanged - amountOfNewLinesChanged);
@@ -76,31 +75,26 @@ export default class DocumentDecoration {
             throw new Error("amountOfRemovedLines < 0");
         }
 
+        // Parse overlapped lines with goal to see if we can avoid document reparse
+        // By just moving existing brackets if the amount of brackets on a line didn't change
         for (let i = change.range.start.line; i < overLapEndIndex; i++) {
             const newLine = this.tokenizeLine(i);
-            const lineBeingReplaced = this.lines[i];
-            this.lines[i] = newLine;
+            const currentLine = this.lines[i];
 
-            const lineBeingReplacedRuleStack = lineBeingReplaced.getRuleStack();
-
-            // Current line has scope changes, so retokenize all future lines
-            if (!lineBeingReplacedRuleStack.equals(newLine.getRuleStack())) {
+            // Current line has new brackets which need to be colored
+            if (
+                !currentLine.getRuleStack().equals(newLine.getRuleStack()) ||
+                currentLine.getBracketHash() !== newLine.getBracketHash()
+            ) {
+                this.lines[i] = newLine;
                 this.lines.splice(i + 1);
                 this.tokenizeDocument();
                 return;
             }
 
-            // e.g. [].map() => [].map(())
-            // Shouldn't trigger full reparse because scope didn't change
-            // Just recolor new brackets (by not splicing)
-            if (lineBeingReplaced.getAmountOfClosedBrackets() !== newLine.getAmountOfClosedBrackets()) {
-                recolour = true;
-            }
+            const charOffset = change.text.length - change.rangeLength;
 
-            // e.g. function(){ => function(()){
-            // The { has moved, but scope not changed
-            // Just update the reference, so closing brackets doesn't need to be reparsed
-            this.updateMovedOpeningBracketReferences(lineBeingReplaced, newLine);
+            currentLine.offset(change.rangeOffset, charOffset);
         }
 
         if (amountOfInsertedLines > 0 || amountOfRemovedLines > 0) {
@@ -126,10 +120,6 @@ export default class DocumentDecoration {
                 }
             }
         }
-
-        if (recolour) {
-            this.tokenizeDocument();
-        }
     }
 
     public expandBracketSelection(editor: vscode.TextEditor) {
@@ -145,7 +135,7 @@ export default class DocumentDecoration {
             if (!endBracket) {
                 return;
             }
-            const startBracket = endBracket.openBracketPointer.bracket;
+            const startBracket = endBracket.openBracket;
             const endLineIndex = endBracket.token.line.index;
             const startLineIndex = startBracket.token.line.index;
 
@@ -248,7 +238,7 @@ export default class DocumentDecoration {
         if (!endBracket) {
             return;
         }
-        const startBracket = endBracket.openBracketPointer.bracket;
+        const startBracket = endBracket.openBracket;
         const endLineIndex = endBracket.token.line.index;
         const startLineIndex = startBracket.token.line.index;
 
@@ -506,28 +496,6 @@ export default class DocumentDecoration {
                 tokenMatch,
                 token,
             );
-        }
-    }
-
-    private updateMovedOpeningBracketReferences(lineBeingReplaced: TextLine, newLine: TextLine) {
-        const oldOpenBracketPointers = lineBeingReplaced.getOpeningBracketsWhereClosingBracketsAreNotOnSameLine();
-        const currentOpenBracketPointers = newLine.getOpeningBracketsWhereClosingBracketsAreNotOnSameLine();
-        if (oldOpenBracketPointers.size === currentOpenBracketPointers.size) {
-            const oldIterator = oldOpenBracketPointers.values();
-            const currentIterator = currentOpenBracketPointers.values();
-            for (let iterator = 0; iterator < oldOpenBracketPointers.size; iterator++) {
-                const old = oldIterator.next();
-                const current = currentIterator.next();
-                if (old.value.bracket.token.type !== current.value.bracket.token.type) {
-                    console.warn("Bracket order not the same?");
-                    return;
-                }
-                const currentBeginIndex = current.value.bracket.token.beginIndex;
-                const currentLine = current.value.bracket.token.line;
-                current.value.bracket = old.value.bracket;
-                current.value.bracket.token.line = currentLine;
-                current.value.bracket.token.beginIndex = currentBeginIndex;
-            }
         }
     }
 

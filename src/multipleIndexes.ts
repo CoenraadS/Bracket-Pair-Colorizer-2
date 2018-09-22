@@ -7,16 +7,16 @@ import Settings from "./settings";
 import Token from "./token";
 
 export default class MultipleBracketGroups implements IBracketManager {
-    private allLinesOpenBracketStack = new Map<string, BracketPointer[]>();
-    private openBracketsWhereClosingBracketIsNotOnTheSameLine: Set<BracketPointer> = new Set();
-    private closedBrackets: BracketClose[] = [];
+    private allLinesOpenBracketStack = new Map<string, Bracket[]>();
+    private allBracketsOnLine: Bracket[] = [];
+    private bracketsHash = "";
     private previousOpenBracketColorIndexes = new Map<string, number>();
     private readonly settings: Settings;
 
     constructor(
         settings: Settings,
         previousState?: {
-            currentOpenBracketColorIndexes: Map<string, BracketPointer[]>,
+            currentOpenBracketColorIndexes: Map<string, Bracket[]>,
             previousOpenBracketColorIndexes: Map<string, number>,
         }) {
         this.settings = settings;
@@ -27,28 +27,21 @@ export default class MultipleBracketGroups implements IBracketManager {
         }
     }
 
-    public getOpeningBracketsWhereClosingBracketsAreNotOnSameLine(): Set<BracketPointer> {
-        return this.openBracketsWhereClosingBracketIsNotOnTheSameLine;
-    }
-
     public getPreviousIndex(type: string): number {
         return this.previousOpenBracketColorIndexes[type];
     }
 
-    public getAmountOfClosedBrackets(){
-        return this.closedBrackets.length;
-    }
-
     public setCurrent(token: Token, colorIndex: number) {
         const openBracket = new Bracket(token, colorIndex, this.settings.colors[colorIndex]);
-        const pointer = new BracketPointer(openBracket);
-        this.openBracketsWhereClosingBracketIsNotOnTheSameLine.add(pointer);
+        this.allBracketsOnLine.push(openBracket);
+        this.bracketsHash += openBracket.token.character;
+
         const stack = this.allLinesOpenBracketStack.get(token.type);
         if (stack) {
-            stack.push(pointer);
+            stack.push(openBracket);
         }
         else {
-            this.allLinesOpenBracketStack.set(token.type, [pointer]);
+            this.allLinesOpenBracketStack.set(token.type, [openBracket]);
         }
 
         this.allLinesOpenBracketStack[token.type].push(openBracket);
@@ -60,28 +53,34 @@ export default class MultipleBracketGroups implements IBracketManager {
         return this.allLinesOpenBracketStack[type].length;
     }
 
-    public getCurrentColorIndex(token: Token): number | undefined {
+    public setCloseBracketAndGetColor(token: Token): number | undefined {
         const openStack = this.allLinesOpenBracketStack.get(token.type);
 
         if (!openStack) {
             return;
         }
-        const openBracketPointer = openStack.pop();
+        const openBracket = openStack.pop();
 
-        if (!openBracketPointer) {
+        if (!openBracket) {
             return;
         }
 
-        const closeBracket = new BracketClose(token, openBracketPointer);
-        this.openBracketsWhereClosingBracketIsNotOnTheSameLine.delete(openBracketPointer);
-        this.closedBrackets.push(closeBracket);
+        const closeBracket = new BracketClose(token, openBracket);
+        this.allBracketsOnLine.push(closeBracket);
+        this.bracketsHash += closeBracket.token;
 
-        return openBracketPointer.bracket.colorIndex;
+        return openBracket.colorIndex;
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {
-        for (const closeBracket of this.closedBrackets) {
-            const openBracket = closeBracket.openBracketPointer.bracket;
+        for (const bracket of this.allBracketsOnLine) {
+            if (!(bracket instanceof BracketClose)) {
+                continue;
+            }
+
+            const closeBracket = bracket as BracketClose;
+
+            const openBracket = closeBracket.openBracket;
             const startPosition = new Position(openBracket.token.line.index,
                 openBracket.token.beginIndex + openBracket.token.character.length);
             const endPosition = new Position(closeBracket.token.line.index, closeBracket.token.beginIndex);
@@ -89,6 +88,18 @@ export default class MultipleBracketGroups implements IBracketManager {
 
             if (range.contains(position)) {
                 return closeBracket;
+            }
+        }
+    }
+
+    public getHash() {
+        return this.bracketsHash;
+    }
+
+    public offset(startIndex: number, amount: number) {
+        for (const bracket of this.allBracketsOnLine) {
+            if (bracket.token.beginIndex >= startIndex) {
+                bracket.token.beginIndex += amount;
             }
         }
     }

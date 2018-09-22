@@ -1,21 +1,20 @@
 import { Position, Range } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import BracketPointer from "./bracketPointer";
 import IBracketManager from "./IBracketManager";
 import Settings from "./settings";
 import Token from "./token";
 
 export default class SingularBracketGroup implements IBracketManager {
-    private allLinesOpenBracketStack: BracketPointer[] = [];
-    private closedBrackets: BracketClose[] = [];
-    private openBracketsWhereClosingBracketsAreNotOnSameLine: Set<BracketPointer> = new Set();
+    private allLinesOpenBracketStack: Bracket[] = [];
+    private allBracketsOnLine: Bracket[] = [];
+    private bracketsHash = "";
     private previousOpenBracketColorIndex: number = -1;
     private readonly settings: Settings;
     constructor(
         settings: Settings,
         previousState?: {
-            currentOpenBracketColorIndexes: BracketPointer[],
+            currentOpenBracketColorIndexes: Bracket[],
             previousOpenBracketColorIndex: number,
         }) {
 
@@ -27,20 +26,15 @@ export default class SingularBracketGroup implements IBracketManager {
         }
     }
 
-    public getOpeningBracketsWhereClosingBracketsAreNotOnSameLine(): Set<BracketPointer> {
-
-        return this.openBracketsWhereClosingBracketsAreNotOnSameLine;
-    }
-
     public getPreviousIndex(type: string): number {
         return this.previousOpenBracketColorIndex;
     }
 
     public setCurrent(token: Token, colorIndex: number) {
         const openBracket = new Bracket(token, colorIndex, this.settings.colors[colorIndex]);
-        const pointer = new BracketPointer(openBracket);
-        this.allLinesOpenBracketStack.push(pointer);
-        this.openBracketsWhereClosingBracketsAreNotOnSameLine.add(pointer);
+        this.allLinesOpenBracketStack.push(openBracket);
+        this.allBracketsOnLine.push(openBracket);
+        this.bracketsHash += openBracket.token.character;
         this.previousOpenBracketColorIndex = colorIndex;
     }
 
@@ -48,20 +42,26 @@ export default class SingularBracketGroup implements IBracketManager {
         return this.allLinesOpenBracketStack.length;
     }
 
-    public getCurrentColorIndex(token: Token): number | undefined {
-        const openBracketPointer = this.allLinesOpenBracketStack.pop();
-        if (openBracketPointer) {
-            const closeBracket = new BracketClose(token, openBracketPointer);
-            this.closedBrackets.push(closeBracket);
-            this.openBracketsWhereClosingBracketsAreNotOnSameLine.delete(openBracketPointer);
+    public setCloseBracketAndGetColor(token: Token): number | undefined {
+        const openBracket = this.allLinesOpenBracketStack.pop();
+        if (openBracket) {
+            const closeBracket = new BracketClose(token, openBracket);
+            this.allBracketsOnLine.push(closeBracket);
+            this.bracketsHash += closeBracket.token.character;
 
-            return openBracketPointer.bracket.colorIndex;
+            return openBracket.colorIndex;
         }
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {
-        for (const closeBracket of this.closedBrackets) {
-            const openBracket = closeBracket.openBracketPointer.bracket;
+        for (const bracket of this.allBracketsOnLine) {
+            if (!(bracket instanceof BracketClose)) {
+                continue;
+            }
+
+            const closeBracket = bracket as BracketClose;
+
+            const openBracket = closeBracket.openBracket;
             const startPosition = new Position(openBracket.token.line.index,
                 openBracket.token.beginIndex + openBracket.token.character.length);
             const endPosition = new Position(closeBracket.token.line.index, closeBracket.token.beginIndex);
@@ -73,8 +73,16 @@ export default class SingularBracketGroup implements IBracketManager {
         }
     }
 
-    public getAmountOfClosedBrackets() {
-        return this.closedBrackets.length;
+    public getHash() {
+        return this.bracketsHash;
+    }
+
+    public offset(startIndex: number, amount: number) {
+        for (const bracket of this.allBracketsOnLine) {
+            if (bracket.token.beginIndex >= startIndex) {
+                bracket.token.beginIndex += amount;
+            }
+        }
     }
 
     public copyCumulativeState() {

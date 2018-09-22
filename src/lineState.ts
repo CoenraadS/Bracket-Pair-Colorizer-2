@@ -39,16 +39,13 @@ export default class LineState {
         }
     }
 
-    public getOpeningBracketsWhereClosingBracketsAreNotOnSameLine() {
-        return this.bracketManager.getOpeningBracketsWhereClosingBracketsAreNotOnSameLine();
-    }
-
     public getCharStack() {
         return this.charStack;
     }
 
-    public getAmountOfClosedBrackets() {
-        return this.bracketManager.getAmountOfClosedBrackets();
+    public getBracketHash()
+    {
+        return this.bracketManager.getHash();
     }
 
     public cloneState(): LineState {
@@ -64,6 +61,10 @@ export default class LineState {
 
     public getClosingBracket(position: Position): BracketClose | undefined {
         return this.bracketManager.getClosingBracket(position);
+    }
+
+    public offset(startIndex: number, amount: number) {
+        this.bracketManager.offset(startIndex, amount);
     }
 
     public getBracketColor(
@@ -112,7 +113,7 @@ export default class LineState {
     };
 
     private getCloseBracketColor(token: Token): string {
-        const colorIndex = this.bracketManager.getCurrentColorIndex(token);
+        const colorIndex = this.bracketManager.setCloseBracketAndGetColor(token);
         let color: string;
         if (colorIndex !== undefined) {
             color = this.settings.colors[colorIndex];

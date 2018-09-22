@@ -32,8 +32,9 @@ export default class TextLine {
         return this.lineState.cloneState();
     }
 
-    public getAmountOfClosedBrackets() {
-        return this.lineState.getAmountOfClosedBrackets();
+    public getBracketHash()
+    {
+        return this.lineState.getBracketHash();
     }
 
     public AddToken(
@@ -104,8 +105,8 @@ export default class TextLine {
         return this.lineState.getClosingBracket(position);
     }
 
-    public getOpeningBracketsWhereClosingBracketsAreNotOnSameLine() {
-        return this.lineState.getOpeningBracketsWhereClosingBracketsAreNotOnSameLine();
+    public offset(startIndex: number, amount: number) {
+        this.lineState.offset(startIndex, amount);
     }
 
     private addBracket(
