@@ -487,7 +487,7 @@ export default class DocumentDecoration {
         if (token.scopes.length > 1) {
             const type = token.scopes[token.scopes.length - 1];
             const base = token.scopes[0];
-            const typeLanguage = base.substring(base.indexOf(".") + 1, base.length);
+            const typeLanguage = base.substring(base.indexOf(".") + 1);
             const typeMap = this.settings.getRule(token.scopes[0]);
             if (!typeMap) {
                 return;
