@@ -384,7 +384,17 @@
                 "bracket-pair-colorizer-2.language-overrides": {
                     "description": "Languages defined here will override the base settings",
                     "scope": "window",
-                    "default": []
+                    "default": [
+                        {
+                            "language": "example",
+                            "scopes": [
+                                {
+                                    "open": "example.begin",
+                                    "close": "example.end"
+                                }
+                            ]
+                        }
+                    ]
                 }
             }
         }
