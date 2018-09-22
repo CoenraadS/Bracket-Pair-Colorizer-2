@@ -249,6 +249,14 @@
                                     "close": "punctuation.definition.dict.end"
                                 },
                                 {
+                                    "open": "punctuation.definition.parameters.begin",
+                                    "close": "punctuation.definition.parameters.end"
+                                },
+                                {
+                                    "open": "punctuation.definition.inheritance.begin",
+                                    "close": "punctuation.definition.inheritance.end"
+                                },
+                                {
                                     "open": "punctuation.definition.arguments.begin",
                                     "close": "punctuation.definition.arguments.end"
                                 },
