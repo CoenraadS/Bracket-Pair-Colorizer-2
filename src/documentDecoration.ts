@@ -561,7 +561,7 @@ export default class DocumentDecoration {
                 continue;
             }
             const ranges = colorMap.get(color);
-            editors.forEach((editor) => {
+            for (const editor of editors) {
                 if (ranges !== undefined) {
                     editor.setDecorations(decoration, ranges);
                 }
@@ -570,7 +570,7 @@ export default class DocumentDecoration {
                     // or previous decorations will not be invalidated
                     editor.setDecorations(decoration, []);
                 }
-            });
+            }
         }
 
         // console.timeEnd("colorDecorations");

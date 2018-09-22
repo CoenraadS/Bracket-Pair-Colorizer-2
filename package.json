@@ -206,6 +206,9 @@
                                     "open": "meta.brace.round"
                                 },
                                 {
+                                    "open": "punctuation.definition.binding-pattern.array"
+                                },
+                                {
                                     "open": "meta.brace.square"
                                 },
                                 {
