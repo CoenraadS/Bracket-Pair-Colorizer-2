@@ -486,7 +486,8 @@ export default class DocumentDecoration {
     private validateToken(token: IToken, character: string, currentLine: TextLine) {
         if (token.scopes.length > 1) {
             const type = token.scopes[token.scopes.length - 1];
-            const typeLanguage = type.substring(type.lastIndexOf(".") + 1, type.length);
+            const base = token.scopes[0];
+            const typeLanguage = base.substring(base.indexOf(".") + 1, base.length);
             const typeMap = this.settings.getRule(token.scopes[0]);
             if (!typeMap) {
                 return;
