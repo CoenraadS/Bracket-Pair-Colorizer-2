@@ -1,7 +1,6 @@
 import { Position, Range } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import BracketPointer from "./bracketPointer";
 import IBracketManager from "./IBracketManager";
 import Settings from "./settings";
 import Token from "./token";
