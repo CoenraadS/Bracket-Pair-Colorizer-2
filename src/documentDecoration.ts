@@ -82,6 +82,8 @@ export default class DocumentDecoration {
             this.lines[i] = newLine;
 
             const lineBeingReplacedRuleStack = lineBeingReplaced.getRuleStack();
+
+            // Current line has scope changes, so retokenize all future lines
             if (!lineBeingReplacedRuleStack.equals(newLine.getRuleStack())) {
                 this.lines.splice(i + 1);
                 this.tokenizeDocument();
@@ -90,7 +92,7 @@ export default class DocumentDecoration {
 
             // e.g. [].map() => [].map(())
             // Shouldn't trigger full reparse because scope didn't change
-            // Just recolor new brackets
+            // Just recolor new brackets (by not splicing)
             if (lineBeingReplaced.getAmountOfClosedBrackets() !== newLine.getAmountOfClosedBrackets()) {
                 recolour = true;
             }
