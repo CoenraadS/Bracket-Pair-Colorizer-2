@@ -164,11 +164,11 @@
                                     "close": "punctuation.definition.end.bracket.curly"
                                 },
                                 {
-                                    "open": "punctuation.definition.bracket.square",
+                                    "open": "punctuation.definition.bracket.square"
                                 },
                                 {
                                     "open": "punctuation.definition.imports.begin.bracket.round",
-                                    "close": "punctuation.definition.imports.end.bracket.round",
+                                    "close": "punctuation.definition.imports.end.bracket.round"
                                 }
                             ]
                         },
