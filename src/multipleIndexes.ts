@@ -76,7 +76,6 @@ export default class MultipleBracketGroups implements IBracketManager {
             }
 
             const closeBracket = bracket as BracketClose;
-
             const openBracket = closeBracket.openBracket;
             const range = new Range(openBracket.token.range.start, closeBracket.token.range.end);
 
