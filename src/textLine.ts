@@ -1,11 +1,11 @@
 import { Position } from "vscode";
+import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import ScopeSingle, { ScopeType } from "./scopeSingle";
 
 export default class TextLine {
-    public colorRanges = new Map<string, Array<{ beginIndex: number, endIndex: number }>>();
     public index: number;
     private lineState: LineState;
     private readonly ruleStack: IStackElement;
@@ -47,7 +47,6 @@ export default class TextLine {
                 match.key,
                 currentChar,
                 token.startIndex,
-                token.endIndex,
                 true,
             );
         }
@@ -56,7 +55,6 @@ export default class TextLine {
                 match.key,
                 currentChar,
                 token.startIndex,
-                token.endIndex,
                 false,
             );
         }
@@ -72,7 +70,6 @@ export default class TextLine {
                         stackKey,
                         currentChar,
                         token.startIndex,
-                        token.endIndex,
                         true,
                     );
                 }
@@ -81,7 +78,6 @@ export default class TextLine {
                         stackKey,
                         currentChar,
                         token.startIndex,
-                        token.endIndex,
                         false,
                     );
                     stack.pop();
@@ -94,7 +90,6 @@ export default class TextLine {
                     stackKey,
                     currentChar,
                     token.startIndex,
-                    token.endIndex,
                     true,
                 );
             }
@@ -109,22 +104,16 @@ export default class TextLine {
         this.lineState.offset(startIndex, amount);
     }
 
+    public getAllBrackets(): Bracket[] {
+        return this.lineState.getAllBrackets();
+    }
+
     private addBracket(
         type: string,
         character: string,
         beginIndex: number,
-        endIndex: number,
         open: boolean,
     ): void {
-        const color = this.lineState.getBracketColor(type, character, beginIndex, this, open);
-
-        const colorRanges = this.colorRanges.get(color);
-        if (colorRanges !== undefined) {
-            colorRanges.push({ beginIndex, endIndex });
-        }
-        else {
-            this.colorRanges.set(color, [{ beginIndex, endIndex }]);
-        }
-        return;
+        this.lineState.addBracket(type, character, beginIndex, this.index, open);
     }
 }

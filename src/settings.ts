@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import LanguageDefinition from "./languageDefinition";
 import ColorMode from "./colorMode";
 import Colors from "./colors";
 import GutterIconManager from "./gutterIconManager";
+import LanguageDefinition from "./languageDefinition";
 import { RuleBuilder } from "./ruleBuilder";
 import TextMateLoader from "./textMateLoader";
 

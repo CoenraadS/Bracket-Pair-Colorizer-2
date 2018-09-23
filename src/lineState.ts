@@ -1,11 +1,11 @@
 import { Position } from "vscode";
+import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import ColorMode from "./colorMode";
 import IBracketManager from "./IBracketManager";
 import MultipleBracketGroups from "./multipleIndexes";
 import Settings from "./settings";
 import SingularBracketGroup from "./singularIndex";
-import TextLine from "./textLine";
 import Token from "./token";
 
 export default class LineState {
@@ -43,8 +43,7 @@ export default class LineState {
         return this.charStack;
     }
 
-    public getBracketHash()
-    {
+    public getBracketHash() {
         return this.bracketManager.getHash();
     }
 
@@ -67,18 +66,24 @@ export default class LineState {
         this.bracketManager.offset(startIndex, amount);
     }
 
-    public getBracketColor(
+    public addBracket(
         type: string,
         character: string,
         beginIndex: number,
-        line: TextLine,
+        lineIndex: number,
         open: boolean,
-    ): string {
-        const token = new Token(type, character, beginIndex, line);
+    ) {
+        const token = new Token(type, character, beginIndex, lineIndex);
         if (open) {
-            return this.getOpenBracketColor(token);
+            this.addOpenBracket(token);
         }
-        return this.getCloseBracketColor(token);
+        else {
+            this.addCloseBracket(token);
+        }
+    }
+
+    public getAllBrackets(): Bracket[] {
+        return this.bracketManager.getAllBrackets();
     }
 
     private cloneCharStack() {
@@ -89,7 +94,7 @@ export default class LineState {
         return clone;
     }
 
-    private getOpenBracketColor(token: Token): string {
+    private addOpenBracket(token: Token) {
         let colorIndex: number;
 
         if (this.settings.forceIterationColorCycle) {
@@ -107,19 +112,10 @@ export default class LineState {
         }
 
         this.previousBracketColor = color;
-        this.bracketManager.setCurrent(token, colorIndex);
-
-        return color;
+        this.bracketManager.addOpenBracket(token, colorIndex);
     };
 
-    private getCloseBracketColor(token: Token): string {
-        const colorIndex = this.bracketManager.setCloseBracketAndGetColor(token);
-        let color: string;
-        if (colorIndex !== undefined) {
-            color = this.settings.colors[colorIndex];
-            return color;
-        }
-
-        throw new Error("Could not get closing bracket color");
+    private addCloseBracket(token: Token) {
+        this.bracketManager.addCloseBracket(token);
     }
 }

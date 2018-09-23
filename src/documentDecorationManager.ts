@@ -81,9 +81,9 @@ export default class DocumentDecorationManager {
 
     public updateAllDocuments() {
         // console.log("updateAllDocuments");
-        window.visibleTextEditors.forEach((editor) => {
+        for (const editor of window.visibleTextEditors) {
             this.updateDocument(editor.document);
-        });
+        }
     }
 
     private getDocumentDecorations(document: TextDocument): DocumentDecoration | undefined {

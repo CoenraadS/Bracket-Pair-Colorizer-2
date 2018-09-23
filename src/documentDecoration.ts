@@ -89,15 +89,9 @@ export default class DocumentDecoration {
             if (!endBracket) {
                 return;
             }
-            const startBracket = endBracket.openBracket;
-            const endLineIndex = endBracket.token.line.index;
-            const startLineIndex = startBracket.token.line.index;
 
-            const startPos = new vscode.Position(startLineIndex,
-                startBracket.token.beginIndex + startBracket.token.character.length);
-            const endPos = new vscode.Position(endLineIndex, endBracket.token.beginIndex);
-            const start = this.document.validatePosition(startPos);
-            const end = this.document.validatePosition(endPos);
+            const start = this.document.validatePosition(endBracket.openBracket.token.range.start);
+            const end = this.document.validatePosition(endBracket.token.range.end);
             newSelections.push(new vscode.Selection(start, end));
         });
 
@@ -188,24 +182,20 @@ export default class DocumentDecoration {
         // Simply wrap in foreach selection for multicursor, maybe put it behind an option?
         const selection = event.textEditor.selection;
 
-        const endBracket = this.searchScopeForwards(selection.active);
-        if (!endBracket) {
+        const closeBracket = this.searchScopeForwards(selection.active);
+        if (!closeBracket) {
             return;
         }
-        const startBracket = endBracket.openBracket;
-        const endLineIndex = endBracket.token.line.index;
-        const startLineIndex = startBracket.token.line.index;
 
-        const beginRange = new vscode.Range(
-            new vscode.Position(startLineIndex, startBracket.token.beginIndex),
-            new vscode.Position(startLineIndex, startBracket.token.beginIndex + startBracket.token.character.length));
-        const endRange = new vscode.Range(
-            new vscode.Position(endLineIndex, endBracket.token.beginIndex),
-            new vscode.Position(endLineIndex, endBracket.token.beginIndex + endBracket.token.character.length));
+        const openBracket = closeBracket.openBracket;
+        const beginRange = openBracket.token.range;
+        const endRange = closeBracket.token.range;
+        const startLineIndex = openBracket.token.range.start.line;
+        const endLineIndex = closeBracket.token.range.start.line;
 
         if (this.settings.highlightActiveScope) {
             const decoration =
-                this.settings.createScopeBracketDecorations(endBracket.color);
+                this.settings.createScopeBracketDecorations(closeBracket.color);
             event.textEditor.setDecorations(decoration, [beginRange, endRange]);
             this.scopeDecorations.push(decoration);
         }
@@ -213,17 +203,17 @@ export default class DocumentDecoration {
         if (this.settings.showBracketsInGutter) {
             if (startLineIndex === endLineIndex) {
                 const decoration = this.settings.createGutterBracketDecorations
-                    (endBracket.color, startBracket.token.character + endBracket.token.character);
+                    (closeBracket.color, openBracket.token.character + closeBracket.token.character);
                 event.textEditor.setDecorations(decoration, [beginRange, endRange]);
                 this.scopeDecorations.push(decoration);
             }
             else {
                 const decorationOpen =
-                    this.settings.createGutterBracketDecorations(startBracket.color, startBracket.token.character);
+                    this.settings.createGutterBracketDecorations(openBracket.color, openBracket.token.character);
                 event.textEditor.setDecorations(decorationOpen, [beginRange]);
                 this.scopeDecorations.push(decorationOpen);
                 const decorationClose =
-                    this.settings.createGutterBracketDecorations(endBracket.color, endBracket.token.character);
+                    this.settings.createGutterBracketDecorations(closeBracket.color, closeBracket.token.character);
                 event.textEditor.setDecorations(decorationClose, [endRange]);
                 this.scopeDecorations.push(decorationClose);
             }
@@ -231,7 +221,7 @@ export default class DocumentDecoration {
 
         if (this.settings.showBracketsInRuler) {
             const decoration =
-                this.settings.createRulerBracketDecorations(endBracket.color);
+                this.settings.createRulerBracketDecorations(closeBracket.color);
             event.textEditor.setDecorations(decoration, [beginRange, endRange]);
             this.scopeDecorations.push(decoration);
         }
@@ -279,7 +269,7 @@ export default class DocumentDecoration {
             }
 
             const safeFallbackPosition = new vscode.Position(start - 1, leftBorderIndex);
-            this.setVerticalLineDecoration(endBracket, event, safeFallbackPosition, verticalLineRanges);
+            this.setVerticalLineDecoration(closeBracket, event, safeFallbackPosition, verticalLineRanges);
         }
 
         if (this.settings.showHorizontalScopeLine) {
@@ -308,11 +298,11 @@ export default class DocumentDecoration {
             }
 
             if (underlineLineRanges) {
-                this.setUnderLineDecoration(endBracket, event, underlineLineRanges);
+                this.setUnderLineDecoration(closeBracket, event, underlineLineRanges);
             }
 
             if (overlineLineRanges) {
-                this.setOverLineDecoration(endBracket, event, overlineLineRanges);
+                this.setOverLineDecoration(closeBracket, event, overlineLineRanges);
             }
         }
 
@@ -458,24 +448,18 @@ export default class DocumentDecoration {
         const colorMap = new Map<string, vscode.Range[]>();
 
         // Reduce all the colors/ranges of the lines into a singular map
-        for (let i = 0; i < this.lines.length; i++) {
+        for (const line of this.lines) {
             {
-                for (const [color, indexes] of this.lines[i].colorRanges) {
-                    const existingRanges = colorMap.get(color);
-
-                    const ranges = indexes.map((index) => {
-                        const start = new vscode.Position(i, index.beginIndex);
-                        const end = new vscode.Position(i, index.endIndex);
-                        return new vscode.Range(start, end);
-                    });
-
+                const brackets = line.getAllBrackets();
+                for (const bracket of brackets) {
+                    const existingRanges = colorMap.get(bracket.color);
                     if (existingRanges !== undefined) {
 
-                        existingRanges.push(...ranges);
+                        existingRanges.push(bracket.token.range);
                     }
                     else {
 
-                        colorMap.set(color, ranges);
+                        colorMap.set(bracket.color, [bracket.token.range]);
                     }
                 }
             }
