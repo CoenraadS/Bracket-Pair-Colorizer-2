@@ -70,7 +70,7 @@ export class TextMateLoader {
     }
 
     private initializeGrammars() {
-        vscode.extensions.all.forEach((extension) => {
+        for (const extension of vscode.extensions.all) {
             const packageJSON = extension.packageJSON as IExtensionPackage;
             if (packageJSON.contributes && packageJSON.contributes.grammars) {
                 packageJSON.contributes.grammars.forEach((grammar) => {
@@ -82,7 +82,7 @@ export class TextMateLoader {
                     }
                 });
             }
-        });
+        }
     }
 }
 
