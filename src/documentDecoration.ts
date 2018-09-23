@@ -73,7 +73,7 @@ export default class DocumentDecoration {
         }
 
         const charOffset = change.text.length - change.rangeLength;
-        currentLine.offset(change.rangeOffset, charOffset);
+        currentLine.offset(change.range.start.character, charOffset);
     }
 
     public expandBracketSelection(editor: vscode.TextEditor) {

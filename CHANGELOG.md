@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.11
+Fix colors sometimes being incorrect after text replacement #2
+
 ### 0.0.10
 JSON with comments support  
 Go support  
