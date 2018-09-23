@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.12
+Fix colors sometimes being incorrect after text replacement #3
+
 ### 0.0.11
 Fix colors sometimes being incorrect after text replacement #2
 
