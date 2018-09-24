@@ -1,26 +1,26 @@
 import { Position } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import { IStackElement, IToken } from "./IExtensionGrammar";
+import { IStackElement, IToken, ITokenizeLineResult2 } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import ScopeSingle, { ScopeType } from "./scopeSingle";
 
 export default class TextLine {
     public index: number;
     private lineState: LineState;
-    private readonly ruleStack: IStackElement;
+    private readonly tokenizedLineResult: ITokenizeLineResult2;
 
     constructor(
-        ruleStack: IStackElement,
+        tokenizedLineResult: ITokenizeLineResult2,
         lineState: LineState,
         index: number) {
         this.lineState = lineState;
-        this.ruleStack = ruleStack;
+        this.tokenizedLineResult = tokenizedLineResult;
         this.index = index;
     }
 
     public getRuleStack(): IStackElement {
-        return this.ruleStack;
+        return this.tokenizedLineResult.ruleStack;
     }
 
     public getCharStack() {
@@ -32,8 +32,7 @@ export default class TextLine {
         return this.lineState.cloneState();
     }
 
-    public getBracketHash()
-    {
+    public getBracketHash() {
         return this.lineState.getBracketHash();
     }
 

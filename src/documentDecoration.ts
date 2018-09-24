@@ -4,9 +4,9 @@ import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
 import LineState from "./lineState";
-import ScopePair from "./scopePair";
 import Settings from "./settings";
 import TextLine from "./textLine";
+import { LineTokens, ignoreBracketsInToken } from "./vscodeFiles";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -317,9 +317,21 @@ export default class DocumentDecoration {
         const previousLineState = index > 0 ?
             this.lines[index - 1].cloneState() :
             new LineState(this.settings);
-        const tokenized = this.tokenizer.tokenizeLine(newText, previousLineRuleStack);
+        const tokenized = this.tokenizer.tokenizeLine2(newText, previousLineRuleStack);
         const ruleStack = tokenized.ruleStack;
         const tokens = tokenized.tokens;
+        const lineTokens = new LineTokens(tokens, newText);
+
+        for (let i = 0; i < lineTokens.getCount(); i++) {
+            const tokenType = lineTokens.getStandardTokenType(i);
+            if (!ignoreBracketsInToken(tokenType)
+            {
+                let searchStartOffset = Math.max(lineTokens.getStartOffset(i), 0 - 1 - currentModeBrackets.maxBracketLength);
+                // limit search to not go after `maxBracketLength`
+                const searchEndOffset = Math.min(lineTokens.getEndOffset(i), 0 - 1 + currentModeBrackets.maxBracketLength);
+            }
+        }
+
         const newLine = new TextLine(ruleStack, previousLineState, index);
         this.parseTokens(tokens, newLine, newText);
         return newLine;

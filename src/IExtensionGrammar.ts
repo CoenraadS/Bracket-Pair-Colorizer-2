@@ -20,6 +20,21 @@ export interface IGrammar {
      * Tokenize `lineText` using previous line state `prevState`.
      */
     tokenizeLine(lineText: string, prevState?: IStackElement): ITokenizeLineResult;
+    tokenizeLine2(lineText: string, prevState?: IStackElement): ITokenizeLineResult2;
+}
+
+export interface ITokenizeLineResult2 {
+    /**
+     * The tokens in binary format. Each token occupies two array indices. For token i:
+     *  - at offset 2*i => startIndex
+     *  - at offset 2*i + 1 => metadata
+     *
+     */
+    readonly tokens: Uint32Array;
+    /**
+     * The `prevState` to be passed on to the next line tokenization.
+     */
+    readonly ruleStack: IStackElement;
 }
 
 export interface IStackElement {
