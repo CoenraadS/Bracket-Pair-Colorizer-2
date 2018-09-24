@@ -117,15 +117,27 @@ export class TextMateLoader {
     private initializeGrammars() {
         for (const extension of vscode.extensions.all) {
             const packageJSON = extension.packageJSON as IExtensionPackage;
-            if (packageJSON.contributes && packageJSON.contributes.grammars) {
-                for (const grammar of packageJSON.contributes.grammars) {
-                    if (grammar.language && grammar.scopeName && grammar.path) {
-                        const fullPath = path.join(extension.extensionPath, grammar.path);
-                        const configPath = path.join(extension.extensionPath, "language-configuration.json");
-                        this.languageToConfigPath.set(grammar.language, configPath);
-                        this.languageToScopeName.set(grammar.language, grammar.scopeName);
-                        this.scopeNameToPath.set(grammar.scopeName, fullPath);
-                        this.scopeNameToLanguage.set(grammar.scopeName, grammar.language);
+            if (packageJSON.contributes) {
+                if (packageJSON.contributes.grammars) {
+                    for (const grammar of packageJSON.contributes.grammars) {
+                        if (grammar.language && grammar.scopeName && grammar.path) {
+                            const fullPath = path.join(extension.extensionPath, grammar.path);
+                            this.languageToScopeName.set(grammar.language, grammar.scopeName);
+                            this.scopeNameToPath.set(grammar.scopeName, fullPath);
+                            this.scopeNameToLanguage.set(grammar.scopeName, grammar.language);
+                        }
+                    }
+                }
+
+                if (packageJSON.contributes.languages) {
+                    for (const language of packageJSON.contributes.languages) {
+                        if (language.configuration) {
+                            const configPath = path.join(extension.extensionPath, language.configuration);
+                            this.languageToConfigPath.set(language.id, configPath);
+                        }
+                        else {
+                            console.log("No configuration for: " + language.id);
+                        }
                     }
                 }
             }

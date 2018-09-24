@@ -329,17 +329,15 @@ export default class DocumentDecoration {
         for (let i = 0; i < lineTokens.getCount(); i++) {
             const tokenType = lineTokens.getStandardTokenType(i);
             if (!ignoreBracketsInToken(tokenType)) {
-                const searchStartOffset = Math.max(lineTokens.getStartOffset(i), 0 - 1 - this.config.maxBracketLength);
-                const searchEndOffset = Math.min(lineTokens.getEndOffset(i), 0 - 1 + this.config.maxBracketLength);
-                const currentTokenText = lineTokens[i].text.substring(searchStartOffset, searchEndOffset);
+                const searchStartOffset = lineTokens.getStartOffset(i);
+                const searchEndOffset = lineTokens.getEndOffset(i);
+                const currentTokenText = newText.substring(searchStartOffset, searchEndOffset);
 
-                let m;
-                do {
-                    m = this.config.regex.exec(currentTokenText);
-                    if (m) {
-                        matches.push({ content: m[0], index: this.config.regex.lastIndex - m[0].length });
-                    }
-                } while (m);
+                let result: RegExpExecArray | null;
+                while ((result = this.config.regex.exec(currentTokenText)) !== null) {
+                    let matchIndex = result.index;
+                    matches.push({ content: result[0], index });
+                }
             }
         }
 
