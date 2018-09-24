@@ -38,60 +38,40 @@ export default class TextLine {
 
     public AddToken(
         currentChar: string,
-        match: ScopeSingle,
-        token: IToken,
+        index: number,
+        id: number,
     ) {
-        if (match.type === ScopeType.Open) {
-            this.addBracket(
-                match.key,
-                currentChar,
-                token.startIndex,
-                true,
-            );
-        }
-        else if (match.type === ScopeType.Close) {
-            this.addBracket(
-                match.key,
-                currentChar,
-                token.startIndex,
-                false,
-            );
-        }
-        else {
-            const stackKey = match.key;
-            const stackMap = this.getCharStack();
-            const stack = stackMap.get(stackKey);
-            if (stack && stack.length > 0) {
-                const topStack = stack[stack.length - 1];
-                if ((topStack) === currentChar) {
-                    stack.push(currentChar);
-                    this.addBracket(
-                        stackKey,
-                        currentChar,
-                        token.startIndex,
-                        true,
-                    );
-                }
-                else {
-                    this.addBracket(
-                        stackKey,
-                        currentChar,
-                        token.startIndex,
-                        false,
-                    );
-                    stack.pop();
-                }
-            }
-            else {
-                const newStack = [currentChar];
-                stackMap.set(stackKey, newStack);
+        const stackKey = id;
+        const stack = this.getCharStack();
+        if (stack.length > 0) {
+            const topStack = stack[stack.length - 1];
+            if ((topStack) === stackKey) {
+                stack.push(stackKey);
                 this.addBracket(
                     stackKey,
                     currentChar,
-                    token.startIndex,
+                    index,
                     true,
                 );
             }
+            else {
+                this.addBracket(
+                    stackKey,
+                    currentChar,
+                    index,
+                    false,
+                );
+                stack.pop();
+            }
+        }
+        else {
+            stack.push(stackKey);
+            this.addBracket(
+                stackKey,
+                currentChar,
+                index,
+                true,
+            );
         }
     }
 
@@ -108,7 +88,7 @@ export default class TextLine {
     }
 
     private addBracket(
-        type: string,
+        type: number,
         character: string,
         beginIndex: number,
         open: boolean,

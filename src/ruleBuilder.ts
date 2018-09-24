@@ -134,19 +134,18 @@ interface ISimpleInternalBracket {
     close: string;
 }
 
-function getRegexForBrackets(input: ISimpleInternalBracket[]): RegExp {
+export function getRegexForBrackets(input: ISimpleInternalBracket[]): RegExp {
     const pieces: string[] = [];
     input.forEach((b) => {
         pieces.push(b.open);
         pieces.push(b.close);
     });
     return createBracketOrRegExp(pieces);
-
 }
 
 function createBracketOrRegExp(pieces: string[]): RegExp {
     const regexStr = `(${pieces.map(prepareBracketForRegExp).join(")|(")})`;
-    return createRegExp(regexStr, true);
+    return createRegExp(regexStr, true, { global: true });
 }
 
 function prepareBracketForRegExp(str: string): string {
@@ -189,6 +188,7 @@ function createRegExp(searchString: string, isRegex: boolean, options: RegExpOpt
     return new RegExp(searchString, modifiers);
 }
 
+// tslint:disable-next-line:interface-name
 export interface RegExpOptions {
     matchCase?: boolean;
     wholeWord?: boolean;

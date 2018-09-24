@@ -26,7 +26,7 @@ export default class SingularBracketGroup implements IBracketManager {
         }
     }
 
-    public getPreviousIndex(type: string): number {
+    public getPreviousIndex(type: number): number {
         return this.previousOpenBracketColorIndex;
     }
 
@@ -42,7 +42,7 @@ export default class SingularBracketGroup implements IBracketManager {
         this.previousOpenBracketColorIndex = colorIndex;
     }
 
-    public getCurrentLength(type: string): number {
+    public getCurrentLength(type: number): number {
         return this.allLinesOpenBracketStack.length;
     }
 

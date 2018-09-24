@@ -1,11 +1,11 @@
 import { Position, Range } from "vscode";
 
 export default class Token {
-    public readonly type: string;
+    public readonly type: number;
     public readonly character: string;
     public range: Range;
 
-    constructor(type: string, character: string, beginIndex: number, lineIndex: number) {
+    constructor(type: number, character: string, beginIndex: number, lineIndex: number) {
         this.type = type;
         this.character = character;
         const startPos = new Position(lineIndex, beginIndex);

@@ -4,9 +4,9 @@ import BracketClose from "./bracketClose";
 import Token from "./token";
 
 interface IBracketManager {
-    getPreviousIndex(type: string): number;
+    getPreviousIndex(type: number): number;
     addOpenBracket(token: Token, color: number): void;
-    getCurrentLength(type: string): number;
+    getCurrentLength(type: number): number;
     addCloseBracket(token: Token): void;
     getClosingBracket(position: Position): BracketClose | undefined;
     copyCumulativeState(): IBracketManager;

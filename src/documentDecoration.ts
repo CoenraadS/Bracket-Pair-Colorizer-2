@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { EndOfLine } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import { IGrammar, IStackElement, IToken } from "./IExtensionGrammar";
+import { IGrammar, IToken, ITokenizeLineResult2 } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
@@ -14,14 +14,18 @@ export default class DocumentDecoration {
     // This program caches lines, and will only analyze linenumbers including or above a modified line
     private lines: TextLine[] = [];
     private readonly document: vscode.TextDocument;
-    private readonly tokenizer: IGrammar;
+    private readonly config: { grammar: IGrammar, regex: RegExp, maxBracketLength: number, bracketToId: Map<string, number> };
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
     private readonly eol: string;
-    constructor(document: vscode.TextDocument, textMate: IGrammar, settings: Settings) {
+    constructor(
+        document: vscode.TextDocument,
+        config: { grammar: IGrammar, regex: RegExp, maxBracketLength: number, bracketToId: Map<string, number> },
+        settings: Settings,
+    ) {
         this.settings = settings;
         this.document = document;
-        this.tokenizer = textMate;
+        this.config = config;
 
         // this.suffix = "." + ((this.tokenizer as any)._grammar.scopeName as string).split(".").slice(1).join(".");
 
@@ -115,7 +119,7 @@ export default class DocumentDecoration {
 
     // Lines are stored in an array, if line is requested outside of array bounds
     // add emptys lines until array is correctly sized
-    public getLine(index: number, ruleStack: IStackElement): TextLine {
+    public getLine(index: number, ruleStack: ITokenizeLineResult2): TextLine {
         if (index < this.lines.length) {
             return this.lines[index];
         }
@@ -317,23 +321,35 @@ export default class DocumentDecoration {
         const previousLineState = index > 0 ?
             this.lines[index - 1].cloneState() :
             new LineState(this.settings);
-        const tokenized = this.tokenizer.tokenizeLine2(newText, previousLineRuleStack);
-        const ruleStack = tokenized.ruleStack;
+        const tokenized = this.config.grammar.tokenizeLine2(newText, previousLineRuleStack);
         const tokens = tokenized.tokens;
         const lineTokens = new LineTokens(tokens, newText);
 
+        const matches = new Array<{ content: string, index: number }>();
         for (let i = 0; i < lineTokens.getCount(); i++) {
             const tokenType = lineTokens.getStandardTokenType(i);
-            if (!ignoreBracketsInToken(tokenType)
-            {
-                let searchStartOffset = Math.max(lineTokens.getStartOffset(i), 0 - 1 - currentModeBrackets.maxBracketLength);
-                // limit search to not go after `maxBracketLength`
-                const searchEndOffset = Math.min(lineTokens.getEndOffset(i), 0 - 1 + currentModeBrackets.maxBracketLength);
+            if (!ignoreBracketsInToken(tokenType)) {
+                const searchStartOffset = Math.max(lineTokens.getStartOffset(i), 0 - 1 - this.config.maxBracketLength);
+                const searchEndOffset = Math.min(lineTokens.getEndOffset(i), 0 - 1 + this.config.maxBracketLength);
+                const currentTokenText = lineTokens[i].text.substring(searchStartOffset, searchEndOffset);
+
+                let m;
+                do {
+                    m = this.config.regex.exec(currentTokenText);
+                    if (m) {
+                        matches.push({ content: m[0], index: this.config.regex.lastIndex - m[0].length });
+                    }
+                } while (m);
             }
         }
 
-        const newLine = new TextLine(ruleStack, previousLineState, index);
-        this.parseTokens(tokens, newLine, newText);
+        const newLine = new TextLine(tokenized, previousLineState, index);
+        for (const match of matches) {
+            const key = this.config.bracketToId.get(match.content);
+            if (key) {
+                newLine.AddToken(match.content, match.index, key);
+            }
+        }
         return newLine;
     }
 
@@ -422,38 +438,29 @@ export default class DocumentDecoration {
         }
     }
 
-    private parseTokens(tokens: IToken[], currentLine: TextLine, text: string) {
-        for (const token of tokens) {
-            const character = text.substring(token.startIndex, token.endIndex);
-            if (token.scopes.length > 1) {
-                this.validateToken(token, character, currentLine);
-            }
-        }
-    }
+    // private validateToken(token: IToken, character: string, currentLine: TextLine) {
+    //     if (token.scopes.length > 1) {
+    //         const type = token.scopes[token.scopes.length - 1];
+    //         const base = token.scopes[0];
+    //         const typeLanguage = base.substring(base.indexOf(".") + 1);
+    //         const typeMap = this.settings.getRule(token.scopes[0]);
+    //         if (!typeMap) {
+    //             return;
+    //         }
 
-    private validateToken(token: IToken, character: string, currentLine: TextLine) {
-        if (token.scopes.length > 1) {
-            const type = token.scopes[token.scopes.length - 1];
-            const base = token.scopes[0];
-            const typeLanguage = base.substring(base.indexOf(".") + 1);
-            const typeMap = this.settings.getRule(token.scopes[0]);
-            if (!typeMap) {
-                return;
-            }
+    //         const typeNoLanguageSuffix = type.substring(0, type.length - typeLanguage.length - 1);
+    //         const tokenMatch = typeMap.get(typeNoLanguageSuffix);
+    //         if (!tokenMatch) {
+    //             return;
+    //         }
 
-            const typeNoLanguageSuffix = type.substring(0, type.length - typeLanguage.length - 1);
-            const tokenMatch = typeMap.get(typeNoLanguageSuffix);
-            if (!tokenMatch) {
-                return;
-            }
-
-            currentLine.AddToken(
-                character,
-                tokenMatch,
-                token,
-            );
-        }
-    }
+    //         currentLine.AddToken(
+    //             character,
+    //             tokenMatch,
+    //             token,
+    //         );
+    //     }
+    // }
 
     private colorDecorations(editors: vscode.TextEditor[]) {
         // console.time("colorDecorations");

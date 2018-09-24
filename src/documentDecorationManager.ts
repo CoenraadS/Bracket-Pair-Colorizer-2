@@ -113,7 +113,7 @@ export default class DocumentDecorationManager {
 
                 // console.log("Found Tokenizer for " + document.languageId);
 
-                documentDecorations = new DocumentDecoration(document, tokenizer as IGrammar, this.settings);
+                documentDecorations = new DocumentDecoration(document, tokenizer, this.settings);
                 // console.log("Adding " + uri + " to cache");
                 this.documents.set(uri, documentDecorations);
             } catch (error) {

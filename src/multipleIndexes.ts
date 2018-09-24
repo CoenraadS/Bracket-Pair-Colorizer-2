@@ -6,17 +6,17 @@ import Settings from "./settings";
 import Token from "./token";
 
 export default class MultipleBracketGroups implements IBracketManager {
-    private allLinesOpenBracketStack = new Map<string, Bracket[]>();
+    private allLinesOpenBracketStack = new Map<number, Bracket[]>();
     private allBracketsOnLine: Bracket[] = [];
     private bracketsHash = "";
-    private previousOpenBracketColorIndexes = new Map<string, number>();
+    private previousOpenBracketColorIndexes = new Map<number, number>();
     private readonly settings: Settings;
 
     constructor(
         settings: Settings,
         previousState?: {
-            currentOpenBracketColorIndexes: Map<string, Bracket[]>,
-            previousOpenBracketColorIndexes: Map<string, number>,
+            currentOpenBracketColorIndexes: Map<number, Bracket[]>,
+            previousOpenBracketColorIndexes: Map<number, number>,
         }) {
         this.settings = settings;
 
@@ -26,7 +26,7 @@ export default class MultipleBracketGroups implements IBracketManager {
         }
     }
 
-    public getPreviousIndex(type: string): number {
+    public getPreviousIndex(type: number): number {
         return this.previousOpenBracketColorIndexes[type];
     }
 
@@ -48,7 +48,7 @@ export default class MultipleBracketGroups implements IBracketManager {
         this.previousOpenBracketColorIndexes.set(token.type, colorIndex);
     }
 
-    public getCurrentLength(type: string): number {
+    public getCurrentLength(type: number): number {
         return this.allLinesOpenBracketStack[type].length;
     }
 
