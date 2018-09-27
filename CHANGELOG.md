@@ -1,19 +1,15 @@
 ## Release Notes
 
 ### 0.0.18
-
 Be more aggresive with recoloring to prevent mismatches
 
 ### 0.0.17
-
 Fix coloring offset being wrong following a string/comment/regex
 
 ### 0.0.16
-
 Fix nested coloring being broken
 
 ### 0.0.13
-
 Leverage VSCode for automagical bracket support
 
 ### 0.0.12
