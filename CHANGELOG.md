@@ -1,6 +1,6 @@
 ## Release Notes
 
-### 0.0.15
+### 0.0.16
 
 Fix nested coloring being broken
 
