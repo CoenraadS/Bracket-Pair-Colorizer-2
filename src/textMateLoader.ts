@@ -2,7 +2,7 @@ import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
 import * as path from "path";
 import * as vscode from "vscode";
 import fs = require("fs");
-import { getRegexForBrackets } from "./ruleBuilder";
+import { getRegexForBrackets } from "./bracketUtil";
 
 export class TextMateLoader {
     public readonly scopeNameToLanguage = new Map<string, string>();

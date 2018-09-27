@@ -6,7 +6,7 @@ import { IGrammar, IStackElement } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
-import { LineTokens, ignoreBracketsInToken } from "./vscodeFiles";
+import { ignoreBracketsInToken, LineTokens } from "./vscodeFiles";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -14,14 +14,14 @@ export default class DocumentDecoration {
     // This program caches lines, and will only analyze linenumbers including or above a modified line
     private lines: TextLine[] = [];
     private readonly document: vscode.TextDocument;
-    private readonly config: { grammar: IGrammar, regex: RegExp, maxBracketLength: number, bracketToId: Map<string, number> };
+    private readonly config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, number> };
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
     private readonly eol: string;
 
     constructor(
         document: vscode.TextDocument,
-        config: { grammar: IGrammar, regex: RegExp, maxBracketLength: number, bracketToId: Map<string, number> },
+        config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, number> },
         settings: Settings,
     ) {
         this.settings = settings;
@@ -337,6 +337,7 @@ export default class DocumentDecoration {
                 const currentTokenText = newText.substring(searchStartOffset, searchEndOffset);
 
                 let result: RegExpExecArray | null;
+                // tslint:disable-next-line:no-conditional-assignment
                 while ((result = this.config.regex.exec(currentTokenText)) !== null) {
                     matches.push({ content: result[0], index: result.index });
                 }

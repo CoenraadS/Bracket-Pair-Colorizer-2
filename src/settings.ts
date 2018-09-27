@@ -2,8 +2,6 @@ import * as vscode from "vscode";
 import ColorMode from "./colorMode";
 import Colors from "./colors";
 import GutterIconManager from "./gutterIconManager";
-import LanguageDefinition from "./languageDefinition";
-import { RuleBuilder } from "./ruleBuilder";
 import TextMateLoader from "./textMateLoader";
 
 export default class Settings {
@@ -29,7 +27,6 @@ export default class Settings {
     private readonly activeScopeLineCSSElements: string[][];
     private readonly activeScopeLineCSSBorder: string;
     private readonly rulerPosition: string;
-    private readonly ruleBuilder: RuleBuilder;
     constructor(
     ) {
         this.gutterIcons = new GutterIconManager();
@@ -130,22 +127,6 @@ export default class Settings {
 
         this.bracketDecorations = this.createBracketDecorations();
 
-        const languageDefinitions = configuration.get("languages") as LanguageDefinition[];
-
-        if (!Array.isArray(languageDefinitions)) {
-            throw new Error("languageDefinitions is not an array");
-        }
-
-        this.ruleBuilder = new RuleBuilder(languageDefinitions);
-
-        const languageOverrideDefinitions = configuration.get("language-overrides") as LanguageDefinition[];
-
-        if (!Array.isArray(languageOverrideDefinitions)) {
-            throw new Error("languageOverrideDefinitions is not an array");
-        }
-
-        this.ruleBuilder.override(languageOverrideDefinitions);
-
         const excludedLanguages = configuration.get("excludedLanguages") as string[];
 
         if (!Array.isArray(excludedLanguages)) {
@@ -153,13 +134,6 @@ export default class Settings {
         }
 
         this.excludedLanguages = new Set(excludedLanguages);
-    }
-
-    public getRule(scopeName: string) {
-        const languageId = this.TextMateLoader.scopeNameToLanguage.get(scopeName);
-        if (languageId) {
-            return this.ruleBuilder.get(languageId);
-        }
     }
 
     public dispose() {
