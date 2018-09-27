@@ -16,7 +16,7 @@ export default class DocumentDecoration {
     private readonly document: vscode.TextDocument;
     private readonly config: {
         grammar: IGrammar, regex: RegExp,
-        bracketToId: Map<string, { open: boolean, key: number }>
+        bracketToId: Map<string, { open: boolean, key: number }>,
     };
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
