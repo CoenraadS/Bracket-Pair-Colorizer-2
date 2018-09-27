@@ -89,8 +89,8 @@ export default class DocumentDecoration {
                 return;
             }
 
-            const start = this.document.validatePosition(endBracket.openBracket.token.range.start);
-            const end = this.document.validatePosition(endBracket.token.range.end);
+            const start = endBracket.openBracket.token.range.start.translate(0, 1);
+            const end = endBracket.token.range.end.translate(0, -1);
             newSelections.push(new vscode.Selection(start, end));
         });
 

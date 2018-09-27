@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.19
+Restore only matching bracket scopes when inside of the scope
+
 ### 0.0.18
 Be more aggresive with recoloring to prevent mismatches
 

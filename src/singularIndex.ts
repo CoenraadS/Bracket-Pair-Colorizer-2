@@ -63,7 +63,8 @@ export default class SingularBracketGroup implements IBracketManager {
 
             const closeBracket = bracket as BracketClose;
             const openBracket = closeBracket.openBracket;
-            const range = new Range(openBracket.token.range.start, closeBracket.token.range.end);
+            const range =
+                new Range(openBracket.token.range.start.translate(0, 1), closeBracket.token.range.end.translate(0, -1));
 
             if (range.contains(position)) {
                 return closeBracket;
