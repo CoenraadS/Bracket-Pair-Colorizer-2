@@ -36,7 +36,7 @@ export default class DocumentDecoration {
     }
 
     public onDidChangeTextDocument(contentChanges: vscode.TextDocumentContentChangeEvent[]) {
-        if (contentChanges.length > 1 || !contentChanges[0].range.isSingleLine) {
+        if (contentChanges.length > 1 || !contentChanges[0].range.isSingleLine || contentChanges[0].text.length > 1) {
             let minLineIndexToUpdate = 0;
             for (const contentChange of contentChanges) {
                 minLineIndexToUpdate = Math.min(minLineIndexToUpdate, contentChange.range.start.line);
@@ -53,6 +53,7 @@ export default class DocumentDecoration {
         }
 
         const change = contentChanges[0];
+
         const lineNumber = change.range.start.line;
         // Parse overlapped lines with goal to see if we can avoid document reparse
         // By just moving existing brackets if the amount of brackets on a line didn't change

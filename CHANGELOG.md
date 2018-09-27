@@ -1,5 +1,9 @@
 ## Release Notes
 
+### 0.0.18
+
+Be more aggresive with recoloring to prevent mismatches
+
 ### 0.0.17
 
 Fix coloring offset being wrong following a string/comment/regex
