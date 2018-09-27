@@ -434,30 +434,6 @@ export default class DocumentDecoration {
         }
     }
 
-    // private validateToken(token: IToken, character: string, currentLine: TextLine) {
-    //     if (token.scopes.length > 1) {
-    //         const type = token.scopes[token.scopes.length - 1];
-    //         const base = token.scopes[0];
-    //         const typeLanguage = base.substring(base.indexOf(".") + 1);
-    //         const typeMap = this.settings.getRule(token.scopes[0]);
-    //         if (!typeMap) {
-    //             return;
-    //         }
-
-    //         const typeNoLanguageSuffix = type.substring(0, type.length - typeLanguage.length - 1);
-    //         const tokenMatch = typeMap.get(typeNoLanguageSuffix);
-    //         if (!tokenMatch) {
-    //             return;
-    //         }
-
-    //         currentLine.AddToken(
-    //             character,
-    //             tokenMatch,
-    //             token,
-    //         );
-    //     }
-    // }
-
     private colorDecorations(editors: vscode.TextEditor[]) {
         // console.time("colorDecorations");
         const colorMap = new Map<string, vscode.Range[]>();
