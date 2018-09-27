@@ -10,19 +10,11 @@ Screenshot:
 ### F.A.Q. 
 
 - Why create a version 2, and not continue the old extension?
-    - Version 2 contains a new parsing engine which should be more accurate and enable more flexibility. However as a result there are many breaking changes to the settings, and also the current language support is very limited, although I hope to grow it quickly.
+    - Version 2 contains a new parsing engine which should be more accurate and enable more flexibility, however it may also break more often as it is still under development
 
 ---
 
 ### [Release Notes](CHANGELOG.md)
-
----
-
-### Language Support
-
-Is a language not supported yet? Read how to [add a new language.](LANGUAGE_SUPPORT.md)
-
-##### HTML Support is not possible yet
 
 ---
 
