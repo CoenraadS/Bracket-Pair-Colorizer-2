@@ -1,5 +1,9 @@
 ## Release Notes
 
+### 0.0.13
+
+Leverage VSCode for automagical bracket support
+
 ### 0.0.12
 Fix colors sometimes being incorrect after text replacement #3
 
