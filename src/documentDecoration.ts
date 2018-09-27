@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { EndOfLine } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import { IGrammar, IToken, ITokenizeLineResult2 } from "./IExtensionGrammar";
+import { IGrammar, IStackElement } from "./IExtensionGrammar";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
@@ -18,6 +18,7 @@ export default class DocumentDecoration {
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
     private readonly eol: string;
+
     constructor(
         document: vscode.TextDocument,
         config: { grammar: IGrammar, regex: RegExp, maxBracketLength: number, bracketToId: Map<string, number> },
@@ -26,8 +27,6 @@ export default class DocumentDecoration {
         this.settings = settings;
         this.document = document;
         this.config = config;
-
-        // this.suffix = "." + ((this.tokenizer as any)._grammar.scopeName as string).split(".").slice(1).join(".");
 
         if (this.document.eol === EndOfLine.LF) {
             this.eol = "\n";
@@ -119,14 +118,14 @@ export default class DocumentDecoration {
 
     // Lines are stored in an array, if line is requested outside of array bounds
     // add emptys lines until array is correctly sized
-    public getLine(index: number, ruleStack: ITokenizeLineResult2): TextLine {
+    public getLine(index: number, state: IStackElement): TextLine {
         if (index < this.lines.length) {
             return this.lines[index];
         }
         else {
             if (this.lines.length === 0) {
                 this.lines.push(
-                    new TextLine(ruleStack, new LineState(this.settings), 0),
+                    new TextLine(state, new LineState(this.settings), 0),
                 );
             }
 
@@ -137,7 +136,7 @@ export default class DocumentDecoration {
             if (index === this.lines.length) {
                 const previousLine = this.lines[this.lines.length - 1];
                 const newLine =
-                    new TextLine(ruleStack, previousLine.cloneState(), index);
+                    new TextLine(state, previousLine.cloneState(), index);
 
                 this.lines.push(newLine);
                 return newLine;
@@ -318,30 +317,33 @@ export default class DocumentDecoration {
         const previousLineRuleStack = index > 0 ?
             this.lines[index - 1].getRuleStack() :
             undefined;
+
         const previousLineState = index > 0 ?
             this.lines[index - 1].cloneState() :
             new LineState(this.settings);
+
         const tokenized = this.config.grammar.tokenizeLine2(newText, previousLineRuleStack);
         const tokens = tokenized.tokens;
         const lineTokens = new LineTokens(tokens, newText);
 
         const matches = new Array<{ content: string, index: number }>();
-        for (let i = 0; i < lineTokens.getCount(); i++) {
+        const count = lineTokens.getCount();
+        for (let i = 0; i < count; i++) {
             const tokenType = lineTokens.getStandardTokenType(i);
             if (!ignoreBracketsInToken(tokenType)) {
-                const searchStartOffset = lineTokens.getStartOffset(i);
-                const searchEndOffset = lineTokens.getEndOffset(i);
+                const searchStartOffset = tokens[i * 2];
+                const searchEndOffset = i < count ? tokens[(i + 1) * 2] : newText.length;
+
                 const currentTokenText = newText.substring(searchStartOffset, searchEndOffset);
 
                 let result: RegExpExecArray | null;
                 while ((result = this.config.regex.exec(currentTokenText)) !== null) {
-                    let matchIndex = result.index;
-                    matches.push({ content: result[0], index });
+                    matches.push({ content: result[0], index: result.index });
                 }
             }
         }
 
-        const newLine = new TextLine(tokenized, previousLineState, index);
+        const newLine = new TextLine(tokenized.ruleStack, previousLineState, index);
         for (const match of matches) {
             const key = this.config.bracketToId.get(match.content);
             if (key) {

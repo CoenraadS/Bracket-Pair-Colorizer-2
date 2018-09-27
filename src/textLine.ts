@@ -8,19 +8,19 @@ import ScopeSingle, { ScopeType } from "./scopeSingle";
 export default class TextLine {
     public index: number;
     private lineState: LineState;
-    private readonly tokenizedLineResult: ITokenizeLineResult2;
+    private readonly ruleStack: IStackElement;
 
     constructor(
-        tokenizedLineResult: ITokenizeLineResult2,
+        ruleStack: IStackElement,
         lineState: LineState,
         index: number) {
         this.lineState = lineState;
-        this.tokenizedLineResult = tokenizedLineResult;
+        this.ruleStack = ruleStack;
         this.index = index;
     }
 
     public getRuleStack(): IStackElement {
-        return this.tokenizedLineResult.ruleStack;
+        return this.ruleStack;
     }
 
     public getCharStack() {
@@ -45,7 +45,7 @@ export default class TextLine {
         const stack = this.getCharStack();
         if (stack.length > 0) {
             const topStack = stack[stack.length - 1];
-            if ((topStack) === stackKey) {
+            if ((topStack) !== stackKey) {
                 stack.push(stackKey);
                 this.addBracket(
                     stackKey,

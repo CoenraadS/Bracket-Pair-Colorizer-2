@@ -1,5 +1,4 @@
 import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
-
 import * as path from "path";
 import * as vscode from "vscode";
 import fs = require("fs");
@@ -10,13 +9,12 @@ export class TextMateLoader {
     private readonly scopeNameToPath = new Map<string, string>();
     private readonly languageToScopeName = new Map<string, string>();
     private readonly languageToConfigPath = new Map<string, string>();
-    private languageId = 0;
+    private languageId = 1;
     private readonly vsctm: any;
     private readonly textMateRegistry =
         new Map<string, {
             grammar: IGrammar,
             regex: RegExp,
-            maxBracketLength: number,
             bracketToId: Map<string, number>,
         }>();
     constructor() {
@@ -87,8 +85,8 @@ export class TextMateLoader {
                         const bracketToId = new Map<string, number>();
                         for (let i = 0; i < brackets.length; i++) {
                             const bracket = brackets[i];
-                            bracketToId.set(bracket[0], i);
-                            bracketToId.set(bracket[1], i);
+                            bracketToId.set(bracket[0], i + 1);
+                            bracketToId.set(bracket[1], i + 1);
                         }
 
                         let maxBracketLength = 0;
@@ -98,7 +96,7 @@ export class TextMateLoader {
                         }
 
                         const regex = getRegexForBrackets(mappedBrackets)
-                        this.textMateRegistry.set(languageID, { grammar, regex, maxBracketLength, bracketToId });
+                        this.textMateRegistry.set(languageID, { grammar, regex, bracketToId });
                     }
                 }
                 return grammar;
