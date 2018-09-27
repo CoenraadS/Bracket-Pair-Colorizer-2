@@ -1,5 +1,9 @@
 ## Release Notes
 
+### 0.0.15
+
+Fix nested coloring being broken
+
 ### 0.0.13
 
 Leverage VSCode for automagical bracket support
