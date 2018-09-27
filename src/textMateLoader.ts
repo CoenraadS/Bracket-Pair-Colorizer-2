@@ -1,6 +1,6 @@
-import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
 import * as path from "path";
 import * as vscode from "vscode";
+import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
 import fs = require("fs");
 import { getRegexForBrackets } from "./bracketUtil";
 
@@ -95,7 +95,7 @@ export class TextMateLoader {
                             maxBracketLength = Math.max(maxBracketLength, bracket.close.length);
                         }
 
-                        const regex = getRegexForBrackets(mappedBrackets)
+                        const regex = getRegexForBrackets(mappedBrackets);
                         this.textMateRegistry.set(languageID, { grammar, regex, bracketToId });
                     }
                 }

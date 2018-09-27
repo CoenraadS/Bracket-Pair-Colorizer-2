@@ -14,10 +14,12 @@ export default class DocumentDecoration {
     // This program caches lines, and will only analyze linenumbers including or above a modified line
     private lines: TextLine[] = [];
     private readonly document: vscode.TextDocument;
-    private readonly config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, { open: boolean, key: number }> };
+    private readonly config: {
+        grammar: IGrammar, regex: RegExp,
+        bracketToId: Map<string, { open: boolean, key: number }>
+    };
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
-    private readonly eol: string;
 
     constructor(
         document: vscode.TextDocument,
@@ -27,13 +29,6 @@ export default class DocumentDecoration {
         this.settings = settings;
         this.document = document;
         this.config = config;
-
-        if (this.document.eol === EndOfLine.LF) {
-            this.eol = "\n";
-        }
-        else {
-            this.eol = "\r\n";
-        }
     }
 
     public dispose() {
