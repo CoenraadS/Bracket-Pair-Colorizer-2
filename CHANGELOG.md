@@ -1,5 +1,9 @@
 ## Release Notes
 
+### 0.0.17
+
+Fix coloring offset being wrong following a string/comment/regex
+
 ### 0.0.16
 
 Fix nested coloring being broken

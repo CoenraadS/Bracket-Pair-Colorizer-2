@@ -334,7 +334,7 @@ export default class DocumentDecoration {
                 let result: RegExpExecArray | null;
                 // tslint:disable-next-line:no-conditional-assignment
                 while ((result = this.config.regex.exec(currentTokenText)) !== null) {
-                    matches.push({ content: result[0], index: result.index });
+                    matches.push({ content: result[0], index: result.index + searchStartOffset });
                 }
             }
         }
