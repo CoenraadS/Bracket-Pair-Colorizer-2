@@ -15,7 +15,7 @@ export class TextMateLoader {
         new Map<string, {
             grammar: IGrammar,
             regex: RegExp,
-            bracketToId: Map<string, number>,
+            bracketToId: Map<string, { open: boolean, key: number }>,
         }>();
     constructor() {
         this.initializeGrammars();
@@ -82,11 +82,11 @@ export class TextMateLoader {
                     if (!this.textMateRegistry.has(languageID)) {
                         const mappedBrackets = brackets.map((b) => ({ open: b[0], close: b[1] }));
 
-                        const bracketToId = new Map<string, number>();
+                        const bracketToId = new Map<string, { open: boolean, key: number }>();
                         for (let i = 0; i < brackets.length; i++) {
                             const bracket = brackets[i];
-                            bracketToId.set(bracket[0], i + 1);
-                            bracketToId.set(bracket[1], i + 1);
+                            bracketToId.set(bracket[0], { open: true, key: i + 1 });
+                            bracketToId.set(bracket[1], { open: false, key: i + 1 });
                         }
 
                         let maxBracketLength = 0;
@@ -132,9 +132,6 @@ export class TextMateLoader {
                         if (language.configuration) {
                             const configPath = path.join(extension.extensionPath, language.configuration);
                             this.languageToConfigPath.set(language.id, configPath);
-                        }
-                        else {
-                            console.log("No configuration for: " + language.id);
                         }
                     }
                 }

@@ -14,14 +14,14 @@ export default class DocumentDecoration {
     // This program caches lines, and will only analyze linenumbers including or above a modified line
     private lines: TextLine[] = [];
     private readonly document: vscode.TextDocument;
-    private readonly config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, number> };
+    private readonly config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, { open: boolean, key: number }> };
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
     private readonly eol: string;
 
     constructor(
         document: vscode.TextDocument,
-        config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, number> },
+        config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, { open: boolean, key: number }> },
         settings: Settings,
     ) {
         this.settings = settings;
@@ -346,9 +346,9 @@ export default class DocumentDecoration {
 
         const newLine = new TextLine(tokenized.ruleStack, previousLineState, index);
         for (const match of matches) {
-            const key = this.config.bracketToId.get(match.content);
-            if (key) {
-                newLine.AddToken(match.content, match.index, key);
+            const lookup = this.config.bracketToId.get(match.content);
+            if (lookup) {
+                newLine.AddToken(match.content, match.index, lookup.key, lookup.open);
             }
         }
         return newLine;

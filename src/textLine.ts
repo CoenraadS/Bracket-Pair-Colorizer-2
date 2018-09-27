@@ -23,10 +23,6 @@ export default class TextLine {
         return this.ruleStack;
     }
 
-    public getCharStack() {
-        return this.lineState.getCharStack();
-    }
-
     // Return a copy of the line while mantaining bracket state. colorRanges is not mantained.
     public cloneState() {
         return this.lineState.cloneState();
@@ -39,38 +35,23 @@ export default class TextLine {
     public AddToken(
         currentChar: string,
         index: number,
-        id: number,
+        key: number,
+        open: boolean,
     ) {
-        const stackKey = id;
-        const stack = this.getCharStack();
-        if (stack.length > 0) {
-            const topStack = stack[stack.length - 1];
-            if ((topStack) !== stackKey) {
-                stack.push(stackKey);
-                this.addBracket(
-                    stackKey,
-                    currentChar,
-                    index,
-                    true,
-                );
-            }
-            else {
-                this.addBracket(
-                    stackKey,
-                    currentChar,
-                    index,
-                    false,
-                );
-                stack.pop();
-            }
-        }
-        else {
-            stack.push(stackKey);
+        if (open) {
             this.addBracket(
-                stackKey,
+                key,
                 currentChar,
                 index,
                 true,
+            );
+        }
+        else {
+            this.addBracket(
+                key,
+                currentChar,
+                index,
+                false,
             );
         }
     }

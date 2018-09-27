@@ -12,23 +12,19 @@ export default class LineState {
     private readonly bracketManager: IBracketManager;
     private previousBracketColor: string;
     private readonly settings: Settings;
-    private readonly charStack: number[];
 
     constructor(settings: Settings, previousState?:
         {
             readonly colorIndexes: IBracketManager;
             readonly previousBracketColor: string;
-            readonly charStack: number[];
         }) {
         this.settings = settings;
 
         if (previousState !== undefined) {
             this.bracketManager = previousState.colorIndexes;
             this.previousBracketColor = previousState.previousBracketColor;
-            this.charStack = previousState.charStack;
         }
         else {
-            this.charStack = [];
             switch (settings.colorMode) {
                 case ColorMode.Consecutive: this.bracketManager = new SingularBracketGroup(settings);
                     break;
@@ -39,10 +35,6 @@ export default class LineState {
         }
     }
 
-    public getCharStack() {
-        return this.charStack;
-    }
-
     public getBracketHash() {
         return this.bracketManager.getHash();
     }
@@ -50,7 +42,6 @@ export default class LineState {
     public cloneState(): LineState {
         const clone =
         {
-            charStack: this.cloneCharStack(),
             colorIndexes: this.bracketManager.copyCumulativeState(),
             previousBracketColor: this.previousBracketColor,
         };
@@ -84,10 +75,6 @@ export default class LineState {
 
     public getAllBrackets(): Bracket[] {
         return this.bracketManager.getAllBrackets();
-    }
-
-    private cloneCharStack() {
-        return this.charStack.slice();
     }
 
     private addOpenBracket(token: Token) {
