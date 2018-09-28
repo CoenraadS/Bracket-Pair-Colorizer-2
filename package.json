@@ -157,6 +157,7 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
+        "@types/json5": "0.0.30",
         "@types/mocha": "^2.2.32",
         "@types/node": "^6.0.117",
         "mocha": "^2.3.3",
@@ -171,6 +172,7 @@
     "license": "SEE LICENSE IN LICENSE.md",
     "dependencies": {
         "escape-html": "^1.0.3",
+        "json5": "^2.1.0",
         "vscode-uri": "^1.0.6"
     }
 }

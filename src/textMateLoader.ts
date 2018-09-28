@@ -3,6 +3,7 @@ import * as vscode from "vscode";
 import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
 import fs = require("fs");
 import { getRegexForBrackets } from "./bracketUtil";
+import JSON5 = require("json5");
 
 export class TextMateLoader {
     public readonly scopeNameToLanguage = new Map<string, string>();
@@ -44,7 +45,7 @@ export class TextMateLoader {
                 if (error) {
                     reject(error);
                 } else {
-                    const config = JSON.parse(content.toString());
+                    const config = JSON5.parse(content.toString());
                     const brackets = (config as any).brackets as [string[]];
                     resolve(brackets);
                 }

@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.20
+Support reading language configuration json files with comments
+
 ### 0.0.19
 Restore only matching bracket scopes when inside of the scope
 
