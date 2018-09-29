@@ -3,11 +3,9 @@ import {
     TextEditor, TextEditorSelectionChangeEvent, window,
 } from "vscode";
 import DocumentDecoration from "./documentDecoration";
-import { IGrammar } from "./IExtensionGrammar";
 import Settings from "./settings";
 
 export default class DocumentDecorationManager {
-    private showError = true;
     private readonly documents = new Map<string, DocumentDecoration>();
     private readonly settings = new Settings();
 
@@ -96,39 +94,25 @@ export default class DocumentDecorationManager {
         let documentDecorations = this.documents.get(uri);
 
         if (documentDecorations === undefined) {
-            try {
-                const tokenizer = this.tryGetTokenizer(document.languageId);
-                if (!tokenizer) {
-                    // console.log("Could not find tokenizer for " + document.languageId);
-                    return;
-                }
-
-                if (tokenizer instanceof Promise) {
-                    // console.log("Found Tokenizer promise for " + document.languageId);
-                    tokenizer.then(() => {
-                        this.updateDocument(document);
-                    }).catch((e) => console.error(e));
-                    return;
-                }
-
-                // console.log("Found Tokenizer for " + document.languageId);
-
-                documentDecorations = new DocumentDecoration(document, tokenizer, this.settings);
-                // console.log("Adding " + uri + " to cache");
-                this.documents.set(uri, documentDecorations);
-            } catch (error) {
-                if (error instanceof Error) {
-                    if (this.showError) {
-                        window.showErrorMessage("BracketPair Settings: " + error.message);
-
-                        // Don't spam errors
-                        this.showError = false;
-                        setTimeout(() => {
-                            this.showError = true;
-                        }, 3000);
-                    }
-                }
+            const tokenizer = this.tryGetTokenizer(document.languageId);
+            if (!tokenizer) {
+                // console.log("Could not find tokenizer for " + document.languageId);
+                return;
             }
+
+            if (tokenizer instanceof Promise) {
+                // console.log("Found Tokenizer promise for " + document.languageId);
+                tokenizer.then(() => {
+                    this.updateDocument(document);
+                }).catch((e) => console.error(e));
+                return;
+            }
+
+            // console.log("Found Tokenizer for " + document.languageId);
+
+            documentDecorations = new DocumentDecoration(document, tokenizer, this.settings);
+            // console.log("Adding " + uri + " to cache");
+            this.documents.set(uri, documentDecorations);
         }
 
         // console.log("Retrieved " + uri + " from cache");
