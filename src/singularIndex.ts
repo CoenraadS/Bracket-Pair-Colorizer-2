@@ -11,6 +11,7 @@ export default class SingularBracketGroup implements IBracketManager {
     private bracketsHash = "";
     private previousOpenBracketColorIndex: number = -1;
     private readonly settings: Settings;
+
     constructor(
         settings: Settings,
         previousState?: {
@@ -42,13 +43,13 @@ export default class SingularBracketGroup implements IBracketManager {
         this.previousOpenBracketColorIndex = colorIndex;
     }
 
-    public getCurrentLength(type: number): number {
+    public GetAmountOfOpenBrackets(type: number): number {
         return this.allLinesOpenBracketStack.length;
     }
 
     public addCloseBracket(token: Token) {
         if (this.allLinesOpenBracketStack.length > 0) {
-            if (this.allLinesOpenBracketStack[0].token.type === token.type) {
+            if (this.allLinesOpenBracketStack[this.allLinesOpenBracketStack.length - 1].token.type === token.type) {
                 const openBracket = this.allLinesOpenBracketStack.pop();
                 const closeBracket = new BracketClose(token, openBracket!);
                 this.allBracketsOnLine.push(closeBracket);

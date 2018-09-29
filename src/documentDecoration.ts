@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 import { EndOfLine } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
-import { IGrammar, IStackElement } from "./IExtensionGrammar";
+import { IStackElement } from "./IExtensionGrammar";
+import LanguageConfig from "./languageConfig";
 import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
@@ -14,21 +15,18 @@ export default class DocumentDecoration {
     // This program caches lines, and will only analyze linenumbers including or above a modified line
     private lines: TextLine[] = [];
     private readonly document: vscode.TextDocument;
-    private readonly config: {
-        grammar: IGrammar, regex: RegExp,
-        bracketToId: Map<string, { open: boolean, key: number }>,
-    };
+    private readonly languageConfig: LanguageConfig;
     private scopeDecorations: vscode.TextEditorDecorationType[] = [];
     private scopeSelectionHistory: vscode.Selection[][] = [];
 
     constructor(
         document: vscode.TextDocument,
-        config: { grammar: IGrammar, regex: RegExp, bracketToId: Map<string, { open: boolean, key: number }> },
+        config: LanguageConfig,
         settings: Settings,
     ) {
         this.settings = settings;
         this.document = document;
-        this.config = config;
+        this.languageConfig = config;
     }
 
     public dispose() {
@@ -121,7 +119,7 @@ export default class DocumentDecoration {
         else {
             if (this.lines.length === 0) {
                 this.lines.push(
-                    new TextLine(state, new LineState(this.settings), 0),
+                    new TextLine(state, new LineState(this.settings, this.languageConfig), 0),
                 );
             }
 
@@ -316,9 +314,9 @@ export default class DocumentDecoration {
 
         const previousLineState = index > 0 ?
             this.lines[index - 1].cloneState() :
-            new LineState(this.settings);
+            new LineState(this.settings, this.languageConfig);
 
-        const tokenized = this.config.grammar.tokenizeLine2(newText, previousLineRuleStack);
+        const tokenized = this.languageConfig.grammar.tokenizeLine2(newText, previousLineRuleStack);
         const tokens = tokenized.tokens;
         const lineTokens = new LineTokens(tokens, newText);
 
@@ -334,7 +332,7 @@ export default class DocumentDecoration {
 
                 let result: RegExpExecArray | null;
                 // tslint:disable-next-line:no-conditional-assignment
-                while ((result = this.config.regex.exec(currentTokenText)) !== null) {
+                while ((result = this.languageConfig.regex.exec(currentTokenText)) !== null) {
                     matches.push({ content: result[0], index: result.index + searchStartOffset });
                 }
             }
@@ -342,7 +340,7 @@ export default class DocumentDecoration {
 
         const newLine = new TextLine(tokenized.ruleStack, previousLineState, index);
         for (const match of matches) {
-            const lookup = this.config.bracketToId.get(match.content);
+            const lookup = this.languageConfig.bracketToId.get(match.content);
             if (lookup) {
                 newLine.AddToken(match.content, match.index, lookup.key, lookup.open);
             }

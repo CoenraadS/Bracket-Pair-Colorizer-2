@@ -9,8 +9,8 @@ Screenshot:
 
 ### F.A.Q. 
 
-- Why create a version 2, and not continue the old extension?
-    - Version 2 contains a new parsing engine which should be more accurate and enable more flexibility, however it may also break more often as it is still under development
+- Differences between v1 and v2?
+    - v2 Uses the same bracket parsing engine as VSCode, greatly increasing speed and accuracy. A new version was released because settings were cleaned up, breaking backwards compatibility.
 
 ---
 
@@ -27,11 +27,11 @@ Screenshot:
 > `"bracket-pair-colorizer-2.forceIterationColorCycle"`  
 ![Enabled](images/forceIterationColorCycleEnabled.png "forceIterationColorCycle Enabled")
 
-<!-- >`"bracket-pair-colorizer-2.colorMode"`  
+>`"bracket-pair-colorizer-2.colorMode"`  
 Consecutive brackets share a color pool for all bracket types  
 Independent brackets allow each bracket type to use its own color pool  
 ![Consecutive](images/consecutiveExample.png "Consecutive Example")
-![Independent](images/independentExample.png "Independent Example") -->
+![Independent](images/independentExample.png "Independent Example")
 
 > `"bracket-pair-colorizer-2.highlightActiveScope"`  
 Should the currently scoped brackets always be highlighted?

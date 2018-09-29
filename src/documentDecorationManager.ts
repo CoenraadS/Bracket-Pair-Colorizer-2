@@ -94,15 +94,15 @@ export default class DocumentDecorationManager {
         let documentDecorations = this.documents.get(uri);
 
         if (documentDecorations === undefined) {
-            const tokenizer = this.tryGetTokenizer(document.languageId);
-            if (!tokenizer) {
+            const languageConfig = this.tryGetLanguageConfig(document.languageId);
+            if (!languageConfig) {
                 // console.log("Could not find tokenizer for " + document.languageId);
                 return;
             }
 
-            if (tokenizer instanceof Promise) {
+            if (languageConfig instanceof Promise) {
                 // console.log("Found Tokenizer promise for " + document.languageId);
-                tokenizer.then(() => {
+                languageConfig.then(() => {
                     this.updateDocument(document);
                 }).catch((e) => console.error(e));
                 return;
@@ -110,7 +110,7 @@ export default class DocumentDecorationManager {
 
             // console.log("Found Tokenizer for " + document.languageId);
 
-            documentDecorations = new DocumentDecoration(document, tokenizer, this.settings);
+            documentDecorations = new DocumentDecoration(document, languageConfig, this.settings);
             // console.log("Adding " + uri + " to cache");
             this.documents.set(uri, documentDecorations);
         }
@@ -119,8 +119,8 @@ export default class DocumentDecorationManager {
         return documentDecorations;
     }
 
-    private tryGetTokenizer(languageID: string) {
-        return this.settings.TextMateLoader.tryGetTokenizer(languageID);
+    private tryGetLanguageConfig(languageID: string) {
+        return this.settings.TextMateLoader.tryGetLanguageConfig(languageID);
     }
 
     private isValidDocument(document?: TextDocument): boolean {

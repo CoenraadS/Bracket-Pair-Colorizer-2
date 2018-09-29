@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.21
+Add unmatched bracket coloring
+
 ### 0.0.20
 Support reading language configuration json files with comments
 

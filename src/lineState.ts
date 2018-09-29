@@ -3,6 +3,7 @@ import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import ColorMode from "./colorMode";
 import IBracketManager from "./IBracketManager";
+import LanguageConfig from "./languageConfig";
 import MultipleBracketGroups from "./multipleIndexes";
 import Settings from "./settings";
 import SingularBracketGroup from "./singularIndex";
@@ -12,13 +13,15 @@ export default class LineState {
     private readonly bracketManager: IBracketManager;
     private previousBracketColor: string;
     private readonly settings: Settings;
+    private readonly languageConfig: LanguageConfig;
 
-    constructor(settings: Settings, previousState?:
+    constructor(settings: Settings, languageConfig: LanguageConfig, previousState?:
         {
             readonly colorIndexes: IBracketManager;
             readonly previousBracketColor: string;
         }) {
         this.settings = settings;
+        this.languageConfig = languageConfig;
 
         if (previousState !== undefined) {
             this.bracketManager = previousState.colorIndexes;
@@ -28,7 +31,7 @@ export default class LineState {
             switch (settings.colorMode) {
                 case ColorMode.Consecutive: this.bracketManager = new SingularBracketGroup(settings);
                     break;
-                case ColorMode.Independent: this.bracketManager = new MultipleBracketGroups(settings);
+                case ColorMode.Independent: this.bracketManager = new MultipleBracketGroups(settings, languageConfig);
                     break;
                 default: throw new RangeError("Not implemented enum value");
             }
@@ -46,7 +49,7 @@ export default class LineState {
             previousBracketColor: this.previousBracketColor,
         };
 
-        return new LineState(this.settings, clone);
+        return new LineState(this.settings, this.languageConfig, clone);
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {
@@ -84,7 +87,7 @@ export default class LineState {
             colorIndex = (this.bracketManager.getPreviousIndex(token.type) + 1) % this.settings.colors.length;
         }
         else {
-            colorIndex = this.bracketManager.getCurrentLength(token.type) % this.settings.colors.length;
+            colorIndex = this.bracketManager.GetAmountOfOpenBrackets(token.type) % this.settings.colors.length;
         }
 
         let color = this.settings.colors[colorIndex];

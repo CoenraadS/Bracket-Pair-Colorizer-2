@@ -4,6 +4,7 @@ import { IExtensionPackage, IGrammar } from "./IExtensionGrammar";
 import fs = require("fs");
 import { getRegexForBrackets } from "./bracketUtil";
 import JSON5 = require("json5");
+import LanguageConfig from "./languageConfig";
 
 export class TextMateLoader {
     public readonly scopeNameToLanguage = new Map<string, string>();
@@ -12,19 +13,14 @@ export class TextMateLoader {
     private readonly languageToConfigPath = new Map<string, string>();
     private languageId = 1;
     private readonly vsctm: any;
-    private readonly textMateRegistry =
-        new Map<string, {
-            grammar: IGrammar,
-            regex: RegExp,
-            bracketToId: Map<string, { open: boolean, key: number }>,
-        }>();
+    private readonly languageConfigs = new Map<string, LanguageConfig>();
     constructor() {
         this.initializeGrammars();
         this.vsctm = this.loadTextMate();
     }
 
-    public tryGetTokenizer(languageID: string) {
-        const existingTokenizer = this.textMateRegistry.get(languageID);
+    public tryGetLanguageConfig(languageID: string) {
+        const existingTokenizer = this.languageConfigs.get(languageID);
         if (existingTokenizer) {
             return existingTokenizer;
         }
@@ -80,7 +76,7 @@ export class TextMateLoader {
             // Load the JavaScript grammar and any other grammars included by it async.
             return (registry.loadGrammarWithConfiguration(scopeName, this.languageId++, {}) as Thenable<IGrammar | undefined | null>).then((grammar) => {
                 if (grammar) {
-                    if (!this.textMateRegistry.has(languageID)) {
+                    if (!this.languageConfigs.has(languageID)) {
                         const mappedBrackets = brackets.map((b) => ({ open: b[0], close: b[1] }));
 
                         const bracketToId = new Map<string, { open: boolean, key: number }>();
@@ -97,7 +93,7 @@ export class TextMateLoader {
                         }
 
                         const regex = getRegexForBrackets(mappedBrackets);
-                        this.textMateRegistry.set(languageID, { grammar, regex, bracketToId });
+                        this.languageConfigs.set(languageID, new LanguageConfig(grammar, regex, bracketToId));
                     }
                 }
                 return grammar;

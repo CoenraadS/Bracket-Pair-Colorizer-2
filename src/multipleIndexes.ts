@@ -2,6 +2,7 @@ import { Position, Range } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import IBracketManager from "./IBracketManager";
+import LanguageConfig from "./languageConfig";
 import Settings from "./settings";
 import Token from "./token";
 
@@ -11,18 +12,25 @@ export default class MultipleBracketGroups implements IBracketManager {
     private bracketsHash = "";
     private previousOpenBracketColorIndexes = new Map<number, number>();
     private readonly settings: Settings;
+    private readonly languageConfig: LanguageConfig;
 
     constructor(
         settings: Settings,
+        languageConfig: LanguageConfig,
         previousState?: {
             currentOpenBracketColorIndexes: Map<number, Bracket[]>,
             previousOpenBracketColorIndexes: Map<number, number>,
         }) {
         this.settings = settings;
-
+        this.languageConfig = languageConfig;
         if (previousState !== undefined) {
             this.allLinesOpenBracketStack = previousState.currentOpenBracketColorIndexes;
             this.previousOpenBracketColorIndexes = previousState.previousOpenBracketColorIndexes;
+        }
+        else {
+            for (const value of languageConfig.bracketToId.values()) {
+                this.allLinesOpenBracketStack[value.key] = [];
+            }
         }
     }
 
@@ -48,7 +56,7 @@ export default class MultipleBracketGroups implements IBracketManager {
         this.previousOpenBracketColorIndexes.set(token.type, colorIndex);
     }
 
-    public getCurrentLength(type: number): number {
+    public GetAmountOfOpenBrackets(type: number): number {
         return this.allLinesOpenBracketStack[type].length;
     }
 
@@ -56,7 +64,7 @@ export default class MultipleBracketGroups implements IBracketManager {
         const openStack = this.allLinesOpenBracketStack.get(token.type);
 
         if (openStack && openStack.length > 0) {
-            if (openStack[0].token.type === token.type) {
+            if (openStack[openStack.length - 1].token.type === token.type) {
                 const openBracket = openStack.pop();
                 const closeBracket = new BracketClose(token, openBracket!);
                 this.allBracketsOnLine.push(closeBracket);
@@ -106,6 +114,7 @@ export default class MultipleBracketGroups implements IBracketManager {
     public copyCumulativeState(): IBracketManager {
         return new MultipleBracketGroups(
             this.settings,
+            this.languageConfig,
             {
                 currentOpenBracketColorIndexes: new Map(this.allLinesOpenBracketStack),
                 previousOpenBracketColorIndexes: new Map(this.previousOpenBracketColorIndexes),

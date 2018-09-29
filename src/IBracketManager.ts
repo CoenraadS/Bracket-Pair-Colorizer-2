@@ -6,7 +6,7 @@ import Token from "./token";
 interface IBracketManager {
     getPreviousIndex(type: number): number;
     addOpenBracket(token: Token, color: number): void;
-    getCurrentLength(type: number): number;
+    GetAmountOfOpenBrackets(type: number): number;
     addCloseBracket(token: Token): void;
     getClosingBracket(position: Position): BracketClose | undefined;
     copyCumulativeState(): IBracketManager;
