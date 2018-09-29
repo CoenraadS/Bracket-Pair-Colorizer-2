@@ -7,10 +7,10 @@ import Settings from "./settings";
 import Token from "./token";
 
 export default class MultipleBracketGroups implements IBracketManager {
-    private allLinesOpenBracketStack = new Map<number, Bracket[]>();
+    private allLinesOpenBracketStack: Bracket[][] = [];
     private allBracketsOnLine: Bracket[] = [];
     private bracketsHash = "";
-    private previousOpenBracketColorIndexes = new Map<number, number>();
+    private previousOpenBracketColorIndexes: number[] = [];
     private readonly settings: Settings;
     private readonly languageConfig: LanguageConfig;
 
@@ -18,8 +18,8 @@ export default class MultipleBracketGroups implements IBracketManager {
         settings: Settings,
         languageConfig: LanguageConfig,
         previousState?: {
-            currentOpenBracketColorIndexes: Map<number, Bracket[]>,
-            previousOpenBracketColorIndexes: Map<number, number>,
+            currentOpenBracketColorIndexes: Bracket[][],
+            previousOpenBracketColorIndexes: number[],
         }) {
         this.settings = settings;
         this.languageConfig = languageConfig;
@@ -30,6 +30,7 @@ export default class MultipleBracketGroups implements IBracketManager {
         else {
             for (const value of languageConfig.bracketToId.values()) {
                 this.allLinesOpenBracketStack[value.key] = [];
+                this.previousOpenBracketColorIndexes[value.key] = 0;
             }
         }
     }
@@ -43,17 +44,8 @@ export default class MultipleBracketGroups implements IBracketManager {
         this.allBracketsOnLine.push(openBracket);
         this.bracketsHash += openBracket.token.character;
 
-        const stack = this.allLinesOpenBracketStack.get(token.type);
-        if (stack) {
-            stack.push(openBracket);
-        }
-        else {
-            this.allLinesOpenBracketStack.set(token.type, [openBracket]);
-        }
-
         this.allLinesOpenBracketStack[token.type].push(openBracket);
-
-        this.previousOpenBracketColorIndexes.set(token.type, colorIndex);
+        this.previousOpenBracketColorIndexes[token.type] = colorIndex;
     }
 
     public GetAmountOfOpenBrackets(type: number): number {
@@ -61,9 +53,9 @@ export default class MultipleBracketGroups implements IBracketManager {
     }
 
     public addCloseBracket(token: Token): number | undefined {
-        const openStack = this.allLinesOpenBracketStack.get(token.type);
+        const openStack = this.allLinesOpenBracketStack[token.type];
 
-        if (openStack && openStack.length > 0) {
+        if (openStack.length > 0) {
             if (openStack[openStack.length - 1].token.type === token.type) {
                 const openBracket = openStack.pop();
                 const closeBracket = new BracketClose(token, openBracket!);
@@ -112,12 +104,18 @@ export default class MultipleBracketGroups implements IBracketManager {
     }
 
     public copyCumulativeState(): IBracketManager {
+        const clone: Bracket[][] = [];
+
+        for (const value of this.allLinesOpenBracketStack) {
+            clone.push(value.slice());
+        }
+
         return new MultipleBracketGroups(
             this.settings,
             this.languageConfig,
             {
-                currentOpenBracketColorIndexes: new Map(this.allLinesOpenBracketStack),
-                previousOpenBracketColorIndexes: new Map(this.previousOpenBracketColorIndexes),
+                currentOpenBracketColorIndexes: clone,
+                previousOpenBracketColorIndexes: this.previousOpenBracketColorIndexes.slice(),
             });
     }
 }

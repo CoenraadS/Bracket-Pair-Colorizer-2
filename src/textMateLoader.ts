@@ -82,8 +82,8 @@ export class TextMateLoader {
                         const bracketToId = new Map<string, { open: boolean, key: number }>();
                         for (let i = 0; i < brackets.length; i++) {
                             const bracket = brackets[i];
-                            bracketToId.set(bracket[0], { open: true, key: i + 1 });
-                            bracketToId.set(bracket[1], { open: false, key: i + 1 });
+                            bracketToId.set(bracket[0], { open: true, key: i });
+                            bracketToId.set(bracket[1], { open: false, key: i });
                         }
 
                         let maxBracketLength = 0;
