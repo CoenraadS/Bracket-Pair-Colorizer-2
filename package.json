@@ -52,6 +52,12 @@
                     "description": "Scope colors",
                     "scope": "window"
                 },
+                "bracket-pair-colorizer-2.unmatchedScopeColor": {
+                    "type": "string",
+                    "default": "Red",
+                    "description": "Unmatched Scope Color",
+                    "scope": "window"
+                },
                 "bracket-pair-colorizer-2.forceUniqueOpeningColor": {
                     "type": "boolean",
                     "default": false,

@@ -20,6 +20,7 @@ export default class Settings {
     public readonly showBracketsInRuler: boolean;
     public readonly scopeLineRelativePosition: boolean;
     public readonly colors: string[];
+    public readonly unmatchedScopeColor: string;
     public readonly excludedLanguages: Set<string>;
     public isDisposed = false;
     private readonly gutterIcons: GutterIconManager;
@@ -100,6 +101,12 @@ export default class Settings {
 
         if (typeof this.rulerPosition !== "string") {
             throw new Error("rulerPosition is not a string");
+        }
+
+        this.unmatchedScopeColor = configuration.get("unmatchedScopeColor") as string;
+
+        if (typeof this.unmatchedScopeColor !== "string") {
+            throw new Error("unmatchedScopeColor is not a string");
         }
 
         this.forceUniqueOpeningColor = configuration.get("forceUniqueOpeningColor") as boolean;
@@ -242,6 +249,11 @@ export default class Settings {
             });
             decorations.set(color, decoration);
         }
+
+        const unmatchedDecoration = vscode.window.createTextEditorDecorationType({
+            color: this.unmatchedScopeColor, rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        });
+        decorations.set(this.unmatchedScopeColor, unmatchedDecoration);
 
         return decorations;
     }

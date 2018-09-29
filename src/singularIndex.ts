@@ -47,12 +47,19 @@ export default class SingularBracketGroup implements IBracketManager {
     }
 
     public addCloseBracket(token: Token) {
-        const openBracket = this.allLinesOpenBracketStack.pop();
-        if (openBracket) {
-            const closeBracket = new BracketClose(token, openBracket);
-            this.allBracketsOnLine.push(closeBracket);
-            this.bracketsHash += closeBracket.token.character;
+        if (this.allLinesOpenBracketStack.length > 0) {
+            if (this.allLinesOpenBracketStack[0].token.type === token.type) {
+                const openBracket = this.allLinesOpenBracketStack.pop();
+                const closeBracket = new BracketClose(token, openBracket!);
+                this.allBracketsOnLine.push(closeBracket);
+                this.bracketsHash += closeBracket.token.character;
+                return;
+            }
         }
+
+        const orphan = new Bracket(token, this.settings.unmatchedScopeColor);
+        this.allBracketsOnLine.push(orphan);
+        this.bracketsHash += orphan.token.character;
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {

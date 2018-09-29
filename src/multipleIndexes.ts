@@ -55,18 +55,19 @@ export default class MultipleBracketGroups implements IBracketManager {
     public addCloseBracket(token: Token): number | undefined {
         const openStack = this.allLinesOpenBracketStack.get(token.type);
 
-        if (!openStack) {
-            return;
+        if (openStack && openStack.length > 0) {
+            if (openStack[0].token.type === token.type) {
+                const openBracket = openStack.pop();
+                const closeBracket = new BracketClose(token, openBracket!);
+                this.allBracketsOnLine.push(closeBracket);
+                this.bracketsHash += closeBracket.token.character;
+                return;
+            }
         }
-        const openBracket = openStack.pop();
 
-        if (!openBracket) {
-            return;
-        }
-
-        const closeBracket = new BracketClose(token, openBracket);
-        this.allBracketsOnLine.push(closeBracket);
-        this.bracketsHash += closeBracket.token;
+        const orphan = new Bracket(token, this.settings.unmatchedScopeColor);
+        this.allBracketsOnLine.push(orphan);
+        this.bracketsHash += orphan.token.character;
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {
