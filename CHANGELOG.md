@@ -1,7 +1,8 @@
 ## Release Notes
 
 ### 0.0.21
-Add unmatched bracket coloring
+Add unmatched bracket coloring  
+Restore option to use independent color groups
 
 ### 0.0.20
 Support reading language configuration json files with comments
