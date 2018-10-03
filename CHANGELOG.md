@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.22
+Ensure that an extension that contributes brackets also contributes a grammar
+
 ### 0.0.21
 Add unmatched bracket coloring  
 Restore option to use independent color groups

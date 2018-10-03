@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { EndOfLine } from "vscode";
 import Bracket from "./bracket";
 import BracketClose from "./bracketClose";
 import { IStackElement } from "./IExtensionGrammar";
