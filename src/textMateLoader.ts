@@ -113,7 +113,7 @@ export class TextMateLoader {
         for (const extension of vscode.extensions.all) {
             const packageJSON = extension.packageJSON as IExtensionPackage;
             if (packageJSON.contributes) {
-                if (packageJSON.contributes.grammars) {
+                if (packageJSON.contributes.grammars && packageJSON.contributes.languages) {
                     for (const grammar of packageJSON.contributes.grammars) {
                         if (grammar.language && grammar.scopeName && grammar.path) {
                             const fullPath = path.join(extension.extensionPath, grammar.path);
@@ -122,9 +122,7 @@ export class TextMateLoader {
                             this.scopeNameToLanguage.set(grammar.scopeName, grammar.language);
                         }
                     }
-                }
 
-                if (packageJSON.contributes.languages) {
                     for (const language of packageJSON.contributes.languages) {
                         if (language.configuration) {
                             const configPath = path.join(extension.extensionPath, language.configuration);
