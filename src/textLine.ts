@@ -37,22 +37,7 @@ export default class TextLine {
         key: number,
         open: boolean,
     ) {
-        if (open) {
-            this.addBracket(
-                key,
-                currentChar,
-                index,
-                true,
-            );
-        }
-        else {
-            this.addBracket(
-                key,
-                currentChar,
-                index,
-                false,
-            );
-        }
+        this.lineState.addBracket(key, currentChar, index, this.index, open);
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {
@@ -65,14 +50,5 @@ export default class TextLine {
 
     public getAllBrackets(): Bracket[] {
         return this.lineState.getAllBrackets();
-    }
-
-    private addBracket(
-        type: number,
-        character: string,
-        beginIndex: number,
-        open: boolean,
-    ): void {
-        this.lineState.addBracket(type, character, beginIndex, this.index, open);
     }
 }
