@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.23
+Remove matching `<>` for all languages because too many false positives
+
 ### 0.0.22
 Ensure that an extension that contributes brackets also contributes a grammar
 

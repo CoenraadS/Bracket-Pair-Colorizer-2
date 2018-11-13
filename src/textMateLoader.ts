@@ -77,7 +77,8 @@ export class TextMateLoader {
             return (registry.loadGrammarWithConfiguration(scopeName, this.languageId++, {}) as Thenable<IGrammar | undefined | null>).then((grammar) => {
                 if (grammar) {
                     if (!this.languageConfigs.has(languageID)) {
-                        const mappedBrackets = brackets.map((b) => ({ open: b[0], close: b[1] }));
+                        const mappedBrackets = brackets.map((b) => ({ open: b[0], close: b[1] }))
+                            .filter(e => e.open !== "<" && e.close !== ">");
 
                         const bracketToId = new Map<string, { open: boolean, key: number }>();
                         for (let i = 0; i < brackets.length; i++) {
