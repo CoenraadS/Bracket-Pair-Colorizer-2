@@ -102,8 +102,10 @@ export default class DocumentDecorationManager {
 
             if (languageConfig instanceof Promise) {
                 // console.log("Found Tokenizer promise for " + document.languageId);
-                languageConfig.then(() => {
-                    this.updateDocument(document);
+                languageConfig.then((grammar) => {
+                    if (grammar) {
+                        this.updateDocument(document);
+                    }
                 }).catch((e) => console.error(e));
                 return;
             }

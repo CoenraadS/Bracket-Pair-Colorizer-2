@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.24
+Fix extension creating a regex that matches everything if no brackets were defined
+
 ### 0.0.23
 Remove matching `<>` for all languages because too many false positives
 
