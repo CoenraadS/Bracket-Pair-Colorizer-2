@@ -4,8 +4,9 @@ interface ISimpleInternalBracket {
 }
 
 export function getRegexForBrackets(input: ISimpleInternalBracket[]): RegExp {
+    const longestFirst = input.sort((a, b) => (b.open.length + b.close.length) - (a.open.length + a.close.length));
     const pieces: string[] = [];
-    input.forEach((b) => {
+    longestFirst.forEach((b) => {
         pieces.push(b.open);
         pieces.push(b.close);
     });

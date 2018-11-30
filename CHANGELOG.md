@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.25
+Fix regex to search for longest match first
+
 ### 0.0.24
 Fix extension creating a regex that matches everything if no brackets were defined
 
