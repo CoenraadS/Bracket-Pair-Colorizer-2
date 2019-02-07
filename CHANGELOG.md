@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.0.26
+Support new extensions being installed without reload
+
 ### 0.0.25
 Fix regex to search for longest match first
 

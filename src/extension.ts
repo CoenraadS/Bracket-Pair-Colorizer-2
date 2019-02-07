@@ -1,8 +1,10 @@
-import { commands, ExtensionContext, window, workspace } from "vscode";
+import { commands, ExtensionContext, window, workspace, extensions } from "vscode";
 import DocumentDecorationManager from "./documentDecorationManager";
 export function activate(context: ExtensionContext) {
     let documentDecorationManager = new DocumentDecorationManager();
 
+    extensions.onDidChange(() => restart());
+    
     context.subscriptions.push(
         commands.registerCommand("bracket-pair-colorizer-2.expandBracketSelection", () => {
             const editor = window.activeTextEditor;
@@ -22,9 +24,7 @@ export function activate(context: ExtensionContext) {
                 event.affectsConfiguration("editor.fontSize")
 
             ) {
-                documentDecorationManager.Dispose();
-                documentDecorationManager = new DocumentDecorationManager();
-                documentDecorationManager.updateAllDocuments();
+                restart();
             }
         }),
 
@@ -48,6 +48,12 @@ export function activate(context: ExtensionContext) {
     );
 
     documentDecorationManager.updateAllDocuments();
+
+    function restart() {
+        documentDecorationManager.Dispose();
+        documentDecorationManager = new DocumentDecorationManager();
+        documentDecorationManager.updateAllDocuments();
+    }
 }
 
 // tslint:disable-next-line:no-empty
