@@ -20,6 +20,16 @@ Screenshot:
 
 ## Settings
 
+> `"bracket-pair-colorizer-2.colors"`  
+Define the colors used to colorize brackets. Accepts valid color names, hex codes, and `rgba()` values. Default:  
+```json
+"bracket-pair-colorizer-2.colors": [
+    "Gold",
+    "Orchid",
+    "LightSkyBlue"
+]
+```
+
 > `"bracket-pair-colorizer-2.forceUniqueOpeningColor"`  
 ![Disabled](images/forceUniqueOpeningColorDisabled.png "forceUniqueOpeningColor Disabled")
 ![Enabled](images/forceUniqueOpeningColorEnabled.png "forceUniqueOpeningColor Enabled")
