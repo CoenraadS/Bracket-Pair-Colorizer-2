@@ -50,7 +50,7 @@ Should the currently scoped brackets always be highlighted?
 Choose a border style to highlight the active scope. Use `{color}` to match the existing bracket color  
 It is recommended to disable the inbuilt `editor.matchBrackets` setting if using this feature  
 ![BorderStyle](images/activeScopeBorder.png "Active Scope Border Example")  
->Tip: Add the value `"backgroundColor : {color}"` to increase visibility. The example below shows a opaque background color, by default adding the aforementioned value will set opacity to 1. To set your own opacity value please use: `"backgroundColor : {color}; opacity: 0.33"`
+>Tip: Add the value `"backgroundColor : {color}"` to increase visibility. The example below shows a opaque background color, by default adding the aforementioned value will set opacity to 1. To set your own opacity value please use: `"backgroundColor : {color}; opacity: 0.33"` Update the opacity value to suit your own needs.
 ![BorderBackground](images/activeScopeBackground.png "Active Scope Background Example")
 
 > `"bracket-pair-colorizer-2.showBracketsInGutter"`  
