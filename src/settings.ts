@@ -183,12 +183,7 @@ export default class Settings {
             const value = element[1];
             if (key.includes("Color")) {
                 const cssColor = value.replace("{color}", color);
-                if (cssColor.includes(".")) {
-                    decorationSettings[key] = new ThemeColor(cssColor);
-                }
-                else {
-                    decorationSettings[key] = cssColor;
-                }
+                decorationSettings[key] = cssColor.includes(".") ? new ThemeColor(cssColor) : cssColor;
                 continue;
             }
             decorationSettings[key] = value;
@@ -216,12 +211,7 @@ export default class Settings {
             const value = element[1];
             if (key.includes("Color")) {
                 const cssColor = value.replace("{color}", color);
-                if (cssColor.includes(".")) {
-                    decorationSettings[key] = new ThemeColor(cssColor);
-                }
-                else {
-                    decorationSettings[key] = cssColor;
-                }
+                decorationSettings[key] = cssColor.includes(".") ? new ThemeColor(cssColor) : cssColor;
                 continue;
             }
 
