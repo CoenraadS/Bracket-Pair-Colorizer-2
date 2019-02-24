@@ -1,5 +1,18 @@
 ## Release Notes
 
+### 0.0.27
+Support VSCode Theme Colors (except in gutters)
+
+e.g.
+
+```
+"bracket-pair-colorizer-2.scopeLineCSS": [
+		"borderStyle : dotted",
+		"borderWidth : 1px",
+		"borderColor : activityBarBadge.background",
+	]
+```
+
 ### 0.0.26
 Support new extensions being installed without reload
 

@@ -258,18 +258,11 @@ export default class Settings {
         const decorations = new Map<string, vscode.TextEditorDecorationType>();
 
         for (const color of this.colors) {
-            if (color.includes(".")) {
-                const decoration = vscode.window.createTextEditorDecorationType({
-                    color: new ThemeColor(color), rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-                });
-                decorations.set(color, decoration);
-            }
-            else {
-                const decoration = vscode.window.createTextEditorDecorationType({
-                    color, rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-                });
-                decorations.set(color, decoration);
-            }
+            const decoration = vscode.window.createTextEditorDecorationType({
+                color: color.includes(".") ? new ThemeColor(color) : color,
+                rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+            });
+            decorations.set(color, decoration);
         }
 
         const unmatchedDecoration = vscode.window.createTextEditorDecorationType({

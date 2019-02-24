@@ -21,7 +21,7 @@ Screenshot:
 ## Settings
 
 > `"bracket-pair-colorizer-2.colors"`  
-Define the colors used to colorize brackets. Accepts valid color names, hex codes, and `rgba()` values. Default:  
+Define the colors used to colorize brackets. Accepts valid color names, hex codes, and `rgba()` values.
 ```json
 "bracket-pair-colorizer-2.colors": [
     "Gold",
@@ -50,8 +50,15 @@ Should the currently scoped brackets always be highlighted?
 Choose a border style to highlight the active scope. Use `{color}` to match the existing bracket color  
 It is recommended to disable the inbuilt `editor.matchBrackets` setting if using this feature  
 ![BorderStyle](images/activeScopeBorder.png "Active Scope Border Example")  
->Tip: Add the value `"backgroundColor : {color}"` to increase visibility. The example below shows a opaque background color, by default adding the aforementioned value will set opacity to 1. To set your own opacity value please use: `"backgroundColor : {color}; opacity: 0.33"`
-![BorderBackground](images/activeScopeBackground.png "Active Scope Background Example")
+
+```json
+"bracket-pair-colorizer-2.activeScopeCSS": [
+    "borderStyle : solid",
+    "borderWidth : 1px",
+    "borderColor : {color}",
+    "opacity: 0.5"
+]
+```
 
 > `"bracket-pair-colorizer-2.showBracketsInGutter"`  
 > Show active scope brackets in the gutter  
@@ -77,6 +84,15 @@ Disable this to show the vertical line in column 0
   
 >`"bracket-pair-colorizer-2.scopeLineCSS"`  
 Choose a border style to highlight the active scope. Use `{color}` to match the existing bracket color 
+
+```json
+"bracket-pair-colorizer-2.scopeLineCSS": [
+    "borderStyle : solid",
+    "borderWidth : 1px",
+    "borderColor : {color}",
+    "opacity: 0.5"
+]
+```
 
 >`"bracket-pair-colorizer-2.excludedLanguages"`  
 Exclude a language from being colorized
