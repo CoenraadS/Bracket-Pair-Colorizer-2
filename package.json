@@ -91,7 +91,8 @@
                     "default": [
                         "borderStyle : solid",
                         "borderWidth : 1px",
-                        "borderColor : {color}; opacity: 0.5"
+                        "borderColor : {color}",
+                        "opacity: 0.5"
                     ],
                     "description": "CSS for the active scope. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
                     "scope": "window"
