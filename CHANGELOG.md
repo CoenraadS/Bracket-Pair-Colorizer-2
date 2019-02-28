@@ -1,4 +1,6 @@
 ## Release Notes
+### 0.0.28
+Fix background opacity
 
 ### 0.0.27
 Support VSCode Theme Colors (except in gutters)

@@ -178,6 +178,7 @@ export default class Settings {
             rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
         };
 
+        let opacity = "1";
         for (const element of this.activeBracketCSSElements) {
             const key = element[0];
             const value = element[1];
@@ -186,8 +187,22 @@ export default class Settings {
                 decorationSettings[key] = cssColor.includes(".") ? new ThemeColor(cssColor) : cssColor;
                 continue;
             }
-            decorationSettings[key] = value;
+
+            if (key === "opacity") {
+                opacity = value;
+            }
+            else {
+                decorationSettings[key] = value;
+            }
         };
+
+        let borderColorType = typeof (decorationSettings["backgroundColor"]);
+        if (borderColorType === "undefined") {
+            decorationSettings["backgroundColor"] = "; opacity: " + opacity;
+        }
+        else if (borderColorType === "string") {
+            decorationSettings["backgroundColor"] += "; opacity: " + opacity;
+        }
 
         const decoration = vscode.window.createTextEditorDecorationType(decorationSettings);
         return decoration;
