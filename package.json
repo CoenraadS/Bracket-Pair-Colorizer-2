@@ -52,6 +52,11 @@
                     "description": "Scope colors",
                     "scope": "window"
                 },
+                "bracket-pair-colorizer-2.colors-dark": {
+                    "type": "array",
+                    "description": "Scope colors for dark mode",
+                    "scope": "window"
+                },
                 "bracket-pair-colorizer-2.unmatchedScopeColor": {
                     "type": "string",
                     "default": "Red",
