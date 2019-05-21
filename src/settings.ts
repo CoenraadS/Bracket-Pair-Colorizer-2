@@ -129,6 +129,10 @@ export default class Settings {
         }
 
         this.colors = configuration.get("colors") as string[];
+        if(this.isDarkMode()) {
+            this.colors = configuration.get("colors-dark", this.colors) as string[]
+        }
+
         if (!Array.isArray(this.colors)) {
             throw new Error("colors is not an array");
         }
@@ -276,5 +280,15 @@ export default class Settings {
         decorations.set(this.unmatchedScopeColor, unmatchedDecoration);
 
         return decorations;
+    }
+
+    /**
+     * Made for rainglow only theme right now - light is in the theme name
+     * can we take bg color and guess?
+     */
+    private isDarkMode(): Boolean {
+        const theme = vscode.workspace.getConfiguration("workbench").get("colorTheme", "")
+        const r = /light/i
+        return !r.test(theme)
     }
 }
