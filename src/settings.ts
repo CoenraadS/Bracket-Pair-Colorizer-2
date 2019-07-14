@@ -159,6 +159,7 @@ export default class Settings {
         const gutterIcon = this.gutterIcons.GetIconUri(bracket, color);
         const decorationSettings: vscode.DecorationRenderOptions = {
             gutterIconPath: gutterIcon,
+            gutterIconSize: configuration.get("gutterIconSize")
         };
         const decoration = vscode.window.createTextEditorDecorationType(decorationSettings);
         return decoration;
