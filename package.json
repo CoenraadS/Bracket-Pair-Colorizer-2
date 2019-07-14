@@ -43,10 +43,10 @@
             "title": "Bracket Pair Colorizer 2",
             "properties": {
                 "bracket-pair-colorizer-2.gutterIconSize": {
-					"type": "string",
-					"default": "100%",
-					"description": "change gutter icon size"
-				},
+                    "type": "string",
+                    "default": "100%",
+                    "description": "change gutter icon size"
+                },
                 "bracket-pair-colorizer-2.colors": {
                     "type": "array",
                     "default": [
