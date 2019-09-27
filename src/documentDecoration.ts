@@ -369,21 +369,21 @@ export default class DocumentDecoration {
         bracket: Bracket,
         event: vscode.TextEditorSelectionChangeEvent,
         fallBackPosition: vscode.Position,
-        verticleLineRanges: Array<{ range: vscode.Range, valid: boolean }>,
+        verticalLineRanges: Array<{ range: vscode.Range, valid: boolean }>,
     ) {
         const offsets:
             Array<{ range: vscode.Range, downOffset: number }> = [];
         const normalDecoration = this.settings.createScopeLineDecorations(bracket.color, false, false, false, true);
 
-        if (verticleLineRanges.length === 0) {
+        if (verticalLineRanges.length === 0) {
             return;
         }
 
-        const normalRanges = verticleLineRanges.filter((e) => e.valid).map((e) => e.range);
+        const normalRanges = verticalLineRanges.filter((e) => e.valid).map((e) => e.range);
 
         // Get first valid range, if non fall-back to opening position
         let aboveValidRange = new vscode.Range(fallBackPosition, fallBackPosition);
-        for (const lineRange of verticleLineRanges) {
+        for (const lineRange of verticalLineRanges) {
             if (lineRange.valid) {
                 aboveValidRange = lineRange.range;
                 break;
@@ -392,7 +392,7 @@ export default class DocumentDecoration {
 
         /* Keep updating last valid range to keep offset distance minimum
          to prevent missing decorations when scrolling */
-        for (const lineRange of verticleLineRanges) {
+        for (const lineRange of verticalLineRanges) {
             if (lineRange.valid) {
                 aboveValidRange = lineRange.range;
             }
