@@ -167,9 +167,7 @@
     },
     "devDependencies": {
         "@types/json5": "0.0.30",
-        "@types/mocha": "^2.2.32",
         "@types/node": "^6.0.117",
-        "mocha": "^2.3.3",
         "tslint": "^4.5.1",
         "typescript": "^2.9.2",
         "vscode": "^1.1.21"
