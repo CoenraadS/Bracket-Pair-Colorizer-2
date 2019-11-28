@@ -1,4 +1,8 @@
 ## Release Notes
+
+### 0.0.29
+Allow extension to work with remove development
+
 ### 0.0.28
 Fix background opacity
 
