@@ -22,15 +22,16 @@ export default class Settings {
     public readonly colors: string[];
     public readonly unmatchedScopeColor: string;
     public readonly excludedLanguages: Set<string>;
-    public isDisposed = false;
+
     private readonly gutterIcons: GutterIconManager;
     private readonly activeBracketCSSElements: string[][];
     private readonly activeScopeLineCSSElements: string[][];
     private readonly activeScopeLineCSSBorder: string;
     private readonly rulerPosition: string;
-    constructor(
-    ) {
-        const workspaceColors = vscode.workspace.getConfiguration("workbench.colorCustomizations", undefined);
+
+    private isDisposed = false;
+
+    constructor() {
         this.gutterIcons = new GutterIconManager();
 
         const configuration = vscode.workspace.getConfiguration("bracket-pair-colorizer-2", undefined);
@@ -198,10 +199,10 @@ export default class Settings {
 
         let borderColorType = typeof (decorationSettings["backgroundColor"]);
         if (borderColorType === "undefined") {
-            decorationSettings["backgroundColor"] = "; opacity: " + opacity;
+            decorationSettings["backgroundColor"] = `; opacity: ${opacity}`;
         }
         else if (borderColorType === "string") {
-            decorationSettings["backgroundColor"] += "; opacity: " + opacity;
+            decorationSettings["backgroundColor"] += `; opacity: ${opacity}`;
         }
 
         const decoration = vscode.window.createTextEditorDecorationType(decorationSettings);
