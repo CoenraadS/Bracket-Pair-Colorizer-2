@@ -59,7 +59,7 @@ export default class DocumentDecoration {
 
         // Current line has new brackets which need to be colored
         if (
-            !currentLine.getRuleStack().equals(newLine.getRuleStack()) ||
+            !currentLine.ruleStack.equals(newLine.ruleStack) ||
             currentLine.getBracketHash() !== newLine.getBracketHash()
         ) {
             this.lines[lineNumber] = newLine;
@@ -308,7 +308,7 @@ export default class DocumentDecoration {
     private tokenizeLine(index: number) {
         const newText = this.document.lineAt(index).text;
         const previousLineRuleStack = index > 0 ?
-            this.lines[index - 1].getRuleStack() :
+            this.lines[index - 1].ruleStack :
             undefined;
 
         const previousLineState = index > 0 ?
@@ -341,7 +341,7 @@ export default class DocumentDecoration {
         for (const match of matches) {
             const lookup = this.languageConfig.bracketToId.get(match.content);
             if (lookup) {
-                newLine.AddToken(match.content, match.index, lookup.key, lookup.open);
+                newLine.addToken(match.content, match.index, lookup.key, lookup.open);
             }
         }
         return newLine;
