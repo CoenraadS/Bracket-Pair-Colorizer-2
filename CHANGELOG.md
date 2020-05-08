@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.1.0
+Work with VSCode v1.45.0
+
 ### 0.0.29
 Allow extension to work with remove development
 
