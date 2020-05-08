@@ -7,6 +7,7 @@ import LineState from "./lineState";
 import Settings from "./settings";
 import TextLine from "./textLine";
 import { ignoreBracketsInToken, LineTokens } from "./vscodeFiles";
+import { TextDocumentContentChangeEvent } from "vscode";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -32,7 +33,7 @@ export default class DocumentDecoration {
         this.disposeScopeDecorations();
     }
 
-    public onDidChangeTextDocument(contentChanges: vscode.TextDocumentContentChangeEvent[]) {
+    public onDidChangeTextDocument(contentChanges: ReadonlyArray<TextDocumentContentChangeEvent>) {
         if (contentChanges.length > 1 || !contentChanges[0].range.isSingleLine || contentChanges[0].text.length > 1) {
             let minLineIndexToUpdate = 0;
             for (const contentChange of contentChanges) {
