@@ -1,4 +1,4 @@
-# Bracket Pair Colorizer 2 (Beta)
+# Bracket Pair Colorizer 2
 
 This extension allows matching brackets to be identified with colours. The user can define which tokens to match, and which colours to use.
 
