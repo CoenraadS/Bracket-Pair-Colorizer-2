@@ -13,10 +13,12 @@ export class TextMateLoader {
     private readonly languageToConfigPath = new Map<string, string>();
     private languageId = 1;
     private readonly vsctm: any;
+    private readonly oniguruma: any;
     private readonly languageConfigs = new Map<string, LanguageConfig>();
     constructor() {
         this.initializeGrammars();
         this.vsctm = this.loadTextMate();
+        this.oniguruma = this.loadOniguruma();
     }
 
     public tryGetLanguageConfig(languageID: string) {
@@ -53,6 +55,10 @@ export class TextMateLoader {
 
             const registry = new this.vsctm.Registry({
                 // tslint:disable-next-line:object-literal-shorthand
+                onigLib: Promise.resolve({
+                    createOnigScanner: (sources: string[]) => new this.oniguruma.OnigScanner(sources),
+                    createOnigString: (str: string) => new this.oniguruma.OnigString(str)
+                }),
                 loadGrammar: (scopeName: string) => {
                     const path = this.scopeNameToPath.get(scopeName);
                     if (!path) {
@@ -107,12 +113,24 @@ export class TextMateLoader {
         });
     }
 
+    private getNodeModulePath(moduleName: string) {
+        return path.join(vscode.env.appRoot, 'node_modules.asar', moduleName);
+    }
+
     private getNodeModule(moduleName: string) {
-        return require(`${vscode.env.appRoot}/node_modules.asar/${moduleName}`);
+        return require(this.getNodeModulePath(moduleName));
     }
 
     private loadTextMate(): any {
         return this.getNodeModule("vscode-textmate");
+    }
+
+    private loadOniguruma(): any {
+        const oniguruma = this.getNodeModule("vscode-oniguruma");
+        const wasmPath = path.join(this.getNodeModulePath("vscode-oniguruma"), 'release', 'onig.wasm');
+        const onigurumaWasm = fs.readFileSync(wasmPath).buffer;
+        oniguruma.loadWASM(onigurumaWasm);
+        return oniguruma;
     }
 
     private initializeGrammars() {
