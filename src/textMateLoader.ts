@@ -53,12 +53,16 @@ export class TextMateLoader {
                 return null;
             }
 
-            const registry = new this.vsctm.Registry({
-                // tslint:disable-next-line:object-literal-shorthand
-                onigLib: Promise.resolve({
+            let onigPromise = null;
+            if (this.oniguruma) {
+                onigPromise = Promise.resolve({
                     createOnigScanner: (sources: string[]) => new this.oniguruma.OnigScanner(sources),
                     createOnigString: (str: string) => new this.oniguruma.OnigString(str)
-                }),
+                });
+            }
+
+            const registry = new this.vsctm.Registry({
+                onigLib: onigPromise,
                 loadGrammar: (scopeName: string) => {
                     const path = this.scopeNameToPath.get(scopeName);
                     if (!path) {
@@ -126,6 +130,12 @@ export class TextMateLoader {
     }
 
     private loadOniguruma(): any {
+        const vsCodeVersion = vscode.version.split(".").map((part) => Number(part));
+        if (vsCodeVersion.length > 1 && vsCodeVersion[0] === 1 && vsCodeVersion[1] < 45) {
+            // Versions of VS Code before 1.45 don't require oniguruma to be loaded separately
+            return null;
+        }
+
         const oniguruma = this.getNodeModule("vscode-oniguruma");
         const wasmPath = path.join(this.getNodeModulePath("vscode-oniguruma"), 'release', 'onig.wasm');
         const onigurumaWasm = fs.readFileSync(wasmPath).buffer;
