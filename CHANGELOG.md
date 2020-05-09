@@ -1,9 +1,6 @@
 ## Release Notes
 
-### 0.1.1
-Not sure what is going on with the marketplace, changing engine requirement to v1.44.0
-
-### 0.1.0
+### 0.1.2
 Work with VSCode v1.45.0
 
 ### 0.0.29
