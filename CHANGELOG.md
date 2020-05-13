@@ -1,6 +1,6 @@
 ## Release Notes
 
-### 0.1.2
+### 0.1.3
 Work with VSCode v1.45.0
 
 ### 0.0.29
