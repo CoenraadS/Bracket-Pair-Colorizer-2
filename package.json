@@ -12,7 +12,8 @@
         "Other"
     ],
     "extensionKind": [
-        "ui"
+        "ui",
+        "workspace"
     ],
     "activationEvents": [
         "*"
