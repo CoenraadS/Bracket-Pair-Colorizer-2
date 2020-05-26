@@ -1,5 +1,8 @@
 ## Release Notes
 
+### 0.1.4
+Add workspace attribute (first step towards web support)
+
 ### 0.1.3
 Work with VSCode v1.45.0
 
