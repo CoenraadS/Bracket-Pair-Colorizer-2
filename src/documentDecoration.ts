@@ -148,7 +148,7 @@ export default class DocumentDecoration {
             vscode.window.visibleTextEditors.filter((e) => this.document === e.document);
 
         if (editors.length === 0) {
-            console.warn("No editors associated with document: " + this.document.fileName);
+            // console.warn("No editors associated with document: " + this.document.fileName);
             return;
         }
 
