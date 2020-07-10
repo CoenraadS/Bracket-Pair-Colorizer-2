@@ -49,7 +49,7 @@ export default class SingularBracketGroup implements IBracketManager {
 
     public addCloseBracket(token: Token) {
         if (this.allLinesOpenBracketStack.length > 0) {
-            if (this.allLinesOpenBracketStack[this.allLinesOpenBracketStack.length - 1].token.type === token.type) {
+            if (this.allLinesOpenBracketStack[this.allLinesOpenBracketStack.length - 1].token.pairsWith.indexOf(token.type) >= 0) {
                 const openBracket = this.allLinesOpenBracketStack.pop();
                 const closeBracket = new BracketClose(token, openBracket!);
                 this.allBracketsOnLine.push(closeBracket);
