@@ -159,6 +159,24 @@
                     "default": [],
                     "description": "Don't colorize files of these languages",
                     "scope": "window"
+                },
+                "bracket-pair-colorizer-2.htmlStyleTagsLanguages": {
+                    "type": "array",
+                    "default": [
+                        "html",
+                        "xml"
+                    ],
+                    "description": "Languages which should colorize HTML-style tags e.g. <div> matches to </div>. This will not affect the behavior of other types of brackets",
+                    "scope": "window"
+                },
+                "bracket-pair-colorizer-2.htmlIgnoredTags": {
+                    "type": "array",
+                    "default": [
+                        "br",
+                        "hr"
+                    ],
+                    "description": "Tags which do not have a corresponding close therefore should be ignored by the HTML colorization e.g. <br>",
+                    "scope": "window"
                 }
             }
         }

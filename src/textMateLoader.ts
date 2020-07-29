@@ -15,10 +15,12 @@ export class TextMateLoader {
     private readonly vsctm: any;
     private readonly oniguruma: any;
     private readonly languageConfigs = new Map<string, LanguageConfig>();
-    constructor() {
+    private readonly htmlStyleTagsLanguages: string[];
+    constructor(htmlStyleTagsLanguages: string[] = []) {
         this.initializeGrammars();
         this.vsctm = this.loadTextMate();
         this.oniguruma = this.loadOniguruma();
+        this.htmlStyleTagsLanguages = htmlStyleTagsLanguages;
     }
 
     public tryGetLanguageConfig(languageID: string) {
@@ -105,7 +107,10 @@ export class TextMateLoader {
                         }
 
                         const regex = getRegexForBrackets(mappedBrackets);
-                        this.languageConfigs.set(languageID, new LanguageConfig(grammar, regex, bracketToId));
+                        const colorHtmlStyleTags = this.htmlStyleTagsLanguages.indexOf(languageID) > -1;
+                        this.languageConfigs.set(
+                            languageID, new LanguageConfig(grammar, regex, bracketToId, colorHtmlStyleTags)
+                        );
                     }
                 }
                 return grammar;

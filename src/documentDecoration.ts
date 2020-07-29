@@ -325,8 +325,6 @@ export default class DocumentDecoration {
 
         const matches = new Array<Match>();
         const htmlMatches = { open: new Array<Match>(), close: new Array<Match>(), ignore: new Array<Match>() };
-        // ECH TODO Set this in the settings
-        const htmlIgnoreTags = ["br"];
 
         const count = lineTokens.getCount();
         for (let i = 0; i < count; i++) {
@@ -338,7 +336,7 @@ export default class DocumentDecoration {
                 const currentTokenText = newText.substring(searchStartOffset, searchEndOffset);
 
                 this.pushMatches(currentTokenText, this.languageConfig.regex, searchStartOffset, matches);
-                if (this.languageConfig.colorHtmlBrackets) {
+                if (this.languageConfig.colorHtmlStyleTags) {
                     this.pushMatches(
                         currentTokenText, createBracketOrRegExp(["</", "/>"]), searchStartOffset, htmlMatches.close
                     );
@@ -347,8 +345,9 @@ export default class DocumentDecoration {
                     );
                     this.pushMatches(
                         currentTokenText,
-                        createBracketOrRegExp(htmlIgnoreTags.map((value: string) => { return "<" + value })),
-                        searchStartOffset, htmlMatches.ignore
+                        createBracketOrRegExp(
+                            this.settings.htmlIgnoredTags.map((value: string) => { return "<" + value })
+                        ), searchStartOffset, htmlMatches.ignore
                     );
                 }
             }

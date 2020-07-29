@@ -32,7 +32,7 @@ export default class MultipleBracketGroups implements IBracketManager {
                 this.allLinesOpenBracketStack[value.key] = [];
                 this.previousOpenBracketColorIndexes[value.key] = 0;
             }
-            if (languageConfig.colorHtmlBrackets) {
+            if (languageConfig.colorHtmlStyleTags) {
                 this.allLinesOpenBracketStack[languageConfig.htmlKey] = [];
                 this.previousOpenBracketColorIndexes[languageConfig.htmlKey] = 0;
             }
