@@ -49,7 +49,7 @@
               "defaults": {
                 "dark": "#ffdf00",
                 "light": "#ffdf00",
-                "highContrast": "#010203"
+                "highContrast": "#ffe600"
               }
             },
             {
@@ -58,7 +58,7 @@
               "defaults": {
                 "dark": "#da70d6",
                 "light": "#da70d6",
-                "highContrast": "#010203"
+                "highContrast": "#ff00ff"
               }
             },
             {
@@ -67,16 +67,16 @@
               "defaults": {
                 "dark": "#87cefa",
                 "light": "#87cefa",
-                "highContrast": "#010203"
+                "highContrast": "#00ff00"
               }
             },
             {
               "id": "bracketPairColorizer2.bracketColor4",
               "description": "Bracket color #4. Can be used in bracket-pair-colorizer-2.colors for theme-based color custimization.",
               "defaults": {
-                "dark": "#0000FF",
-                "light": "#0000FF",
-                "highContrast": "#010203"
+                "dark": "#0000ff",
+                "light": "#0000ff",
+                "highContrast": "#00ffff"
               }
             },
             {
@@ -85,7 +85,7 @@
               "defaults": {
                 "dark": "#008000",
                 "light": "#008000",
-                "highContrast": "#010203"
+                "highContrast": "#ffffff"
               }
             },
             {
@@ -94,7 +94,7 @@
               "defaults": {
                 "dark": "#ff0000",
                 "light": "#ff0000",
-                "highContrast": "#010203"
+                "highContrast": "#ff0000"
               }
             }
         ],
