@@ -21,7 +21,7 @@ Screenshot:
 ## Settings
 
 > `"bracket-pair-colorizer-2.colors"`  
-Define the colors used to colorize brackets. Accepts valid color names, hex codes, and `rgba()` values.
+Define the colors used to colorize brackets. Accepts valid color names, hex codes, and `rgba()` values. Colors `bracketPairColorizer2.bracketColorN` (N=1..5) are theme colors specific to this extension. These can be configured in `workbench.colorCustomizations` and allow for theme-aware (e.g. dark/light) customization.
 ```json
 "bracket-pair-colorizer-2.colors": [
     "Gold",
