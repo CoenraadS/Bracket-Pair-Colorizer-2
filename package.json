@@ -65,13 +65,13 @@
                 "bracket-pair-colorizer-2.forceUniqueOpeningColor": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Ensure that an opening brackets color does not match a previous brackets color",
+                    "description": "Ensure that an opening bracket's color does not match a previous bracket's color.",
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.forceIterationColorCycle": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should opening brackets iterate the color cycle even if they are not nested",
+                    "description": "Should opening brackets iterate the color cycle even if they are not nested?",
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.colorMode": {
@@ -81,13 +81,13 @@
                         "Independent"
                     ],
                     "default": "Consecutive",
-                    "description": "Should different brackets share a color group (Consecutive), or use their own color group (Independent)",
+                    "description": "Should different brackets share a color group (Consecutive), or use their own color group (Independent)?",
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.highlightActiveScope": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should the active scope brackets always be highlighted? Recommended to disable editor.matchBrackets if using this feature.",
+                    "description": "Should the active scope brackets always be highlighted? Recommend disabling editor.matchBrackets when using this feature.",
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.activeScopeCSS": {
@@ -140,7 +140,7 @@
                 "bracket-pair-colorizer-2.scopeLineRelativePosition": {
                     "type": "boolean",
                     "default": true,
-                    "description": "True: Scope Line will start from the ending bracket position. False: Scope Line will always be at column 0",
+                    "description": "True: Scope Line will start from the ending bracket position. False: Scope Line will always be at column 0.",
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.scopeLineCSS": {
@@ -151,13 +151,13 @@
                         "borderColor : {color}",
                         "opacity: 0.5"
                     ],
-                    "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
+                    "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used.",
                     "scope": "window"
                 },
                 "bracket-pair-colorizer-2.excludedLanguages": {
                     "type": "array",
                     "default": [],
-                    "description": "Don't colorize files of these languages",
+                    "description": "Don't colorize files of these languages.",
                     "scope": "window"
                 }
             }
