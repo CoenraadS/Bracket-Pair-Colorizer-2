@@ -129,7 +129,11 @@ export class TextMateLoader {
         const oniguruma = this.getNodeModule("vscode-oniguruma");
         const wasmPath = path.join(this.getNodeModulePath("vscode-oniguruma"), 'release', 'onig.wasm');
         const onigurumaWasm = fs.readFileSync(wasmPath).buffer;
-        oniguruma.loadWASM(onigurumaWasm);
+        try {
+          oniguruma.loadWASM(onigurumaWasm); // Catch loadWASM already called
+        } catch (error) {
+          console.warn(error) // Warn out instead of erroring
+        }
         return oniguruma;
     }
 
