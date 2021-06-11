@@ -1,7 +1,7 @@
 ## Release Notes
 
-### 0.1.4
-Add workspace attribute (first step towards web support)
+### 0.1.5
+Change activation event to `onStartupFinished` for better performance
 
 ### 0.1.3
 Work with VSCode v1.45.0
