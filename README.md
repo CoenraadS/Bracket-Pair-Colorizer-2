@@ -1,3 +1,13 @@
+
+---
+
+Note:   
+This extension is unmaintained, check out these similar alternatives:  
+- [Highlight Matching Tag](https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag)  
+- [Blockman](https://marketplace.visualstudio.com/items?itemName=leodevbro.blockman)
+
+---
+
 # Bracket Pair Colorizer 2
 
 This extension allows matching brackets to be identified with colours. The user can define which tokens to match, and which colours to use.

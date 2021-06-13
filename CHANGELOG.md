@@ -1,12 +1,21 @@
+
+---
+
+Note:   
+This extension is unmaintained, check out these similar alternatives:  
+- [Highlight Matching Tag](https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag)  
+- [Blockman](https://marketplace.visualstudio.com/items?itemName=leodevbro.blockman)
+
+---
+
 ## Release Notes
+
+### 0.2.1
+Change activation event to `onStartupFinished` for better performance
 
 ### 0.1.5
 
 Remove logging
-
-### 0.1.4
-
-Add workspace attribute (first step towards web support)
 
 ### 0.1.3
 
