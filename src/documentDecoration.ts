@@ -8,6 +8,9 @@ import Settings from "./settings";
 import TextLine from "./textLine";
 import { ignoreBracketsInToken, LineTokens } from "./vscodeFiles";
 import { TextDocumentContentChangeEvent } from "vscode";
+import { createBracketOrRegExp } from "./bracketUtil";
+
+type Match = { content: string, index: number };
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -320,7 +323,9 @@ export default class DocumentDecoration {
         const tokens = tokenized.tokens;
         const lineTokens = new LineTokens(tokens, newText);
 
-        const matches = new Array<{ content: string, index: number }>();
+        const matches = new Array<Match>();
+        const htmlMatches = { open: new Array<Match>(), close: new Array<Match>(), ignore: new Array<Match>() };
+
         const count = lineTokens.getCount();
         for (let i = 0; i < count; i++) {
             const tokenType = lineTokens.getStandardTokenType(i);
@@ -330,22 +335,66 @@ export default class DocumentDecoration {
 
                 const currentTokenText = newText.substring(searchStartOffset, searchEndOffset);
 
-                let result: RegExpExecArray | null;
-                // tslint:disable-next-line:no-conditional-assignment
-                while ((result = this.languageConfig.regex.exec(currentTokenText)) !== null) {
-                    matches.push({ content: result[0], index: result.index + searchStartOffset });
+                this.pushMatches(currentTokenText, this.languageConfig.regex, searchStartOffset, matches);
+                if (this.languageConfig.colorHtmlStyleTags) {
+                    this.pushMatches(
+                        currentTokenText, createBracketOrRegExp(["</", "/>"]), searchStartOffset, htmlMatches.close
+                    );
+                    this.pushMatches(
+                        currentTokenText, createBracketOrRegExp(["<"]), searchStartOffset, htmlMatches.open
+                    );
+                    this.pushMatches(
+                        currentTokenText,
+                        createBracketOrRegExp(
+                            this.settings.htmlIgnoredTags.map((value: string) => { return "<" + value })
+                        ), searchStartOffset, htmlMatches.ignore
+                    );
                 }
             }
         }
 
-        const newLine = new TextLine(tokenized.ruleStack, previousLineState, index);
+        // Filter out the overlap between the open tags and the other tags
+        //      (also protects against a potential <> in languageConfig)
+        const htmlCloseIgnoreIndexes = matches.concat(htmlMatches.close, htmlMatches.ignore)
+            .map((value: { index: number }) => { return value.index });
+        htmlMatches.open = htmlMatches.open.filter(function (value: { index: number }) {
+            return htmlCloseIgnoreIndexes.indexOf(value.index) == -1
+        });
+
+        // Collate all matches
+        let tokensToAdd = new Array<{ content: string, index: number, key: number, open: boolean }>();
         for (const match of matches) {
             const lookup = this.languageConfig.bracketToId.get(match.content);
             if (lookup) {
-                newLine.AddToken(match.content, match.index, lookup.key, lookup.open);
+                tokensToAdd.push({ content: match.content, index: match.index, key: lookup.key, open: lookup.open });
             }
         }
+        tokensToAdd = tokensToAdd.concat(
+            htmlMatches.open.map((match: Match) => {
+                return { content: match.content, index: match.index, key: this.languageConfig.htmlKey, open: true }
+            }),
+            htmlMatches.close.map((match: Match) => {
+                return { content: match.content, index: match.index, key: this.languageConfig.htmlKey, open: false }
+            })
+        );
+
+        // Force index order so that the bracket stack is created correctly
+        tokensToAdd.sort((a, b) => a.index - b.index);
+
+        const newLine = new TextLine(tokenized.ruleStack, previousLineState, index);
+        for (const token of tokensToAdd) {
+            newLine.AddToken(token.content, token.index, token.key, token.open);
+        }
+
         return newLine;
+    }
+
+    private pushMatches(text: string, regex: RegExp, indexOffset: number, matches: Array<Match>) {
+        let result: RegExpExecArray | null;
+        // tslint:disable-next-line:no-conditional-assignment
+        while ((result = regex.exec(text)) !== null) {
+            matches.push({ content: result[0], index: result.index + indexOffset });
+        }
     }
 
     private setOverLineDecoration(

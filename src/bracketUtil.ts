@@ -13,7 +13,7 @@ export function getRegexForBrackets(input: ISimpleInternalBracket[]): RegExp {
     return createBracketOrRegExp(pieces);
 }
 
-function createBracketOrRegExp(pieces: string[]): RegExp {
+export function createBracketOrRegExp(pieces: string[]): RegExp {
     const regexStr = `(${pieces.map(prepareBracketForRegExp).join(")|(")})`;
     return createRegExp(regexStr, true, { global: true });
 }

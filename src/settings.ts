@@ -5,7 +5,7 @@ import TextMateLoader from "./textMateLoader";
 import { ThemeColor } from "vscode";
 
 export default class Settings {
-    public readonly TextMateLoader = new TextMateLoader();
+    public readonly TextMateLoader: TextMateLoader;
     public readonly bracketDecorations: Map<string, vscode.TextEditorDecorationType>;
     public readonly colorMode: ColorMode;
     public readonly contextualParsing: boolean;
@@ -22,6 +22,7 @@ export default class Settings {
     public readonly colors: string[];
     public readonly unmatchedScopeColor: string;
     public readonly excludedLanguages: Set<string>;
+    public readonly htmlIgnoredTags: string[];
     public isDisposed = false;
     private readonly gutterIcons: GutterIconManager;
     private readonly activeBracketCSSElements: string[][];
@@ -129,6 +130,7 @@ export default class Settings {
         }
 
         this.colors = configuration.get("colors") as string[];
+
         if (!Array.isArray(this.colors)) {
             throw new Error("colors is not an array");
         }
@@ -142,6 +144,20 @@ export default class Settings {
         }
 
         this.excludedLanguages = new Set(excludedLanguages);
+
+        this.htmlIgnoredTags = configuration.get("htmlIgnoredTags") as string[];
+
+        if (!Array.isArray(this.htmlIgnoredTags)) {
+            throw new Error("htmlIgnoredTags is not an array");
+        }
+
+        let htmlStyleTagsLanguages = configuration.get("htmlStyleTagsLanguages") as string[];
+
+        if (!Array.isArray(htmlStyleTagsLanguages)) {
+            throw new Error("htmlStyleTagsLanguages is not an array");
+        }
+
+        this.TextMateLoader = new TextMateLoader(htmlStyleTagsLanguages);
     }
 
     public dispose() {

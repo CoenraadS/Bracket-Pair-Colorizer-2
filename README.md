@@ -81,7 +81,7 @@ Show a horizontal line between the brackets? Enabled by default
 >`"bracket-pair-colorizer-2.scopeLineRelativePosition"`  
 Disable this to show the vertical line in column 0  
 ![Scope Line](images/no-relative.png "Gutter Brackets Example")  
-  
+
 >`"bracket-pair-colorizer-2.scopeLineCSS"`  
 Choose a border style to highlight the active scope. Use `{color}` to match the existing bracket color 
 
@@ -96,6 +96,28 @@ Choose a border style to highlight the active scope. Use `{color}` to match the 
 
 >`"bracket-pair-colorizer-2.excludedLanguages"`  
 Exclude a language from being colorized
+
+>`"bracket-pair-colorizer-2.htmlStyleTagsLanguages"`  
+Languages which should colorize HTML-style tags e.g. `<div>` matches to `</div>`. This will not affect the behavior of other types of brackets
+![HTML-Style Tags](images/htmlTags.png "HTML-Style Tags Example")  
+
+```json
+"bracket-pair-colorizer-2.htmlStyleTagsLanguages": [
+    "html",
+    "xml"
+]
+```
+Exclude a language from being colorized
+
+>`"bracket-pair-colorizer-2.htmlIgnoredTags"`  
+Tags which do not have a corresponding close and therefore should be ignored by the HTML colorization e.g. `<br>`
+
+```json
+"bracket-pair-colorizer-2.htmlIgnoredTags": [
+    "br",
+    "hr"
+]
+```
 
 ### Commands
 
