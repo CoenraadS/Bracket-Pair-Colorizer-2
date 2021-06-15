@@ -7,7 +7,7 @@ Change activation event to `onStartupFinished` for better performance
 Work with VSCode v1.45.0
 
 ### 0.0.29
-Allow extension to work with remove development
+Allow extension to work with remote development
 
 ### 0.0.28
 Fix background opacity
