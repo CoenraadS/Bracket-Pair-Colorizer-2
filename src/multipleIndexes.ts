@@ -56,7 +56,7 @@ export default class MultipleBracketGroups implements IBracketManager {
         const openStack = this.allLinesOpenBracketStack[token.type];
 
         if (openStack.length > 0) {
-            if (openStack[openStack.length - 1].token.type === token.type) {
+            if (openStack[openStack.length - 1].token.pairsWith.indexOf(token.type) >= 0) {
                 const openBracket = openStack.pop();
                 const closeBracket = new BracketClose(token, openBracket!);
                 this.allBracketsOnLine.push(closeBracket);

@@ -342,7 +342,7 @@ export default class DocumentDecoration {
         for (const match of matches) {
             const lookup = this.languageConfig.bracketToId.get(match.content);
             if (lookup) {
-                newLine.AddToken(match.content, match.index, lookup.key, lookup.open);
+                newLine.AddToken(match.content, match.index, lookup.key, lookup.open, lookup.pairsWith);
             }
         }
         return newLine;

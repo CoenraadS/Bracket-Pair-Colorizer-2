@@ -36,8 +36,9 @@ export default class TextLine {
         index: number,
         key: number,
         open: boolean,
+        pairsWith: Array<number>
     ) {
-        this.lineState.addBracket(key, currentChar, index, this.index, open);
+        this.lineState.addBracket(key, currentChar, index, this.index, open, pairsWith);
     }
 
     public getClosingBracket(position: Position): BracketClose | undefined {

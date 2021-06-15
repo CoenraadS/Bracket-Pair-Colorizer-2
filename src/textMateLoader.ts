@@ -91,11 +91,30 @@ export class TextMateLoader {
                             return;
                         }
 
-                        const bracketToId = new Map<string, { open: boolean, key: number }>();
+                        const bracketToId = new Map<string, { open: boolean, key: number, pairsWith: Array<number> }>();
                         for (let i = 0; i < brackets.length; i++) {
                             const bracket = brackets[i];
-                            bracketToId.set(bracket[0], { open: true, key: i });
-                            bracketToId.set(bracket[1], { open: false, key: i });
+
+                            var openBracket = bracketToId.get(bracket[0]);
+                            var closeBracket = bracketToId.get(bracket[1]);
+
+                            // Create new keys if brackets don't exist.
+                            if (openBracket === undefined) {
+                                openBracket = { open: true, key: i, pairsWith: [] };
+                            }
+                            if (closeBracket === undefined) {
+                                closeBracket = { open: false, key: i, pairsWith: [] };
+                            }
+                            // Link open and close brackets.
+                            if (openBracket.pairsWith.indexOf(closeBracket.key) < 0) {
+                                openBracket.pairsWith.push(closeBracket.key);
+                            }
+                            if (closeBracket.pairsWith.indexOf(openBracket.key) < 0) {
+                                closeBracket.pairsWith.push(openBracket.key);
+                            }
+                            // Create or update bracket definitions
+                            bracketToId.set(bracket[0], openBracket);
+                            bracketToId.set(bracket[1], closeBracket);
                         }
 
                         let maxBracketLength = 0;
