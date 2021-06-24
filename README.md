@@ -21,7 +21,7 @@ Screenshot:
 ## Settings
 
 > `"bracket-pair-colorizer-2.colors"`  
-Define the colors used to colorize brackets. Accepts valid color names, hex codes, and `rgba()` values.
+Define the colors used to colorize brackets. Accepts [CSS3 color values](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) - valid color names, hex codes, `rgb()` and `hsl()` values. 
 ```json
 "bracket-pair-colorizer-2.colors": [
     "Gold",
