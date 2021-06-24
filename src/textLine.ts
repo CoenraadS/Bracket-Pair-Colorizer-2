@@ -5,9 +5,10 @@ import { IStackElement } from "./IExtensionGrammar";
 import LineState from "./lineState";
 
 export default class TextLine {
-    public index: number;
-    private lineState: LineState;
-    private readonly ruleStack: IStackElement;
+    public readonly ruleStack: IStackElement;
+
+    private readonly index: number;
+    private readonly lineState: LineState;
 
     constructor(
         ruleStack: IStackElement,
@@ -16,10 +17,6 @@ export default class TextLine {
         this.lineState = lineState;
         this.ruleStack = ruleStack;
         this.index = index;
-    }
-
-    public getRuleStack(): IStackElement {
-        return this.ruleStack;
     }
 
     // Return a copy of the line while mantaining bracket state. colorRanges is not mantained.
@@ -31,7 +28,7 @@ export default class TextLine {
         return this.lineState.getBracketHash();
     }
 
-    public AddToken(
+    public addToken(
         currentChar: string,
         index: number,
         key: number,
