@@ -159,6 +159,12 @@
                     "default": [],
                     "description": "Don't colorize files of these languages",
                     "scope": "window"
+                },
+                "bracket-pair-colorizer-2.depreciation-notice": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show notice extension is deprecated",
+                    "scope": "window"
                 }
             }
         }

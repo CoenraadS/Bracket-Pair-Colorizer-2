@@ -1,10 +1,31 @@
 
 ---
 
-Note:   
-This extension is unmaintained, check out these similar alternatives:  
-- [Highlight Matching Tag](https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag)  
-- [Blockman](https://marketplace.visualstudio.com/items?itemName=leodevbro.blockman)
+# 🎄 Christmas Notice ☃️
+
+This project started on 3 Dec 2016. Now 5 years later, it has become a native feature in VSCode.
+
+This extension has seen wilder success then I could over ever dreamed of, with over 10M+ downloads.
+
+I'm glad so many people found it useful, however it no longer has a purpose entering 2022 so development will no longer continue.
+
+If you enjoyed it, a coffee donation is appreciated: 
+
+🎁 [Donate](https://ko-fi.com/bracketpaircolorizer) 🎁
+
+Merry Christmas and Happy New Year!
+
+---
+
+## How to enable native bracket matching:
+
+`settings.json`
+```
+{
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs":"active"
+}
+```
 
 ---
 

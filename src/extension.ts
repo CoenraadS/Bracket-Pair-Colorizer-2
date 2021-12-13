@@ -1,10 +1,31 @@
-import { commands, ExtensionContext, window, workspace, extensions } from "vscode";
+import { commands, ExtensionContext, window, workspace, extensions, env, Uri } from "vscode";
 import DocumentDecorationManager from "./documentDecorationManager";
+
 export function activate(context: ExtensionContext) {
+    const configuration = workspace.getConfiguration("bracket-pair-colorizer-2", undefined);
+    let noticeKey = "depreciation-notice";
+    var showNotice = configuration.get(noticeKey);
+    if (showNotice) {
+        window.showInformationMessage(
+            "Bracket Pair Colorizer is no longer being maintained.",
+            { title: "Learn more" },
+            { title: "Don't show again" }
+        ).then(e => {
+
+            if (e?.title == "Learn more") {
+                env.openExternal(Uri.parse('https://github.com/CoenraadS/Bracket-Pair-Colorizer-2#readme'));
+            }
+
+            if (e?.title == "Don't show again") {
+                configuration.update(noticeKey, false, true)
+            }
+        });
+    }
+
     let documentDecorationManager = new DocumentDecorationManager();
 
     extensions.onDidChange(() => restart());
-    
+
     context.subscriptions.push(
         commands.registerCommand("bracket-pair-colorizer-2.expandBracketSelection", () => {
             const editor = window.activeTextEditor;
