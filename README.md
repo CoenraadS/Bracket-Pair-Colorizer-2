@@ -3,7 +3,7 @@
 
 # 🎄 Christmas Notice ☃️
 
-This project started on 3 Dec 2016. Now 5 years later, it has become a native feature in VSCode.
+This project started on 3 Dec 2016. Now 5 years later, it has become a [native feature](https://code.visualstudio.com/blogs/2021/09/29/bracket-pair-colorization) in VSCode. The feature can be enabled by adding the setting `"editor.bracketPairColorization.enabled": true`.
 
 This extension has seen wilder success then I could over ever dreamed of, with over 10M+ downloads.
 
