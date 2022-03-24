@@ -1,19 +1,55 @@
-import { commands, ExtensionContext, window, workspace, extensions, env, Uri } from "vscode";
+import { commands, ExtensionContext, window, workspace, extensions, env, Uri, ConfigurationTarget, MessageItem } from "vscode";
 import DocumentDecorationManager from "./documentDecorationManager";
 
 export function activate(context: ExtensionContext) {
+    const isNativeBracketPairColorizationEnabled = !!workspace.getConfiguration().get<boolean>("editor.bracketPairColorization.enabled");
+
     const configuration = workspace.getConfiguration("bracket-pair-colorizer-2", undefined);
     let noticeKey = "depreciation-notice";
     var showNotice = configuration.get(noticeKey);
     if (showNotice) {
+        const items: MessageItem[] = [{ title: "Learn more" }];
+        items.push({ title: "Migrate to native colorization" });
+        items.push({ title: "Don't show again" });
+
         window.showInformationMessage(
             "Bracket Pair Colorizer is no longer being maintained.",
-            { title: "Learn more" },
-            { title: "Don't show again" }
+            ...items
         ).then(e => {
 
             if (e?.title == "Learn more") {
                 env.openExternal(Uri.parse('https://github.com/CoenraadS/Bracket-Pair-Colorizer-2#readme'));
+            }
+
+            if (e?.title == "Migrate to native colorization") {
+                if (!isNativeBracketPairColorizationEnabled) {
+                    workspace
+                        .getConfiguration()
+                        .update(
+                            "editor.bracketPairColorization.enabled",
+                            true,
+                            ConfigurationTarget.Global
+                        );
+                    workspace
+                        .getConfiguration()
+                        .update(
+                            "editor.guides.bracketPairs",
+                            "active",
+                            ConfigurationTarget.Global
+                        );
+
+                    // Disable extension, only required if `isNativeBracketPairColorizationEnabled` is not true.
+                    for (const sub of context.subscriptions) {
+                        sub.dispose();
+                    }
+                    context.subscriptions.length = 0;
+                    documentDecorationManager.Dispose();
+                }
+
+                commands.executeCommand(
+                    "workbench.extensions.uninstallExtension",
+                    "CoenraadS.bracket-pair-colorizer-2"
+                );
             }
 
             if (e?.title == "Don't show again") {
@@ -22,11 +58,15 @@ export function activate(context: ExtensionContext) {
         });
     }
 
+    if (isNativeBracketPairColorizationEnabled) {
+        // don't do bracket pair colorization if native colorization is already enabled.
+        return;
+    }
+
     let documentDecorationManager = new DocumentDecorationManager();
 
-    extensions.onDidChange(() => restart());
-
     context.subscriptions.push(
+        extensions.onDidChange(() => restart()),
         commands.registerCommand("bracket-pair-colorizer-2.expandBracketSelection", () => {
             const editor = window.activeTextEditor;
             if (!editor) { return; }
