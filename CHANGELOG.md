@@ -29,6 +29,14 @@
 
 ## Release Notes
 
+### 0.2.3
+Deprecate extension even more
+- Append [Deprecated] to extension name
+- Add ability to migrate to native coloring with single click
+
+### 0.2.2
+Deprecate extension
+
 ### 0.2.1
 Change activation event to `onStartupFinished` for better performance
 
