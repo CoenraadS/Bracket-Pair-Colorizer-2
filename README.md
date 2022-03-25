@@ -23,7 +23,7 @@ Merry Christmas and Happy New Year!
 ```
 {
     "editor.bracketPairColorization.enabled": true,
-    "editor.guides.bracketPairs":"active"
+    "editor.guides.bracketPairs": true
 }
 ```
 
