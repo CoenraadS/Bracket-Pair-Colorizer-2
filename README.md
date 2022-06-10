@@ -18,12 +18,29 @@ Merry Christmas and Happy New Year!
 ---
 
 ## How to enable native bracket matching:
+(With similar color scheme as this extension)
 
 `settings.json`
 ```
 {
     "editor.bracketPairColorization.enabled": true,
-    "editor.guides.bracketPairs":"active"
+    "editor.guides.bracketPairs": "active",
+    "editor.guides.bracketPairsHorizontal": "active",
+    "editor.guides.highlightActiveIndentation": false,
+    "workbench.colorCustomizations": {
+        // Bracket colors
+        "editorBracketHighlight.foreground1": "#FFD700",
+        "editorBracketHighlight.foreground2": "#DA70D6",
+        "editorBracketHighlight.foreground3": "#179fff",
+        // Inactive guide colors
+        "editorBracketPairGuide.background1": "#ffd90080",
+        "editorBracketPairGuide.background2": "#CC66CC80",
+        "editorBracketPairGuide.background3": "#87CEFA80",
+        // Active guide colors
+        "editorBracketPairGuide.activeBackground1": "#ffd90080",
+        "editorBracketPairGuide.activeBackground2": "#CC66CC80",
+        "editorBracketPairGuide.activeBackground3": "#87CEFA80",
+    }
 }
 ```
 
