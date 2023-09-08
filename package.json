@@ -187,7 +187,7 @@
     "dependencies": {
         "@types/vscode": "^1.57.0",
         "escape-html": "^1.0.3",
-        "json5": "^2.2.0",
+        "json5": "^2.2.2",
         "vscode-uri": "^1.0.6"
     }
 }
